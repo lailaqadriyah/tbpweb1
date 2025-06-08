@@ -1,13 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="flex flex-1">
-      <%- include('../views/partials/aside.ejs') %>
-      <div class="flex-1 flex flex-col">
-</body>
-</html>
+<%- include('./partials/layoutStart.ejs') %>
+<%- include('./partials/aside.ejs') %>
+
+<!-- Konten Pengembalian Barang -->
+<div class="p-6">
+  <h1 class="text-2xl font-bold mb-4">Form Pengembalian Barang</h1>
+
+  <form action="/pengembalian" method="POST" class="space-y-4 bg-white p-6 rounded shadow">
+    <div>
+      <label for="namaBarang" class="text-red-500 block text-sm font-medium">Nama Barang</label>
+      <input type="text" name="namaBarang" id="namaBarang" required
+             class="mt-1 block w-full border border-gray-300 rounded px-3 py-2" />
+    </div>
+
+    <div>
+      <label for="jumlah" class="block text-sm font-medium">Jumlah</label>
+      <input type="number" name="jumlah" id="jumlah" min="1" required
+             class="mt-1 block w-full border border-gray-300 rounded px-3 py-2" />
+    </div>
+
+    <div>
+      <label for="alasan" class="block text-sm font-medium">Alasan Pengembalian</label>
+      <textarea name="alasan" id="alasan" rows="4" required
+                class="mt-1 block w-full border border-gray-300 rounded px-3 py-2"></textarea>
+    </div>
+
+    <div>
+      <button type="submit"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
+
+<%- include('./partials/closeAside.ejs') %>

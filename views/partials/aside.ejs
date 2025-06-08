@@ -1,26 +1,183 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/stylesheets/output.css">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
-<aside class="bg-[#2f855a] w-56 flex flex-col justify-between text-[#d1d5db]">
-    <div class="flex flex-col h-full bg-gray-800 text-white w-64">
-        <div class="flex items-center justify-center h-16 bg-gray-900">
-        <h1 class="text-red-400 text-xl">Pengembalian Barang</h1>
+<aside
+  class="w-60 h-screen bg-[#0D1F4B] text-white flex flex-col justify-between p-4 rounded-r-xl"
+>
+  <div>
+    <img src="/images/logovensi.png" alt="Logo Vensi" class="w-42 mb-6" />
+
+    <nav class="space-y-4">
+      <div>
+        <a
+          href="#"
+          class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
+        >
+          <img
+            src="/icons/Home.png"
+            class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
+            alt="Dashboard"
+          />
+          Dashboard
+        </a>
+      </div>
+
+      <div class="relative"> 
+        <button
+          type="button"
+          class="group flex items-center text-white hover:text-orange-500 font-medium p-2"
+          id="menu-button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          <img
+            src="/icons/Inventory.png"
+            class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
+            alt="Data Barang"
+          />
+          <span>Data Barang</span>
+          <svg
+            class="ml-auto size-5 text-gray-400 transform transition-transform duration-200"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+            data-slot="icon"
+            id="arrow-icon"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+
+        <div
+          class="mt-2  rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="menu-button"
+          tabindex="-1"
+          id="dropdown-menu"
+        >
+          <div class="py-1" role="none">
+            <a
+              href="#"
+              class="block px-10 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+              tabindex="-1"
+              id="menu-item-0"
+              >Data Peminjaman</a
+            >
+            <div class="border-t border-gray-200 mx-4"></div>
+            <a
+              href="#"
+              class="block px-10 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+              tabindex="-1"
+              id="menu-item-1"
+              >Data Pengembalian</a
+            >
+          </div>
         </div>
-        <nav class="flex-1 p-4">
-        <ul class="space-y-2">
-            <li><a href="/pengembalian" class="block px-4 py-2 hover:bg-gray-700 rounded">Dashboard</a></li>
-            <li><a href="/pengembalian/tambah" class="block px-4 py-2 hover:bg-gray-700 rounded">Tambah Pengembalian</a></li>
-            <li><a href="/pengembalian/list" class="block px-4 py-2 hover:bg-gray-700 rounded">List Pengembalian</a></li>
-        </ul>
-        </nav>
+      </div>
+
+      <div>
+        <a
+          href="#"
+          class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
+        >
+          <img
+            src="/icons/Report.png"
+            class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
+            alt="Laporan"
+          />
+          Laporan
+        </a>
+      </div>
+      <div>
+        <a
+          href="#"
+          class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
+        >
+          <img
+            src="/icons/Suppliers.png"
+            class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
+            alt="Data Asisten"
+          />
+          Data Asisten
+        </a>
+      </div>
+      <div>
+        <a
+          href="#"
+          class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
+        >
+          <img
+            src="/icons/Manage Store.png"
+            class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
+            alt="Data Ruangan"
+          />
+          Data Ruangan
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="space-y-4">
+    <div>
+      <a
+        href="#"
+        class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
+      >
+        <img
+          src="/icons/Settings.png"
+          class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
+          alt="Pengaturan"
+        />
+        Pengaturan
+      </a>
     </div>
+    <div>
+      <a
+        href="#"
+        class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
+      >
+        <img
+          src="/icons/Log Out.png"
+          class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
+          alt="Log Out"
+        />
+        Log Out
+      </a>
+    </div>
+  </div>
 </aside>
+
+<script>
+  const menuButton = document.getElementById("menu-button");
+  const dropdownMenu = document.getElementById("dropdown-menu");
+  const arrowIcon = document.getElementById("arrow-icon");
+
+  menuButton.addEventListener("click", () => {
+    const isExpanded = menuButton.getAttribute("aria-expanded") === "true";
+
+    dropdownMenu.classList.toggle("hidden");
+
+    menuButton.setAttribute("aria-expanded", !isExpanded);
+
+    if (!isExpanded) {
+      arrowIcon.classList.add("rotate-180");
+    } else {
+      arrowIcon.classList.remove("rotate-180");
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (
+      !menuButton.contains(event.target) &&
+      !dropdownMenu.contains(event.target)
+    ) {
+      dropdownMenu.classList.add("hidden");
+      menuButton.setAttribute("aria-expanded", "false");
+      arrowIcon.classList.remove("rotate-180");
+    }
+  });
+</script>
