@@ -1,6 +1,230 @@
 <%- include('./partials/layoutStart.ejs') %>
 <%- include('./partials/aside.ejs') %>
 
+<div class="flex-1 bg-gray-100 p-6">
+    <div class="p-1 mb-4 flex justify-between items-center">
+        <div class="relative flex items-center w-full max-w-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400 absolute left-3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+            <input
+                type="text"
+                id="search"
+                name="search"
+                class="block w-full px-4 py-2 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Cari"
+                autocomplete="off"
+            />
+        </div>
 
+        <div class="flex items-center space-x-4">
+            <div>
+                <img src="icons/bell.png" alt="Notification Bell" class="w-6 h-6">
+            </div>
+            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-600">
+                    <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+   <%- include('./partials/ringkasanAset.ejs') %>
+
+    <div class="bg-white rounded-md shadow-md p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-gray-800">Aset</h2>
+            <div class="flex space-x-2">
+                <button class="flex items-center bg-[#0D1F4B] text-white font-medium py-2 px-4 rounded-lg shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Tambah Barang
+                </button>
+                <button class="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm">
+                    Print
+                    <img src="icons/print.png" alt="" class="ml-2">
+                </button>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Kode Barang</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Nama</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Kuantitas</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Tanggal Masuk</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Kondisi</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">LSD.I</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Meja</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">43 buah</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">11/12/22</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Baik
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
+                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
+                                <img src="icons/detail.png" alt="Icon Detail">
+                            </a>
+                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
+                                <img src="icons/edit.png" alt="Icon Edit">
+                            </a>
+                            <a href="#" class="text-red-600 hover:text-red-900">
+                                <img src="icons/hapus.png" alt="Icon Hapus">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">LSD.II</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Kursi</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">22 Packets</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">11/12/22</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                Rusak
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
+                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
+                                <img src="icons/detail.png" alt="Icon Detail">
+                            </a>
+                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
+                                <img src="icons/edit.png" alt="Icon Edit">
+                            </a>
+                            <a href="#" class="text-red-600 hover:text-red-900">
+                                <img src="icons/hapus.png" alt="Icon Hapus">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">LSD.III</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Monitor</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">36 Packets</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">2/12/22</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Baik
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
+                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
+                                <img src="icons/detail.png" alt="Icon Detail">
+                            </a>
+                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
+                                <img src="icons/edit.png" alt="Icon Edit">
+                            </a>
+                            <a href="#" class="text-red-600 hover:text-red-900">
+                                <img src="icons/hapus.png" alt="Icon Hapus">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Bourn Vita</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">₹502</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">14 Packets</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">4/11/22</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                Rusak
+                            </span>
+                        </td>
+                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
+                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
+                                <img src="icons/detail.png" alt="Icon Detail">
+                            </a>
+                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
+                                <img src="icons/edit.png" alt="Icon Edit">
+                            </a>
+                            <a href="#" class="text-red-600 hover:text-red-900">
+                                <img src="icons/hapus.png" alt="Icon Hapus">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Harpic</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">₹605</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">10 Packets</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">10/10/22</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Baik
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
+                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
+                                <img src="icons/detail.png" alt="Icon Detail">
+                            </a>
+                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
+                                <img src="icons/edit.png" alt="Icon Edit">
+                            </a>
+                            <a href="#" class="text-red-600 hover:text-red-900">
+                                <img src="icons/hapus.png" alt="Icon Hapus">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Coca cola</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">₹205</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">41 Packets</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">1/9/22</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Baik
+                            </span>
+                        </td>
+                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
+                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
+                                <img src="icons/detail.png" alt="Icon Detail">
+                            </a>
+                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
+                                <img src="icons/edit.png" alt="Icon Edit">
+                            </a>
+                            <a href="#" class="text-red-600 hover:text-red-900">
+                                <img src="icons/hapus.png" alt="Icon Hapus">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Scotch Brite</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">₹359</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">43 Packets</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">2/9/22</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Baik
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
+                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
+                                <img src="icons/detail.png" alt="Icon Detail">
+                            </a>
+                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
+                                <img src="icons/edit.png" alt="Icon Edit">
+                            </a>
+                            <a href="#" class="text-red-600 hover:text-red-900">
+                                <img src="icons/hapus.png" alt="Icon Hapus">
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="flex justify-between items-center mt-6">
+            <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm">Sebelumnya</button>
+            <span class="text-gray-600 text-sm">Page 1 of 10</span>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm">Berikutnya</button>
+        </div>
+    </div>
+</div>
 
 <%- include('./partials/closeAside.ejs') %>
