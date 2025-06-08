@@ -29,7 +29,7 @@
         </div>
     </div>
 
-   <%- include('./partials/ringkasanAset.ejs') %>
+    <%- include('./partials/ringkasanAset.ejs') %>
 
     <div class="bg-white rounded-md shadow-md p-6">
         <div class="flex justify-between items-center mb-4">
@@ -49,7 +49,7 @@
         </div>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200">
-            <table class="min-w-full divide-y divide-gray-200">
+            <table class="min-w-full divide-y divide-gray-200" id="assetsTable">
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Kode Barang</th>
@@ -60,171 +60,167 @@
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">LSD.I</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Meja</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">43 buah</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">11/12/22</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Baik
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
-                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <img src="icons/detail.png" alt="Icon Detail">
-                            </a>
-                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
-                                <img src="icons/edit.png" alt="Icon Edit">
-                            </a>
-                            <a href="#" class="text-red-600 hover:text-red-900">
-                                <img src="icons/hapus.png" alt="Icon Hapus">
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">LSD.II</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Kursi</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">22 Packets</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">11/12/22</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                Rusak
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
-                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <img src="icons/detail.png" alt="Icon Detail">
-                            </a>
-                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
-                                <img src="icons/edit.png" alt="Icon Edit">
-                            </a>
-                            <a href="#" class="text-red-600 hover:text-red-900">
-                                <img src="icons/hapus.png" alt="Icon Hapus">
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">LSD.III</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Monitor</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">36 Packets</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">2/12/22</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Baik
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
-                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <img src="icons/detail.png" alt="Icon Detail">
-                            </a>
-                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
-                                <img src="icons/edit.png" alt="Icon Edit">
-                            </a>
-                            <a href="#" class="text-red-600 hover:text-red-900">
-                                <img src="icons/hapus.png" alt="Icon Hapus">
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Bourn Vita</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">₹502</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">14 Packets</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">4/11/22</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                Rusak
-                            </span>
-                        </td>
-                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
-                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <img src="icons/detail.png" alt="Icon Detail">
-                            </a>
-                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
-                                <img src="icons/edit.png" alt="Icon Edit">
-                            </a>
-                            <a href="#" class="text-red-600 hover:text-red-900">
-                                <img src="icons/hapus.png" alt="Icon Hapus">
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Harpic</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">₹605</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">10 Packets</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">10/10/22</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Baik
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
-                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <img src="icons/detail.png" alt="Icon Detail">
-                            </a>
-                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
-                                <img src="icons/edit.png" alt="Icon Edit">
-                            </a>
-                            <a href="#" class="text-red-600 hover:text-red-900">
-                                <img src="icons/hapus.png" alt="Icon Hapus">
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Coca cola</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">₹205</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">41 Packets</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">1/9/22</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Baik
-                            </span>
-                        </td>
-                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
-                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <img src="icons/detail.png" alt="Icon Detail">
-                            </a>
-                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
-                                <img src="icons/edit.png" alt="Icon Edit">
-                            </a>
-                            <a href="#" class="text-red-600 hover:text-red-900">
-                                <img src="icons/hapus.png" alt="Icon Hapus">
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Scotch Brite</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">₹359</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">43 Packets</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">2/9/22</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Baik
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
-                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <img src="icons/detail.png" alt="Icon Detail">
-                            </a>
-                            <a href="#" class="text-green-600 hover:text-green-900 mr-3">
-                                <img src="icons/edit.png" alt="Icon Edit">
-                            </a>
-                            <a href="#" class="text-red-600 hover:text-red-900">
-                                <img src="icons/hapus.png" alt="Icon Hapus">
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
+                <tbody class="bg-white divide-y divide-gray-200" id="assetsTableBody">
+                    </tbody>
             </table>
         </div>
 
         <div class="flex justify-between items-center mt-6">
-            <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm">Sebelumnya</button>
-            <span class="text-gray-600 text-sm">Page 1 of 10</span>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm">Berikutnya</button>
+            <button id="prevPageBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm">Sebelumnya</button>
+            <span id="pageInfo" class="text-gray-600 text-sm">Page 1 of 10</span>
+            <button id="nextPageBtn" class="bg-[#0D1F4B] hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm">Berikutnya</button>
         </div>
     </div>
 </div>
+
+<script>
+    const allAssets = [
+        { kode: 'LSD.I', nama: 'Meja', kuantitas: '43 buah', tanggal: '11/12/22', kondisi: 'Baik' },
+        { kode: 'LSD.II', nama: 'Kursi', kuantitas: '22 Packets', tanggal: '11/12/22', kondisi: 'Rusak' },
+        { kode: 'LSD.III', nama: 'Monitor', kuantitas: '36 Packets', tanggal: '2/12/22', kondisi: 'Baik' },
+        { kode: 'Bourn Vita', nama: '₹502', kuantitas: '14 Packets', tanggal: '4/11/22', kondisi: 'Rusak' },
+        { kode: 'Harpic', nama: '₹605', kuantitas: '10 Packets', tanggal: '10/10/22', kondisi: 'Baik' },
+        { kode: 'Coca cola', nama: '₹205', kuantitas: '41 Packets', tanggal: '1/9/22', kondisi: 'Baik' },
+        { kode: 'Scotch Brite', nama: '₹359', kuantitas: '43 Packets', tanggal: '2/9/22', kondisi: 'Baik' },
+        { kode: 'ITEM.008', nama: 'Keyboard', kuantitas: '15 buah', tanggal: '01/01/23', kondisi: 'Baik' },
+        { kode: 'ITEM.009', nama: 'Mouse', kuantitas: '20 buah', tanggal: '02/01/23', kondisi: 'Rusak' },
+        { kode: 'ITEM.010', nama: 'Printer', kuantitas: '5 buah', tanggal: '03/01/23', kondisi: 'Baik' },
+        { kode: 'ITEM.011', nama: 'Proyektor', kuantitas: '3 buah', tanggal: '04/01/23', kondisi: 'Baik' },
+        { kode: 'ITEM.012', nama: 'Speaker', kuantitas: '10 buah', tanggal: '05/01/23', kondisi: 'Rusak' },
+        { kode: 'ITEM.013', nama: 'Whiteboard', kuantitas: '2 buah', tanggal: '06/01/23', kondisi: 'Baik' },
+        { kode: 'ITEM.014', nama: 'AC', kuantitas: '7 buah', tanggal: '07/01/23', kondisi: 'Baik' },
+        { kode: 'ITEM.015', nama: 'CCTV', kuantitas: '12 buah', tanggal: '08/01/23', kondisi: 'Rusak' },
+    ];
+
+    let currentPage = 1;
+    const itemsPerPage = 5;
+
+    const assetsTableBody = document.getElementById('assetsTableBody');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    const pageInfoSpan = document.getElementById('pageInfo');
+
+    function renderTable(page) {
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const itemsToDisplay = allAssets.slice(startIndex, endIndex);
+
+        assetsTableBody.innerHTML = '';
+
+        itemsToDisplay.forEach(asset => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.kode}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.nama}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.kuantitas}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.tanggal}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${asset.kondisi === 'Baik' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                        ${asset.kondisi}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
+                    <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
+                        <img src="icons/detail.png" alt="Icon Detail">
+                    </a>
+                    <a href="/updatebarang/:id" class="text-green-600 hover:text-green-900 mr-3">
+                        <img src="icons/edit.png" alt="Icon Edit">
+                    </a>
+                    <a href="#" class="text-red-600 hover:text-red-900 delete-btn" data-id="${asset.kode}">
+                        <img src="icons/hapus.png" alt="Icon Hapus">
+                    </a>
+                </td>
+            `;
+            assetsTableBody.appendChild(row);
+        });
+
+        const totalPages = Math.ceil(allAssets.length / itemsPerPage);
+        pageInfoSpan.textContent = `Page ${page} of ${totalPages}`;
+
+        prevPageBtn.disabled = (page === 1);
+        nextPageBtn.disabled = (page === totalPages);
+
+        if (prevPageBtn.disabled) {
+            prevPageBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            prevPageBtn.classList.remove('hover:bg-gray-300');
+        } else {
+            prevPageBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            prevPageBtn.classList.add('hover:bg-gray-300');
+        }
+
+        if (nextPageBtn.disabled) {
+            nextPageBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            nextPageBtn.classList.remove('hover:bg-blue-700');
+        } else {
+            nextPageBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            nextPageBtn.classList.add('hover:bg-blue-700');
+        }
+    }
+
+    prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable(currentPage);
+        }
+    });
+
+    nextPageBtn.addEventListener('click', () => {
+        const totalPages = Math.ceil(allAssets.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTable(currentPage);
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() { 
+        const assetsTable = document.getElementById('assetsTable'); 
+
+        if (assetsTable) {
+            assetsTable.addEventListener('click', function(e) {
+                const deleteButton = e.target.closest('.delete-btn');
+
+                if (deleteButton) {
+                    e.preventDefault();
+                    const itemId = deleteButton.dataset.id;
+                    console.log('Menghapus item dengan ID:', itemId);
+
+                    Swal.fire({
+                        title: "Apakah Anda yakin?",
+                        text: "Anda tidak akan bisa mengembalikan ini!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Ya, hapus saja!",
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+                            const indexToDelete = allAssets.findIndex(asset => asset.kode === itemId);
+                            if (indexToDelete > -1) {
+                                allAssets.splice(indexToDelete, 1); // Hapus item dari array
+                            }
+
+                            Swal.fire({
+                                title: "Dihapus!",
+                                text: `Item ${itemId} telah dihapus.`,
+                                icon: "success"
+                            }).then(() => {
+
+                                const totalPages = Math.ceil(allAssets.length / itemsPerPage);
+                                if (currentPage > totalPages && currentPage > 1) {
+                                    currentPage--; 
+                                }
+                                renderTable(currentPage);
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        renderTable(currentPage);
+    });
+</script>
 
 <%- include('./partials/closeAside.ejs') %>

@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon server.js",
+    "dev": "nodemon app.js",
     "css": "npx tailwindcss -i ./public/stylesheets/input.css -o ./public/stylesheets/output.css --watch"
-
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.8",
@@ -16,6 +15,8 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
+    "mysql2": "^3.14.1",
+    "sweetalert2": "^11.22.0",
     "tailwindcss": "^4.1.8"
   }
 }
