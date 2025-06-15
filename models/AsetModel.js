@@ -19,6 +19,10 @@ const Aset = sequelize.define("Aset", {
         type: DataTypes.DATE,
         allowNull: false,
     },
+    kategori_barang:{
+        type: DataTypes.ENUM('Barang elektronik', 'Perabotan', 'Laporan TA', 'Laporan KP', 'Buku', 'ATK'),
+        allowNull: false,
+    },
     lokasi: {
         type: DataTypes.STRING(100),
         allowNull: false,

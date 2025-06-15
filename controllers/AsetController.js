@@ -30,7 +30,7 @@
         if (asetToUpdate) {
             // Render tampilan 'Update Barang.ejs'
             // Kirim data aset yang ditemukan ke template dalam bentuk JSON
-            res.render("Update Barang", {
+            res.render("UpdateBarang", {
                 title: "Update Barang", // Judul halaman
                 id: asetId, // Mengirim ID untuk digunakan di form EJS (misal untuk action form)
                 aset: asetToUpdate // Mengirim data aset yang akan diupdate
@@ -43,6 +43,58 @@
         // Tangani error yang terjadi saat mengambil data aset
         console.error('Error saat mengambil data aset untuk update:', error);
         res.status(500).send('Gagal memuat form update aset. Silakan coba lagi.');
+    }
+};
+
+// ==============================================================================
+// CONTROLLER: updateAset
+// Fungsi untuk mengupdate aset di database
+// ==============================================================================
+const updateAset = async (req, res) => {
+    try {
+        const asetId = req.params.id; // Ambil ID aset dari parameter URL
+        const {
+            kode_barang,
+            nama_barang, // Pastikan nama_barang juga dikirim dari form
+            kuantitas,
+            tanggal_masuk,
+            kondisi,
+            lokasi,
+            kategori_barang
+        } = req.body; // Ambil data yang dikirim dari form (body request)
+
+        // Cari aset yang akan diupdate berdasarkan ID
+        const asetToUpdate = await Aset.findByPk(asetId);
+
+        if (!asetToUpdate) {
+            return res.status(404).json({ error: 'Aset tidak ditemukan.' });
+        }
+
+        // Lakukan update data aset
+        await asetToUpdate.update({
+            kode_barang,
+            nama_barang, // Update nama_barang
+            kuantitas,
+            tanggal_masuk,
+            kondisi,
+            lokasi,
+            kategori_barang
+            // Jika ada gambarBarang yang perlu diupdate, Anda perlu logika tambahan di sini
+            // untuk menangani file upload, misal dengan 'multer'
+        });
+
+        // Kirim respons sukses
+        // Anda bisa mengarahkan kembali ke daftar aset atau halaman detail aset
+        res.status(200).json({ message: 'Aset berhasil diperbarui!' });
+        // ATAU: res.redirect('/aset'); // Redirect ke halaman daftar aset
+        // ATAU: res.redirect(`/aset/${asetId}`); // Redirect ke halaman detail aset (jika ada)
+
+    } catch (error) {
+        console.error('Error saat memperbarui aset:', error);
+        res.status(500).json({
+            error: 'Gagal memperbarui aset.',
+            details: error.message
+        });
     }
 };
 
@@ -80,4 +132,4 @@ const deleteAset = async (req, res) => {
 };
 
        module.exports = { getAllAset, getAsetForUpdate,
-    deleteAset}
+    deleteAset, updateAset }; // Ekspor fungsi-fungsi controller untuk digunakan di router

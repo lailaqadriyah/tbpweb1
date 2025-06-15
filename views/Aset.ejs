@@ -1,5 +1,6 @@
-<%- include('./partials/layoutStart.ejs') %> <%- include('./partials/aside.ejs')
-%>
+<%- include('./partials/layoutStart.ejs') %> 
+<%- include('./partials/aside.ejs') %>
+<div id="aset" hidden data-aset="<%= JSON.stringify(aset) %>"></div>
 
 <div class="flex-1 bg-gray-100 p-6">
   <div class="p-1 mb-4 flex justify-between items-center">
@@ -172,6 +173,18 @@
       // ];
 
       // Di Aset.ejs
+const allAset = document.getElementById('aset').getAttribute('data-aset');
+const aset = JSON.parse(allAset);
+  
+
+      const allAssets = aset.map(asset => ({
+          id: asset.id,
+          kode: asset.kode_barang,
+          nama: asset.nama_barang,
+          kuantitas: asset.kuantitas,
+          tanggal: asset.tanggal_masuk,
+          kondisi: asset.kondisi
+      }));
 
 
     //   const allAsset = allAset.map(asset => ({
@@ -194,7 +207,7 @@
           const startIndex = (page - 1) * itemsPerPage;
           const endIndex = startIndex + itemsPerPage;
           const itemsToDisplay = allAssets.slice(startIndex, endIndex);
-
+        console.log(itemsToDisplay);
           assetsTableBody.innerHTML = '';
 
           itemsToDisplay.forEach(asset => {
@@ -203,7 +216,7 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.kode}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.nama}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.kuantitas}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.tanggal}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${new Date (asset.tanggal).toLocaleDateString()}</td>
                   <td class="px-6 py-4 whitespace-nowrap">
                       <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${asset.kondisi === 'Baik' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
                           ${asset.kondisi}
@@ -213,10 +226,10 @@
                       <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
                           <img src="icons/detail.png" alt="Icon Detail">
                       </a>
-                      <a href="/updatebarang/:id" class="text-green-600 hover:text-green-900 mr-3">
+                      <a href="/updatebarang/${asset.id}" class="text-green-600 hover:text-green-900 mr-3">
                           <img src="icons/edit.png" alt="Icon Edit">
                       </a>
-                      <a href="#" class="text-red-600 hover:text-red-900 delete-btn" data-id="${asset.kode}">
+                      <a href="#" class="text-red-600 hover:text-red-900 delete-btn" data-id="${asset.id}">
                           <img src="icons/hapus.png" alt="Icon Hapus">
                       </a>
                   </td>
