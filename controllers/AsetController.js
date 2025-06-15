@@ -4,20 +4,52 @@
 
         // ==============================================================================
        const getAllAset = async (req, res) => {
-        try {
-            const allAset = await Aset.findAll({
-                order: [['id', 'ASC']] // Mengurutkan berdasarkan ID secara menurun
-            });
+    try {
+        // Ambil query parameters dari URL
+        const { search, kategori, lokasi } = req.query; // Ini akan menerima dari name="search", name="kategori", name="lokasi"
 
-            res.render("Aset", {
-                title: "Daftar Aset",
-                aset: allAset 
-            });
-        } catch (error) {
-            console.error('Error saat mengambil data aset:', error);
-            res.status(500).send('Gagal memuat daftar aset.');
+        // Buat objek where condition untuk Sequelize
+        const whereConditions = {};
+
+        // Tambahkan kondisi pencarian jika 'search' ada
+        if (search) {
+            whereConditions[Op.or] = [
+                { nama_barang: { [Op.Like]: `%${search}%` } },
+                { kode_barang: { [Op.Like]: `%${search}%` } },
+                // Tambahkan kolom lain yang ingin dicari
+            ];
         }
-       };
+
+        // Tambahkan kondisi filter kategori jika 'kategori' ada dan tidak kosong
+        if (kategori && kategori !== '') {
+            whereConditions.kategori_barang = kategori;
+        }
+
+        // Tambahkan kondisi filter lokasi jika 'lokasi' ada dan tidak kosong
+        if (lokasi && lokasi !== '') {
+            whereConditions.lokasi = lokasi;
+        }
+
+        const allAset = await Aset.findAll({
+            where: whereConditions, // Terapkan kondisi pencarian dan filter
+            order: [['id', 'ASC']]
+        });
+
+        res.render("Aset", {
+            title: "Daftar Aset",
+            aset: allAset,
+            // Kirim kembali nilai search dan filter ke view agar bisa dipertahankan di input
+            search: search || '',
+            kategori: kategori || '', // Penting untuk hidden input
+            lokasi: lokasi || ''      // Penting untuk hidden input
+        });
+
+    } catch (error) {
+        console.error('Error saat mengambil data aset:', error);
+        res.status(500).send('Gagal memuat daftar aset.');
+    }
+};
+
 
       const getAsetForUpdate = async (req, res) => {
     try {
@@ -81,7 +113,7 @@ const updateAset = async (req, res) => {
 
         // Arahkan kembali ke halaman daftar aset setelah sukses
         // Anda bisa menambahkan query param untuk pesan sukses jika mau
-        res.redirect('/aset?status=success&message=Aset berhasil diperbarui!'); 
+        res.redirect('/aset?status=success&message=Status berhasil diupdate!'); 
 
     } catch (error) {
         console.error('Error saat memperbarui aset:', error);

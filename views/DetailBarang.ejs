@@ -26,7 +26,7 @@
         </div>
         <div class="mb-4 flex items-center">
           <div class="w-1/3 text-gray-600 font-medium">Tanggal Masuk</div>
-          <div class="w-2/3 text-gray-800"><%= asset.tanggal_masuk %></div>
+          <div class="w-2/3 text-gray-800"><%= asset.tanggal_masuk ? new Date(asset.tanggal_masuk).toISOString().slice(0,10) : '' %></div>
         </div>
         <div class="mb-4 flex items-center">
           <div class="w-1/3 text-gray-600 font-medium">Kondisi Barang</div>
