@@ -29,11 +29,11 @@
         // Jika aset ditemukan
         if (asetToUpdate) {
             // Render tampilan 'Update Barang.ejs'
-            // Kirim data aset yang ditemukan ke template dalam bentuk JSON
+            // Kirim data aset 
             res.render("UpdateBarang", {
                 title: "Update Barang", // Judul halaman
                 id: asetId, // Mengirim ID untuk digunakan di form EJS (misal untuk action form)
-                aset: asetToUpdate // Mengirim data aset yang akan diupdate
+                asset: asetToUpdate // Mengirim data aset yang akan diupdate
             });
         } else {
             // Jika aset tidak ditemukan, kirim respons 404 Not Found
@@ -47,89 +47,113 @@
 };
 
 // ==============================================================================
-// CONTROLLER: updateAset
-// Fungsi untuk mengupdate aset di database
+// CONTROLLER: updateAset (Revisi untuk redirect)
 // ==============================================================================
 const updateAset = async (req, res) => {
     try {
-        const asetId = req.params.id; // Ambil ID aset dari parameter URL
+        const asetId = req.params.id; 
         const {
             kode_barang,
-            nama_barang, // Pastikan nama_barang juga dikirim dari form
+            nama_barang,
             kuantitas,
             tanggal_masuk,
             kondisi,
             lokasi,
             kategori_barang
-        } = req.body; // Ambil data yang dikirim dari form (body request)
+        } = req.body; 
 
-        // Cari aset yang akan diupdate berdasarkan ID
         const asetToUpdate = await Aset.findByPk(asetId);
 
         if (!asetToUpdate) {
-            return res.status(404).json({ error: 'Aset tidak ditemukan.' });
+            // Jika aset tidak ditemukan, arahkan kembali dengan pesan error (opsional, bisa juga render halaman error)
+            return res.status(404).redirect('/aset?status=error&message=Aset tidak ditemukan untuk diupdate.');
         }
 
-        // Lakukan update data aset
         await asetToUpdate.update({
             kode_barang,
-            nama_barang, // Update nama_barang
+            nama_barang,
             kuantitas,
             tanggal_masuk,
             kondisi,
             lokasi,
             kategori_barang
-            // Jika ada gambarBarang yang perlu diupdate, Anda perlu logika tambahan di sini
-            // untuk menangani file upload, misal dengan 'multer'
         });
 
-        // Kirim respons sukses
-        // Anda bisa mengarahkan kembali ke daftar aset atau halaman detail aset
-        res.status(200).json({ message: 'Aset berhasil diperbarui!' });
-        // ATAU: res.redirect('/aset'); // Redirect ke halaman daftar aset
-        // ATAU: res.redirect(`/aset/${asetId}`); // Redirect ke halaman detail aset (jika ada)
+        // Arahkan kembali ke halaman daftar aset setelah sukses
+        // Anda bisa menambahkan query param untuk pesan sukses jika mau
+        res.redirect('/aset?status=success&message=Aset berhasil diperbarui!'); 
 
     } catch (error) {
         console.error('Error saat memperbarui aset:', error);
-        res.status(500).json({
-            error: 'Gagal memperbarui aset.',
-            details: error.message
-        });
+        // Arahkan kembali dengan pesan error
+        res.status(500).redirect('/aset?status=error&message=Gagal memperbarui aset. Silakan coba lagi.');
     }
 };
 
 // ==============================================================================
-// CONTROLLER: deleteAset
-// Fungsi untuk menghapus aset dari database via API
-// Ini biasanya dipanggil oleh JavaScript di frontend (misalnya, menggunakan fetch API)
+// CONTROLLER: deleteAset (Revisi untuk API/AJAX dengan JSON response)
 // ==============================================================================
 const deleteAset = async (req, res) => {
     try {
-        const asetId = req.params.id; // Ambil ID aset dari parameter URL
+        const asetId = req.params.id; 
         
-        // Hapus aset dari database berdasarkan ID
-        // Metode destroy akan mengembalikan jumlah baris yang terhapus
         const deletedRows = await Aset.destroy({
-            where: { id: asetId } // Kondisi untuk menghapus aset dengan ID tertentu
+            where: { id: asetId } 
         });
 
-        // Jika ada baris yang berhasil dihapus (deletedRows > 0)
         if (deletedRows > 0) {
-            // Kirim respons sukses dalam format JSON
+            // Kirim respons JSON sukses untuk AJAX (sesuai dengan SweetAlert2 fetch Anda)
             res.status(200).json({ message: 'Aset berhasil dihapus.' });
         } else {
-            // Jika tidak ada baris yang terhapus (aset tidak ditemukan), kirim respons 404 Not Found
+            // Kirim respons JSON 404 untuk AJAX
             res.status(404).json({ error: 'Aset tidak ditemukan.' });
         }
     } catch (error) {
-        // Tangani error yang terjadi saat proses penghapusan
         console.error('Error menghapus aset:', error);
+        // Kirim respons JSON 500 untuk AJAX
         res.status(500).json({ 
             error: 'Gagal menghapus aset.', 
-            details: error.message // Berikan detail error untuk debugging
+            details: error.message 
         });
     }
 };
 
-       module.exports = { getAllAset, getAsetForUpdate,
-    deleteAset, updateAset }; // Ekspor fungsi-fungsi controller untuk digunakan di router
+// ==============================================================================
+// FUNGSI BARU: getAssetDetail - Menggunakan Sequelize (konsisten)
+// ==============================================================================
+const getAsetDetail = async (req, res) => {
+    const asetId = req.params.id; // Mengambil ID dari parameter URL
+
+    try {
+        // Menggunakan Sequelize findByPk (Find by Primary Key)
+        // Ini adalah cara paling efisien untuk mencari berdasarkan ID unik
+        const asset = await Aset.findByPk(asetId);
+
+        if (asset) {
+            // Jika aset ditemukan, render template EJS
+            res.render('DetailBarang', { // Pastikan path ini benar (misal: views/pages/assetDetail.ejs)
+                title: 'Detail Barang',
+                asset: asset.toJSON() // Mengubah instance Sequelize menjadi objek JSON biasa
+                                      // Ini berguna jika Anda perlu mengakses properti data secara langsung
+                                      // dan bukan metode instance Sequelize.
+                                      // Namun, jika Anda hanya mengakses asset.nama_barang dll, asset langsung juga bisa.
+            });
+        } else {
+            // Jika barang tidak ditemukan
+            res.status(404).render('pages/404', { title: 'Tidak Ditemukan', message: 'Barang tidak ditemukan.' });
+        }
+    } catch (error) {
+        console.error('Error fetching asset detail:', error);
+        // Mengirimkan halaman error atau pesan error
+        res.status(500).render('pages/error', { title: 'Error Server', message: 'Terjadi kesalahan saat mengambil detail barang.' });
+    }
+};
+
+// Ekspor semua fungsi controller
+module.exports = {
+    getAllAset,
+    getAsetForUpdate,
+    updateAset,
+    deleteAset,
+    getAsetDetail // Pastikan nama fungsinya di sini sama dengan nama const di atas
+};

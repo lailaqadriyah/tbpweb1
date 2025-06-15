@@ -183,7 +183,7 @@
     console.log(itemsToDisplay);
     assetsTableBody.innerHTML = '';
 
-    itemsToDisplay.forEach(asset => { // <--- Variabel 'asset' hanya berlaku di dalam loop ini
+    itemsToDisplay.forEach(asset => {
       const row = document.createElement('tr');
       row.innerHTML = `
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.kode}</td>
@@ -271,8 +271,7 @@
             cancelButtonText: "Batal"
           }).then((result) => {
             if (result.isConfirmed) {
-              // LAKUKAN PENGIRIMAN REQUEST DELETE KE SERVER
-              fetch(`/aset/${itemId}`, { // Ini akan memanggil router.delete('/aset/:id', deleteAset);
+              fetch(`/aset/${itemId}`, {
                 method: 'DELETE'
               })
               .then(response => {
@@ -287,8 +286,6 @@
                   text: data.message || `Item ${itemId} telah dihapus.`,
                   icon: "success"
                 }).then(() => {
-                  // Hapus item dari array di klien setelah berhasil dihapus di server
-                  // Penting: Gunakan asset.id dari data asli, bukan asset.kode
                   const indexToDelete = allAssets.findIndex(asset => String(asset.id) === String(itemId));
                   if (indexToDelete > -1) {
                     allAssets.splice(indexToDelete, 1);
@@ -298,7 +295,7 @@
                   if (currentPage > totalPages && currentPage > 1) {
                     currentPage--;
                   }
-                  renderTable(currentPage); // Render ulang tabel
+                  renderTable(currentPage);
                 });
               })
               .catch(error => {
@@ -316,6 +313,34 @@
     }
 
     renderTable(currentPage);
+
+    // --- LOGIKA SWEETALERT UNTUK NOTIFIKASI UPDATE DARI URL QUERY PARAMETER ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+    const message = urlParams.get('message');
+
+    if (status && message) {
+        if (status === 'success') {
+            Swal.fire({
+                title: "Berhasil!",
+                text: message,
+                icon: "success",
+                timer: 3000, // Opsional: otomatis menutup setelah 3 detik
+                timerProgressBar: true
+            });
+        } else if (status === 'error') {
+            Swal.fire({
+                title: "Gagal!",
+                text: message,
+                icon: "error",
+                // timer: 5000, // Opsional: otomatis menutup setelah 5 detik
+                // timerProgressBar: true
+            });
+        }
+        // Penting: Hapus query parameter dari URL agar pesan tidak muncul lagi saat refresh
+        history.replaceState({}, document.title, window.location.pathname);
+    }
+    // --- AKHIR LOGIKA SWEETALERT ---
   });
 </script>
 
