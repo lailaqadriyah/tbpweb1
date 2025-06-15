@@ -58,7 +58,7 @@
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-xl font-semibold text-gray-800">Aset</h2>
       <div class="flex space-x-2">
-        <button
+        <a href="/aset/add"
           class="flex items-center bg-[#0D1F4B] text-white font-medium py-2 px-4 rounded-lg shadow-sm"
         >
           <svg
@@ -76,7 +76,7 @@
             />
           </svg>
           Tambah Barang
-        </button>
+        </a>
         <button
           class="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm"
         >
@@ -131,10 +131,10 @@
         <tbody
           class="bg-white divide-y divide-gray-200"
           id="assetsTableBody"
-        ></tbody>
+        >
+          </tbody>
       </table>
     </div>
-    <% aset  %>
     <div class="flex justify-between items-center mt-6">
       <button
         id="prevPageBtn"
@@ -153,177 +153,170 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-      // const allAssets = [
-      //     { kode: 'LSD.I', nama: 'Meja', kuantitas: '43 buah', tanggal: '11/12/22', kondisi: 'Baik' },
-      //     { kode: 'LSD.II', nama: 'Kursi', kuantitas: '22 Packets', tanggal: '11/12/22', kondisi: 'Rusak' },
-      //     { kode: 'LSD.III', nama: 'Monitor', kuantitas: '36 Packets', tanggal: '2/12/22', kondisi: 'Baik' },
-      //     { kode: 'Bourn Vita', nama: '₹502', kuantitas: '14 Packets', tanggal: '4/11/22', kondisi: 'Rusak' },
-      //     { kode: 'Harpic', nama: '₹605', kuantitas: '10 Packets', tanggal: '10/10/22', kondisi: 'Baik' },
-      //     { kode: 'Coca cola', nama: '₹205', kuantitas: '41 Packets', tanggal: '1/9/22', kondisi: 'Baik' },
-      //     { kode: 'Scotch Brite', nama: '₹359', kuantitas: '43 Packets', tanggal: '2/9/22', kondisi: 'Baik' },
-      //     { kode: 'ITEM.008', nama: 'Keyboard', kuantitas: '15 buah', tanggal: '01/01/23', kondisi: 'Baik' },
-      //     { kode: 'ITEM.009', nama: 'Mouse', kuantitas: '20 buah', tanggal: '02/01/23', kondisi: 'Rusak' },
-      //     { kode: 'ITEM.010', nama: 'Printer', kuantitas: '5 buah', tanggal: '03/01/23', kondisi: 'Baik' },
-      //     { kode: 'ITEM.011', nama: 'Proyektor', kuantitas: '3 buah', tanggal: '04/01/23', kondisi: 'Baik' },
-      //     { kode: 'ITEM.012', nama: 'Speaker', kuantitas: '10 buah', tanggal: '05/01/23', kondisi: 'Rusak' },
-      //     { kode: 'ITEM.013', nama: 'Whiteboard', kuantitas: '2 buah', tanggal: '06/01/23', kondisi: 'Baik' },
-      //     { kode: 'ITEM.014', nama: 'AC', kuantitas: '7 buah', tanggal: '07/01/23', kondisi: 'Baik' },
-      //     { kode: 'ITEM.015', nama: 'CCTV', kuantitas: '12 buah', tanggal: '08/01/23', kondisi: 'Rusak' },
-      // ];
+  // Mengambil data aset dari atribut data pada elemen div tersembunyi
+  const allAsetElement = document.getElementById('aset');
+  const allAset = JSON.parse(allAsetElement.getAttribute('data-aset'));
 
-      // Di Aset.ejs
-const allAset = document.getElementById('aset').getAttribute('data-aset');
-const aset = JSON.parse(allAset);
-  
+  const allAssets = allAset.map(asset => ({
+    id: asset.id,
+    kode: asset.kode_barang,
+    nama: asset.nama_barang,
+    kuantitas: asset.kuantitas,
+    tanggal: asset.tanggal_masuk,
+    kondisi: asset.kondisi
+  }));
 
-      const allAssets = aset.map(asset => ({
-          id: asset.id,
-          kode: asset.kode_barang,
-          nama: asset.nama_barang,
-          kuantitas: asset.kuantitas,
-          tanggal: asset.tanggal_masuk,
-          kondisi: asset.kondisi
-      }));
+  let currentPage = 1;
+  const itemsPerPage = 5;
 
+  const assetsTableBody = document.getElementById('assetsTableBody');
+  const prevPageBtn = document.getElementById('prevPageBtn');
+  const nextPageBtn = document.getElementById('nextPageBtn');
+  const pageInfoSpan = document.getElementById('pageInfo');
 
-    //   const allAsset = allAset.map(asset => ({
-    //       kode_barang: asset.kode_barang,
-    //       nama_barang: asset.nama_barang,
-    //       kuantitas: asset.kuantitas,
-    //       tanggal: asset.tanggal_masuk,
-    //       kondisi: asset.kondisi
-    //   }));
+  function renderTable(page) {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const itemsToDisplay = allAssets.slice(startIndex, endIndex);
+    console.log(itemsToDisplay);
+    assetsTableBody.innerHTML = '';
 
-      let currentPage = 1;
-      const itemsPerPage = 5;
+    itemsToDisplay.forEach(asset => { // <--- Variabel 'asset' hanya berlaku di dalam loop ini
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.kode}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.nama}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.kuantitas}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${new Date (asset.tanggal).toLocaleDateString('id-ID')}</td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${asset.kondisi === 'Baik' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+            ${asset.kondisi}
+          </span>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
+          <a href="/aset/detail/${asset.id}" class="text-blue-600 hover:text-blue-900 mr-3">
+            <img src="icons/detail.png" alt="Icon Detail">
+          </a>
+          <a href="/aset/update/${asset.id}" class="text-green-600 hover:text-green-900 mr-3">
+            <img src="icons/edit.png" alt="Icon Edit">
+          </a>
+          <a href="#" class="text-red-600 hover:text-red-900 delete-btn" data-id="${asset.id}">
+            <img src="icons/hapus.png" alt="Icon Hapus">
+          </a>
+        </td>
+      `;
+      assetsTableBody.appendChild(row);
+    });
 
-      const assetsTableBody = document.getElementById('assetsTableBody');
-      const prevPageBtn = document.getElementById('prevPageBtn');
-      const nextPageBtn = document.getElementById('nextPageBtn');
-      const pageInfoSpan = document.getElementById('pageInfo');
+    const totalPages = Math.ceil(allAssets.length / itemsPerPage);
+    pageInfoSpan.textContent = `Page ${page} of ${totalPages}`;
 
-      function renderTable(page) {
-          const startIndex = (page - 1) * itemsPerPage;
-          const endIndex = startIndex + itemsPerPage;
-          const itemsToDisplay = allAssets.slice(startIndex, endIndex);
-        console.log(itemsToDisplay);
-          assetsTableBody.innerHTML = '';
+    prevPageBtn.disabled = (page === 1);
+    nextPageBtn.disabled = (page === totalPages);
 
-          itemsToDisplay.forEach(asset => {
-              const row = document.createElement('tr');
-              row.innerHTML = `
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.kode}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.nama}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${asset.kuantitas}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${new Date (asset.tanggal).toLocaleDateString()}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${asset.kondisi === 'Baik' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                          ${asset.kondisi}
-                      </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex">
-                      <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">
-                          <img src="icons/detail.png" alt="Icon Detail">
-                      </a>
-                      <a href="/updatebarang/${asset.id}" class="text-green-600 hover:text-green-900 mr-3">
-                          <img src="icons/edit.png" alt="Icon Edit">
-                      </a>
-                      <a href="#" class="text-red-600 hover:text-red-900 delete-btn" data-id="${asset.id}">
-                          <img src="icons/hapus.png" alt="Icon Hapus">
-                      </a>
-                  </td>
-              `;
-              assetsTableBody.appendChild(row);
-          });
+    if (prevPageBtn.disabled) {
+      prevPageBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      prevPageBtn.classList.remove('hover:bg-gray-300');
+    } else {
+      prevPageBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      prevPageBtn.classList.add('hover:bg-gray-300');
+    }
 
-          const totalPages = Math.ceil(allAssets.length / itemsPerPage);
-          pageInfoSpan.textContent = `Page ${page} of ${totalPages}`;
+    if (nextPageBtn.disabled) {
+      nextPageBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      nextPageBtn.classList.remove('hover:bg-blue-700');
+    } else {
+      nextPageBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      nextPageBtn.classList.add('hover:bg-blue-700');
+    }
+  }
 
-          prevPageBtn.disabled = (page === 1);
-          nextPageBtn.disabled = (page === totalPages);
+  prevPageBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderTable(currentPage);
+    }
+  });
 
-          if (prevPageBtn.disabled) {
-              prevPageBtn.classList.add('opacity-50', 'cursor-not-allowed');
-              prevPageBtn.classList.remove('hover:bg-gray-300');
-          } else {
-              prevPageBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-              prevPageBtn.classList.add('hover:bg-gray-300');
-          }
+  nextPageBtn.addEventListener('click', () => {
+    const totalPages = Math.ceil(allAssets.length / itemsPerPage);
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderTable(currentPage);
+    }
+  });
 
-          if (nextPageBtn.disabled) {
-              nextPageBtn.classList.add('opacity-50', 'cursor-not-allowed');
-              nextPageBtn.classList.remove('hover:bg-blue-700');
-          } else {
-              nextPageBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-              nextPageBtn.classList.add('hover:bg-blue-700');
-          }
-      }
+  document.addEventListener('DOMContentLoaded', function() {
+    const assetsTable = document.getElementById('assetsTable');
 
-      prevPageBtn.addEventListener('click', () => {
-          if (currentPage > 1) {
-              currentPage--;
-              renderTable(currentPage);
-          }
-      });
+    if (assetsTable) {
+      assetsTable.addEventListener('click', function(e) {
+        const deleteButton = e.target.closest('.delete-btn');
 
-      nextPageBtn.addEventListener('click', () => {
-          const totalPages = Math.ceil(allAssets.length / itemsPerPage);
-          if (currentPage < totalPages) {
-              currentPage++;
-              renderTable(currentPage);
-          }
-      });
+        if (deleteButton) {
+          e.preventDefault();
+          const itemId = deleteButton.dataset.id;
+          console.log('Menghapus item dengan ID:', itemId);
 
-      document.addEventListener('DOMContentLoaded', function() {
-          const assetsTable = document.getElementById('assetsTable');
-
-          if (assetsTable) {
-              assetsTable.addEventListener('click', function(e) {
-                  const deleteButton = e.target.closest('.delete-btn');
-
-                  if (deleteButton) {
-                      e.preventDefault();
-                      const itemId = deleteButton.dataset.id;
-                      console.log('Menghapus item dengan ID:', itemId);
-
-                      Swal.fire({
-                          title: "Apakah Anda yakin?",
-                          text: "Anda tidak akan bisa mengembalikan ini!",
-                          icon: "warning",
-                          showCancelButton: true,
-                          confirmButtonColor: "#3085d6",
-                          cancelButtonColor: "#d33",
-                          confirmButtonText: "Ya, hapus saja!",
-                          cancelButtonText: "Batal"
-                      }).then((result) => {
-                          if (result.isConfirmed) {
-
-                              const indexToDelete = allAssets.findIndex(asset => asset.kode === itemId);
-                              if (indexToDelete > -1) {
-                                  allAssets.splice(indexToDelete, 1); // Hapus item dari array
-                              }
-
-                              Swal.fire({
-                                  title: "Dihapus!",
-                                  text: `Item ${itemId} telah dihapus.`,
-                                  icon: "success"
-                              }).then(() => {
-
-                                  const totalPages = Math.ceil(allAssets.length / itemsPerPage);
-                                  if (currentPage > totalPages && currentPage > 1) {
-                                      currentPage--;
-                                  }
-                                  renderTable(currentPage);
-                              });
-                          }
-                      });
+          Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Anda tidak akan bisa mengembalikan ini!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, hapus saja!",
+            cancelButtonText: "Batal"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // LAKUKAN PENGIRIMAN REQUEST DELETE KE SERVER
+              fetch(`/aset/${itemId}`, { // Ini akan memanggil router.delete('/aset/:id', deleteAset);
+                method: 'DELETE'
+              })
+              .then(response => {
+                if (!response.ok) {
+                  return response.json().then(err => Promise.reject(err));
+                }
+                return response.json();
+              })
+              .then(data => {
+                Swal.fire({
+                  title: "Dihapus!",
+                  text: data.message || `Item ${itemId} telah dihapus.`,
+                  icon: "success"
+                }).then(() => {
+                  // Hapus item dari array di klien setelah berhasil dihapus di server
+                  // Penting: Gunakan asset.id dari data asli, bukan asset.kode
+                  const indexToDelete = allAssets.findIndex(asset => String(asset.id) === String(itemId));
+                  if (indexToDelete > -1) {
+                    allAssets.splice(indexToDelete, 1);
                   }
-              });
-          }
 
-          renderTable(currentPage);
+                  const totalPages = Math.ceil(allAssets.length / itemsPerPage);
+                  if (currentPage > totalPages && currentPage > 1) {
+                    currentPage--;
+                  }
+                  renderTable(currentPage); // Render ulang tabel
+                });
+              })
+              .catch(error => {
+                console.error('Error saat menghapus aset:', error);
+                Swal.fire({
+                  title: "Gagal!",
+                  text: error.error || "Gagal menghapus item.",
+                  icon: "error"
+                });
+              });
+            }
+          });
+        }
       });
+    }
+
+    renderTable(currentPage);
+  });
 </script>
 
 <%- include('./partials/closeAside.ejs') %>
