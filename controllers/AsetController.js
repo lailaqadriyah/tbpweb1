@@ -11,7 +11,7 @@
 
             res.render("Aset", {
                 title: "Daftar Aset",
-                aset: allAset.map(aset => aset.toJSON()) // Mengonversi setiap objek Aset ke JSON
+                aset: allAset 
             });
         } catch (error) {
             console.error('Error saat mengambil data aset:', error);

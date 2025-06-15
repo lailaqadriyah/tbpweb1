@@ -9,7 +9,9 @@ var app = express();
 
 const sequelize = require('./config/db');
 const { Aset } = require('./models/AsetModel'); 
-const router = require("./routes/Aset");
+const asetRouter = require("./routes/Aset");
+const pengembalianBarangRouter = require("./routes/PengembalianBarang");
+
 
 // Fungsi untuk memulai server setelah koneksi DB berhasil
 async function startServer() {
@@ -29,7 +31,7 @@ async function startServer() {
         app.use(express.urlencoded({ extended: false })); 
         app.use(cookieParser());
         app.use(express.static(path.join(__dirname, 'public'))); 
-        app.use("/", router);
+        app.use("/", asetRouter, pengembalianBarangRouter); // Gunakan router aset dan pengembalian barang
 
         var indexRouter = require('./routes/index');
         var usersRouter = require('./routes/users');
