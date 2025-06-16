@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tambah Asisten</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+  <div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-bold mb-4 text-blue-700">Tambah Data Asisten</h2>
+
+    <form action="/aslab/tambah" method="POST" class="space-y-4">
+      <input type="text" name="nama" placeholder="Nama" class="border p-2 w-full" required>
+      <input type="text" name="nomor_asisten" placeholder="Nomor Asisten" class="border p-2 w-full">
+      <input type="text" name="nim" placeholder="NIM" class="border p-2 w-full">
+      <input type="text" name="telepon" placeholder="Telepon" class="border p-2 w-full">
+      <input type="text" name="jabatan" placeholder="Jabatan" class="border p-2 w-full">
+
+      <select name="jenis_kelamin" class="border p-2 w-full">
+        <option value="">-- Jenis Kelamin --</option>
+        <option value="Laki-laki">Laki-laki</option>
+        <option value="Perempuan">Perempuan</option>
+      </select>
+
+      <input type="text" name="domisili" placeholder="Domisili" class="border p-2 w-full">
+
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        Simpan
+      </button>
+    </form>
+  </div>
+</body>
+</html>
