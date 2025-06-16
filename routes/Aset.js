@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { getAllAset, getAsetForUpdate, updateAset, getAsetDetail } = require('../controllers/AsetController');
+const { getAllAset, getAsetForUpdate, updateAset, getAsetDetail, addAset } = require('../controllers/AsetController');
 
 router.get('/aset/detail/:id=', getAsetDetail); 
 
@@ -13,6 +13,7 @@ router.post('/aset/update/:id', updateAset); // Rute POST untuk memproses update
 
 
 router.get('/aset/detail/:id', getAsetDetail);
+router.get('/aset/add/:id', addAset);
 
 module.exports = router;  
 

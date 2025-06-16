@@ -1,10 +1,10 @@
- const { Aset } = require('../models/AsetModel'); 
- const { Op } = require('sequelize'); // Import operator Sequelize untuk kondisi pencarian
+const { Aset } = require('../models/AsetModel');
+const { Op } = require('sequelize'); // Import operator Sequelize untuk kondisi pencarian
 
-        // RUTE UTAMA UNTUK MENAMPILKAN DAFTAR ASET DENGAN DATA DARI DATABASE
-
-        // ==============================================================================
-       const getAllAset = async (req, res) => {
+// ==============================================================================
+// RUTE UTAMA UNTUK MENAMPILKAN DAFTAR ASET DENGAN DATA DARI DATABASE
+// ==============================================================================
+const getAllAset = async (req, res) => {
     try {
         // Ambil query parameters dari URL
         const { search, kategori, lokasi } = req.query; // Ini akan menerima dari name="search", name="kategori", name="lokasi"
@@ -52,17 +52,17 @@
 };
 
 
-      const getAsetForUpdate = async (req, res) => {
+const getAsetForUpdate = async (req, res) => {
     try {
         const asetId = req.params.id; // Ambil ID aset dari parameter URL
-        
+
         // Cari aset berdasarkan primary key (ID) di database
-        const asetToUpdate = await Aset.findByPk(asetId); 
+        const asetToUpdate = await Aset.findByPk(asetId);
 
         // Jika aset ditemukan
         if (asetToUpdate) {
             // Render tampilan 'Update Barang.ejs'
-            // Kirim data aset 
+            // Kirim data aset
             res.render("UpdateBarang", {
                 title: "Update Barang", // Judul halaman
                 id: asetId, // Mengirim ID untuk digunakan di form EJS (misal untuk action form)
@@ -84,7 +84,7 @@
 // ==============================================================================
 const updateAset = async (req, res) => {
     try {
-        const asetId = req.params.id; 
+        const asetId = req.params.id;
         const {
             kode_barang,
             nama_barang,
@@ -93,7 +93,7 @@ const updateAset = async (req, res) => {
             kondisi,
             lokasi,
             kategori_barang
-        } = req.body; 
+        } = req.body;
 
         const asetToUpdate = await Aset.findByPk(asetId);
 
@@ -114,7 +114,7 @@ const updateAset = async (req, res) => {
 
         // Arahkan kembali ke halaman daftar aset setelah sukses
         // Anda bisa menambahkan query param untuk pesan sukses jika mau
-        res.redirect('/aset?status=success&message=Status berhasil diupdate!'); 
+        res.redirect('/aset?status=success&message=Status berhasil diupdate!');
 
     } catch (error) {
         console.error('Error saat memperbarui aset:', error);
@@ -128,10 +128,10 @@ const updateAset = async (req, res) => {
 // ==============================================================================
 const deleteAset = async (req, res) => {
     try {
-        const asetId = req.params.id; 
-        
+        const asetId = req.params.id;
+
         const deletedRows = await Aset.destroy({
-            where: { id: asetId } 
+            where: { id: asetId }
         });
 
         if (deletedRows > 0) {
@@ -144,9 +144,9 @@ const deleteAset = async (req, res) => {
     } catch (error) {
         console.error('Error menghapus aset:', error);
         // Kirim respons JSON 500 untuk AJAX
-        res.status(500).json({ 
-            error: 'Gagal menghapus aset.', 
-            details: error.message 
+        res.status(500).json({
+            error: 'Gagal menghapus aset.',
+            details: error.message
         });
     }
 };
@@ -159,26 +159,78 @@ const getAsetDetail = async (req, res) => {
 
     try {
         // Menggunakan Sequelize findByPk (Find by Primary Key)
-        // Ini adalah cara paling efisien untuk mencari berdasarkan ID unik
         const asset = await Aset.findByPk(asetId);
 
         if (asset) {
             // Jika aset ditemukan, render template EJS
             res.render('DetailBarang', { // Pastikan path ini benar (misal: views/pages/assetDetail.ejs)
                 title: 'Detail Barang',
-                asset: asset.toJSON() // Mengubah instance Sequelize menjadi objek JSON biasa
-                                      // Ini berguna jika Anda perlu mengakses properti data secara langsung
-                                      // dan bukan metode instance Sequelize.
-                                      // Namun, jika Anda hanya mengakses asset.nama_barang dll, asset langsung juga bisa.
+                asset: asset.toJSON()
             });
         } else {
             // Jika barang tidak ditemukan
-            res.status(404).render('pages/404', { title: 'Tidak Ditemukan', message: 'Barang tidak ditemukan.' });
+            res.status(404).render('404', { title: 'Tidak Ditemukan', message: 'Barang tidak ditemukan.' }); // Asumsi ada view 404.ejs
         }
     } catch (error) {
         console.error('Error fetching asset detail:', error);
         // Mengirimkan halaman error atau pesan error
-        res.status(500).render('pages/error', { title: 'Error Server', message: 'Terjadi kesalahan saat mengambil detail barang.' });
+        res.status(500).render('error', { title: 'Error Server', message: 'Terjadi kesalahan saat mengambil detail barang.' }); // Asumsi ada view error.ejs
+    }
+};
+
+// ==============================================================================
+// FUNGSI BARU: getAddAsetPage - Untuk menampilkan form tambah aset
+// ==============================================================================
+const getAddAsetPage = (req, res) => {
+    try {
+        res.render("AddBarang", {
+            title: "Tambah Barang Baru"
+        });
+    } catch (error) {
+        console.error('Error saat memuat halaman tambah aset:', error);
+        res.status(500).send('Gagal memuat halaman tambah aset.');
+    }
+};
+
+// ==============================================================================
+// FUNGSI BARU: addAset - Untuk menambahkan aset baru ke database
+// ==============================================================================
+const addAset = async (req, res) => {
+    try {
+        // Ambil data dari body permintaan POST
+        const {
+            kode_barang,
+            nama_barang,
+            kuantitas,
+            tanggal_masuk,
+            kondisi,
+            lokasi,
+            kategori_barang
+        } = req.body;
+
+        // Validasi sederhana (Anda bisa menambahkan validasi yang lebih kompleks)
+        if (!kode_barang || !nama_barang || !kuantitas || !tanggal_masuk || !kondisi || !lokasi || !kategori_barang) {
+            return res.status(400).redirect('/add-aset?status=error&message=Semua field harus diisi.');
+        }
+
+        // Buat entri aset baru di database menggunakan Sequelize
+        await Aset.create({
+            kode_barang,
+            nama_barang,
+            kuantitas,
+            tanggal_masuk,
+            kondisi,
+            lokasi,
+            kategori_barang
+        });
+
+        // Redirect ke halaman daftar aset dengan pesan sukses
+        res.redirect('/aset?status=success&message=Aset berhasil ditambahkan!');
+
+    } catch (error) {
+        console.error('Error saat menambahkan aset baru:', error);
+        // Redirect kembali ke halaman tambah aset dengan pesan error
+        res.status(500).redirect('/add-aset?status=error&message=Gagal menambahkan aset. Pastikan kode barang unik atau coba lagi.');
     }
 };
 
@@ -188,5 +240,7 @@ module.exports = {
     getAsetForUpdate,
     updateAset,
     deleteAset,
-    getAsetDetail // Pastikan nama fungsinya di sini sama dengan nama const di atas
+    getAsetDetail,
+    getAddAsetPage, // Tambahkan ini
+    addAset         // Tambahkan ini
 };
