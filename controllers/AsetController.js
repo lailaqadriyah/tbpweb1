@@ -1,4 +1,5 @@
  const { Aset } = require('../models/AsetModel'); 
+ const { Op } = require('sequelize'); // Import operator Sequelize untuk kondisi pencarian
 
         // RUTE UTAMA UNTUK MENAMPILKAN DAFTAR ASET DENGAN DATA DARI DATABASE
 
@@ -14,8 +15,8 @@
         // Tambahkan kondisi pencarian jika 'search' ada
         if (search) {
             whereConditions[Op.or] = [
-                { nama_barang: { [Op.Like]: `%${search}%` } },
-                { kode_barang: { [Op.Like]: `%${search}%` } },
+                { nama_barang: { [Op.like]: `%${search}%` } },
+                { kode_barang: { [Op.like]: `%${search}%` } },
                 // Tambahkan kolom lain yang ingin dicari
             ];
         }

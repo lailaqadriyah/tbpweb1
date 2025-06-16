@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const { getAllAset, getAsetForUpdate, updateAset, getAsetDetail } = require('../controllers/AsetController');
 
+router.get('/aset/detail/:id=', getAsetDetail); 
+
 router.get('/aset', getAllAset); // RUTE UTAMA UNTUK MENAMPILKAN DAFTAR ASET DENGAN DATA DARI DATABASE
 // Ubah rute GET ini:
 router.get('/aset/update/:id', getAsetForUpdate); // RUTE UNTUK MENAMPILKAN FORM UPDATE BARANG
@@ -11,7 +13,6 @@ router.post('/aset/update/:id', updateAset); // Rute POST untuk memproses update
 
 
 router.get('/aset/detail/:id', getAsetDetail);
-
 
 module.exports = router;  
 

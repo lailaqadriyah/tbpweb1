@@ -1,0 +1,62 @@
+<%- include('./partials/layoutStart.ejs') %> 
+<div class="flex w-full max-w-6xl p-4 items-center justify-center gap-12 min-h-screen">
+
+  <!-- Logo dan Branding -->
+  <div class="flex flex-col items-center justify-center w-1/2">
+    <img src="/images/logovensi.png" alt="Logo Vensi" class="w-64 mb-4">
+  </div>
+
+  <!-- Form Login -->
+  <div class="w-1/2 max-w-md">
+    <div class="flex flex-col items-center mb-6">
+      <img src="/images/vensi.png" alt="Small Logo" class="w-12 h-12 mb-2">
+      <h2 class="text-2xl font-bold text-gray-800 mb-1">Masuk ke akun Anda</h2>
+      <p class="text-gray-500 text-sm">Selamat datang kembali!</p>
+    </div>
+    
+    <!-- Pesan error akan muncul di sini -->
+    <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm">
+      Username atau password salah.
+    </div>
+
+    <form onsubmit="return validateLogin(event)" class="space-y-4">
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Username</label>
+        <input type="text" id="username" required placeholder="Masukkan username Anda" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Password</label>
+        <input type="password" id="password" required placeholder="••••••••" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      
+      <div class="flex items-center text-sm">
+        <label class="flex items-center">
+          <input type="checkbox" class="mr-2">
+          Ingat saya
+        </label>
+      </div>
+
+      <button type="submit" class="w-full bg-[#0D1B3E] text-white py-2 rounded-md hover:bg-blue-900 transition">
+        Masuk
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function validateLogin(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const errorDiv = document.getElementById('error-message');
+
+    if (username === "admin" && password === "123") {
+      errorDiv.classList.add("hidden");
+      window.location.href = "/aset"; // Redirect ke halaman aset
+    } else {
+      errorDiv.classList.remove("hidden");
+    }
+  }
+</script>
+
+<%- include('./partials/closeAside.ejs') %>

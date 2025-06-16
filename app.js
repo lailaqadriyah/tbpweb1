@@ -1,3 +1,5 @@
+const session = require('express-session');
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -9,9 +11,12 @@ var app = express();
 
 const sequelize = require('./config/db');
 const { Aset } = require('./models/AsetModel'); 
+const { PengembalianBarang } = require('./models/PengembalianBarangModel');
 const asetRouter = require("./routes/Aset");
 const pengembalianBarangRouter = require("./routes/PengembalianBarang");
 const laporanRouter = require("./routes/Laporan");
+const loginRouter = require('./routes/login')
+const logoutRouter = require('./routes/logout');
 
 
 // Fungsi untuk memulai server setelah koneksi DB berhasil
@@ -26,13 +31,20 @@ async function startServer() {
         // View engine setup
         app.set('views', path.join(__dirname, 'views'));
         app.set('view engine', 'ejs');
-
+        
+        // Middleware setup 
+        app.use(session({
+        secret: 'rahasia123', // bebas, tapi harus rahasia
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false } // gunakan true jika HTTPS
+}));
         app.use(logger('dev'));
         app.use(express.json()); 
         app.use(express.urlencoded({ extended: false })); 
         app.use(cookieParser());
         app.use(express.static(path.join(__dirname, 'public'))); 
-        app.use("/", asetRouter, pengembalianBarangRouter, laporanRouter); // Gunakan router aset dan pengembalian barang
+        app.use("/", asetRouter, pengembalianBarangRouter, laporanRouter, loginRouter, logoutRouter); // Gunakan router aset dan pengembalian barang
 
         var indexRouter = require('./routes/index');
         var usersRouter = require('./routes/users');
@@ -79,5 +91,6 @@ async function startServer() {
 
 // Panggil fungsi utama untuk memulai server dan sinkronisasi DB
 startServer();
+
 
 module.exports = app;
