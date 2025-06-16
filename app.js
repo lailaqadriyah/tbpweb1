@@ -12,11 +12,13 @@ var app = express();
 const sequelize = require('./config/db');
 const { Aset } = require('./models/AsetModel'); 
 const { PengembalianBarang } = require('./models/PengembalianBarangModel');
+const { PeminjamanBarang } = require('./models/PeminjamanBarangModel'); // Import model PeminjamanBarang
 const asetRouter = require("./routes/Aset");
 const pengembalianBarangRouter = require("./routes/PengembalianBarang");
 const laporanRouter = require("./routes/Laporan");
 const loginRouter = require('./routes/login')
 const logoutRouter = require('./routes/logout');
+const notifikasiRouter = require("./routes/PengembalianBarang");
 
 
 // Fungsi untuk memulai server setelah koneksi DB berhasil
@@ -44,7 +46,7 @@ async function startServer() {
         app.use(express.urlencoded({ extended: false })); 
         app.use(cookieParser());
         app.use(express.static(path.join(__dirname, 'public'))); 
-        app.use("/", asetRouter, pengembalianBarangRouter, laporanRouter, loginRouter, logoutRouter); // Gunakan router aset dan pengembalian barang
+        app.use("/", asetRouter, pengembalianBarangRouter, laporanRouter, loginRouter, logoutRouter, notifikasiRouter); // Gunakan router aset dan pengembalian barang
 
         var indexRouter = require('./routes/index');
         var usersRouter = require('./routes/users');
