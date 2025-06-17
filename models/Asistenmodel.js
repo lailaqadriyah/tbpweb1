@@ -1,20 +1,49 @@
-const db = require('../config/db');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db'); 
 
-const insertAsisten = (data, callback) => {
-  const sql = `INSERT INTO asisten 
-    (nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, foto)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+const Asisten = sequelize.define('Asisten', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  nama: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  nomor_asisten: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  nim: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  telepon: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  jabatan: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  jenis_kelamin: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  domisili: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  foto: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+}, {
+  tableName: 'asisten', 
+  timestamps: false, 
+});
 
-  db.query(sql, [
-    data.nama,
-    data.nomor_asisten,
-    data.nim,
-    data.telepon,
-    data.jabatan,
-    data.jenis_kelamin,
-    data.domisili,
-    data.foto
-  ], callback);
-};
-
-module.exports = { insertAsisten };
+module.exports = { Asisten };

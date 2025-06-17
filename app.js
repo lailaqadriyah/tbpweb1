@@ -13,7 +13,7 @@ const sequelize = require('./config/db');
 const { Aset } = require('./models/AsetModel');
 const { PengembalianBarang } = require('./models/PengembalianBarangModel');
 const { PeminjamanBarang } = require('./models/PeminjamanBarangModel'); // Import model PeminjamanBarang
-
+const { Asisten } = require('./models/Asistenmodel');
 const asetRouter = require("./routes/Aset");
 const pengembalianBarangRouter = require("./routes/PengembalianBarang");
 const laporanRouter = require("./routes/Laporan");

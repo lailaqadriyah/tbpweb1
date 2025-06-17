@@ -1,4 +1,4 @@
-const { insertAsisten } = require('../models/AsistenModel');
+const { insertAsisten } = require('../models/Asistenmodel');
 
 // Tampilkan form tambah data
 exports.formTambahAslab = (req, res) => {
@@ -23,14 +23,11 @@ exports.simpanAslab = (req, res) => {
       console.error(err);
       return res.send('Gagal menyimpan data');
     }
-    res.redirect('/aslab/tambah'); // Kembali ke form setelah submit
+    res.redirect('/aslab/tambah');
   });
 };
 
-// ✅ Fungsi ini dipindahkan ke luar agar bisa diekspor dengan benar
+// ✅ Tambahkan fungsi ini
 exports.viewAsisten = (req, res) => {
-  res.render('Aslab/DataAsisten');
- // Harus sesuai nama file EJS
+  res.render('aslab/DataAsisten'); // Harus sesuai path views/aslab/DataAsisten.ejs
 };
-
-
