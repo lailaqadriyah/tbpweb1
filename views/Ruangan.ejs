@@ -1,1 +1,136 @@
-<div>Halooo</div>
+<%- include('./partials/layoutStart.ejs') %> 
+<%- include('./partials/aside.ejs') %>
+
+<div class="flex flex-col flex-1 p-6 bg-gray-100">
+  <div class="flex justify-between items-center mb-6">
+
+<div class="relative flex items-center w-full max-w-md">
+    <form id="search-filter-form" action="/aset" method="GET" class="flex items-center w-full">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5 text-gray-400 absolute left-3"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+            />
+        </svg>
+        <input
+            type="text"
+            id="search"
+            name="search"
+            class="block w-full px-4 py-2 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Cari"
+            autocomplete="off"
+            value="<%= typeof search !== 'undefined' ? search : '' %>"
+        />
+</div>
+
+
+    
+   
+        <a href="/addruangan"
+          class="flex items-center bg-[#0D1F4B] text-white font-medium py-2 px-4 rounded-lg shadow-sm"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-5 h-5 mr-2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          Tambah Ruangan
+        </a>
+    
+  </div>
+
+  <!-- Card Ruangan -->
+  <div class="space-y-4">
+    <!-- Card 1 -->
+     <h2 class="text-xl font-semibold text-gray-800">Daftar Ruangan</h2>
+    <div class="bg-white rounded shadow flex items-center justify-between p-4">
+      <div class="flex items-center space-x-4">
+        <div class="bg-gray-200 w-48 h-20 flex items-center justify-center font-semibold text-gray-700">
+          Ruangan Kepala Lab
+        </div>
+        <div>
+          <h3 class="text-gray-700 font-medium">Ruangan Kepala Lab</h3>
+          <p class="text-gray-500 text-sm">R.LSD.01</p>
+        </div>
+      </div>
+      <div class="flex space-x-3 text-lg">
+        <button class="text-sky-500 hover:text-sky-600">
+          <i class="fas fa-info-circle"></i>
+        </button>
+        <button class="text-green-500 hover:text-green-600">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="text-red-500 hover:text-red-600">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="bg-white rounded shadow flex items-center justify-between p-4">
+      <div class="flex items-center space-x-4">
+        <div class="bg-gray-200 w-48 h-20 flex items-center justify-center font-semibold text-gray-700">
+          Ruangan Asisten Lab
+        </div>
+        <div>
+          <h3 class="text-gray-700 font-medium">Ruangan Asisten Lab</h3>
+          <p class="text-gray-500 text-sm">R.LSD.02</p>
+        </div>
+      </div>
+      <div class="flex space-x-3 text-lg">
+        <button class="text-sky-500 hover:text-sky-600">
+          <i class="fas fa-info-circle"></i>
+        </button>
+        <button class="text-green-500 hover:text-green-600">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="text-red-500 hover:text-red-600">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bg-white rounded shadow flex items-center justify-between p-4">
+      <div class="flex items-center space-x-4">
+        <div class="bg-gray-200 w-48 h-20 flex items-center justify-center font-semibold text-gray-700">
+          Ruang Utama
+        </div>
+        <div>
+          <h3 class="text-gray-700 font-medium">Ruang Utama</h3>
+          <p class="text-gray-500 text-sm">R.LSD.03</p>
+        </div>
+      </div>
+      <div class="flex space-x-3 text-lg">
+        <button class="text-sky-500 hover:text-sky-600">
+          <i class="fas fa-info-circle"></i>
+        </button>
+        <button class="text-green-500 hover:text-green-600">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="text-red-500 hover:text-red-600">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('./partials/closeAside.ejs') %>

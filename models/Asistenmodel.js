@@ -14,12 +14,10 @@ const Asisten = sequelize.define('Asisten', {
   nomor_asisten: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   nim: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   telepon: {
     type: DataTypes.STRING,

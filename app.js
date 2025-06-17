@@ -14,12 +14,16 @@ const { Aset } = require('./models/AsetModel');
 const { PengembalianBarang } = require('./models/PengembalianBarangModel');
 const { PeminjamanBarang } = require('./models/PeminjamanBarangModel'); // Import model PeminjamanBarang
 const { Asisten } = require('./models/Asistenmodel');
+const { Ruangan } = require('./models/RuanganModel');
+
 const asetRouter = require("./routes/Aset");
 const pengembalianBarangRouter = require("./routes/PengembalianBarang");
 const laporanRouter = require("./routes/Laporan");
 const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
 const addBarangRouter = require('./routes/Aset');
+const ruanganRouter= require('./routes/Ruangan');
+const tambahRuangan = require('./routes/Ruangan');
 
 // ✅ Tambahan dari remote
 const addAslabRoutes = require('./routes/AddAslab');
@@ -101,6 +105,9 @@ async function startServer() {
         // Saya tetap mempertahankan sesuai input Anda, tapi perlu dipertimbangkan.
         app.use("/", notifikasiRouter);
         app.use("/", addBarangRouter);
+        
+        app.use("/", ruanganRouter);
+        app.use("/", tambahRuangan);
 
         // Router baru dari remote
         app.use('/aslab', addAslabRoutes);

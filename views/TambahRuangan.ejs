@@ -1,0 +1,47 @@
+<%- include('./partials/layoutStart.ejs') %>
+<%- include('./partials/aside.ejs') %>
+
+<div class="p-6 flex-1 bg-gray-100">
+  <div class="max-w-4xl mx-auto bg-white rounded shadow p-8">
+    <div class="flex justify-between items-start mb-6">
+      <h2 class="text-xl font-semibold text-gray-800">Tambah Ruangan</h2>
+      <a href="/ruangan" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">
+        &times;
+      </a>
+    </div>
+
+    <!-- Upload Gambar -->
+    <form action="/ruangan/tambah" method="POST" enctype="multipart/form-data">
+      <div class="flex justify-center mb-8">
+        <label for="gambar" class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded w-40 h-40 text-gray-400 hover:border-blue-400 transition">
+          <div class="text-center">
+            <p class="text-sm">Tarik gambar ke sini</p>
+            <p class="text-sm">atau</p>
+            <p class="text-blue-600 text-sm hover:underline">Upload gambar</p>
+          </div>
+          <input id="gambar" name="gambar" type="file" accept="image/*" class="hidden" />
+        </label>
+      </div>
+
+      <!-- Form -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <label class="text-gray-700 font-medium">Nama Ruangan</label>
+        <input type="text" name="nama" placeholder="Masukan Nama Ruangan" class="md:col-span-2 border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+
+        <label class="text-gray-700 font-medium">Kode Ruangan</label>
+        <input type="text" name="kode" placeholder="Masukan Kode Ruangan" class="md:col-span-2 border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+
+        <label class="text-gray-700 font-medium">Deskripsi</label>
+        <textarea name="deskripsi" placeholder="Masukan Deskripsi Ruangan" rows="4" class="md:col-span-2 border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+      </div>
+
+      <!-- Tombol Aksi -->
+      <div class="flex justify-end mt-8 space-x-4">
+       <button type="reset" class="px-6 py-2 border border-red-500 rounded-md text-red-500 font-medium hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mr-3">Reset</button>
+            <button type="submit" href="./UpdateBarang.ejs" class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('./partials/closeAside.ejs') %>
