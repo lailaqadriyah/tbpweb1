@@ -19,6 +19,7 @@ const pengembalianBarangRouter = require("./routes/PengembalianBarang");
 const laporanRouter = require("./routes/Laporan");
 const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
+const addBarangRouter = require('./routes/Aset');
 
 // ✅ Tambahan dari remote
 const addAslabRoutes = require('./routes/AddAslab');
@@ -74,13 +75,7 @@ async function startServer() {
         app.set('views', path.join(__dirname, 'views'));
         app.set('view engine', 'ejs');
 
-        // Middleware setup
-        app.use(session({
-            secret: 'rahasia123',
-            resave: false,
-            saveUninitialized: true,
-            cookie: { secure: false }
-        }));
+       
         app.use(logger('dev'));
         app.use(express.json());
         app.use(express.urlencoded({ extended: false }));
@@ -105,6 +100,7 @@ async function startServer() {
         // Jika rute-nya sama, ini bisa menyebabkan masalah atau hanya redundansi.
         // Saya tetap mempertahankan sesuai input Anda, tapi perlu dipertimbangkan.
         app.use("/", notifikasiRouter);
+        app.use("/", addBarangRouter);
 
         // Router baru dari remote
         app.use('/aslab', addAslabRoutes);
