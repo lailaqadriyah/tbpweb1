@@ -1,191 +1,206 @@
-<%- include('./partials/layoutStart.ejs') %> 
+<%- include('./partials/layoutStart.ejs') %>
 <%- include('./partials/aside.ejs') %>
 
-<div class="min-h-screen bg-gray-100 p-4">
-  <div class="container mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-200">
-      <div class="flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.928-5.66c.5-.357 1.282-.357 1.782 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2zM10 12h4m-2-2v4" />
-        </svg>
-        <h2 class="text-xl font-semibold text-gray-800">Notifikasi Email Peminjam</h2>
-      </div>
-      <p class="mt-2 text-sm text-gray-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-        </svg>
-        Ada 5 barang lagi menuju jatuh tenobelum ciikdini email pengingat
-      </p>
+<div class="flex-1 bg-gray-100">
+    <div class="w-full flex justify-end p-4 mr-4"> 
+      <div class="flex items-center space-x-4">
+            <a href="" class="relative">
+                <img src="icons/notif.png" alt="Notification History" class="w-6 h-6">
+            </a>
+            <a href="/notifpengembalian">
+                <img src="icons/bell.png" alt="Notification Bell" class="w-6 h-6" />
+            </a>
+            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-600">
+                    <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                </svg>
+            </div>
+        </div>
     </div>
 
-    <div class="p-6">
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Nama Peminjam
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Barang
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tanggal Pinjam
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tanggal Kembali
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Aksi
-                <button class="ml-2 px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                  Select
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                Fikri A
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                Kamera Nikon
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                10 Juni
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                13 Juni
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-semibold">
-                Telat 2 Hari
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" class="text-red-600 hover:text-red-900">Kirim</a>
-              </td>
-            </tr>
+    <div class="p-6"> <div class="container mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex items-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.928-5.66c.5-.357 1.282-.357 1.782 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2zM10 12h4m-2-2v4" />
+                    </svg>
+                    <h2 class="text-xl font-semibold text-gray-800">Notifikasi Email Peminjam</h2>
+                </div>
+                <p class="mt-2 text-sm text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                    Ada 5 barang lagi menuju jatuh tenobelum ciikdini email pengingat
+                </p>
+            </div>
 
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                Lisa Ray
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                LCD Proyektor
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                10 Juni
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                11 Juni
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600 font-semibold">
-                Jatuh Tempo Besok
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" class="text-red-600 hover:text-red-900">Kirim</a>
-              </td>
-            </tr>
+            <div class="p-6"> <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nama Peminjam
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Barang
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tanggal Pinjam
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tanggal Kembali
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    
+                                    <button class="ml-2 px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                        Select
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    Fikri A
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    Kamera Nikon
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    10 Juni
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    13 Juni
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-semibold">
+                                    Telat 2 Hari
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="#" class="text-red-600 hover:text-red-900">Kirim</a>
+                                </td>
+                            </tr>
 
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                Jeff N
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                Mic
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                10 Juni
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                14 Juni
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600 font-semibold">
-                Jatuh Tempo Besok
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" class="text-red-600 hover:text-red-900">Kirim</a>
-              </td>
-            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    Lisa Ray
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    LCD Proyektor
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    10 Juni
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    11 Juni
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600 font-semibold">
+                                    Jatuh Tempo Besok
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="#" class="text-red-600 hover:text-red-900">Kirim</a>
+                                </td>
+                            </tr>
 
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                Dani
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                Laptop HP
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                10 Juni
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                14 Juni
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600 font-semibold">
-                Jatuh Tempo Besok
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" class="text-red-600 hover:text-red-900">Kirim</a>
-              </td>
-            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    Jeff N
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    Mic
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    10 Juni
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    14 Juni
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600 font-semibold">
+                                    Jatuh Tempo Besok
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="#" class="text-red-600 hover:text-red-900">Kirim</a>
+                                </td>
+                            </tr>
 
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                Mike L
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                Proyektor
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                10 Juni
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                12 Juni
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-semibold">
-                Telat
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" class="text-red-600 hover:text-red-900">Kirim</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    Dani
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    Laptop HP
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    10 Juni
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    14 Juni
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600 font-semibold">
+                                    Jatuh Tempo Besok
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="#" class="text-red-600 hover:text-red-900">Kirim</a>
+                                </td>
+                            </tr>
 
-      <div class="mt-4 flex items-center justify-between">
-        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
-          Sebelumnya
-        </button>
-        <span class="text-sm text-gray-700">
-          Page 1 of 10
-        </span>
-        <button class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-          Berikutnya
-        </button>
-      </div>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    Mike L
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    Proyektor
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    10 Juni
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    12 Juni
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-semibold">
+                                    Telat
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="#" class="text-red-600 hover:text-red-900">Kirim</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 flex items-center justify-between">
+                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
+                        Sebelumnya
+                    </button>
+                    <span class="text-sm text-gray-700">
+                        Page 1 of 10
+                    </span>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Berikutnya
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <%- include('./partials/closeAside.ejs') %>
