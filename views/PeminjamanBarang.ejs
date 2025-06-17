@@ -1,0 +1,84 @@
+<%- include('./partials/layoutStart.ejs') %> 
+<%- include('./partials/aside.ejs') %>
+
+<div class="flex-1 bg-gray-100 p-6">
+  <div class="p-1 mb-4 flex justify-between items-center">
+
+    <%- include('./partials/SearchBarPeminjaman.ejs', { search: search, status: status }) %>
+    
+    <div class="flex items-center space-x-4">
+      <a href="/notifpengembalian">
+        <img src="icons/bell.png" alt="Notification Bell" class="w-6 h-6" />
+      </a>
+      <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-600">
+          <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-md shadow-md p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-gray-800">Peminjaman Barang</h2>
+      <a href="/peminjaman/add" class="flex items-center bg-[#0D1F4B] text-white font-medium py-2 px-4 rounded-lg shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+        </svg>
+        Tambah Peminjaman
+      </a>
+    </div>
+
+    <div class="overflow-x-auto rounded-lg border border-gray-200">
+      <table class="min-w-full divide-y divide-gray-200" id="loanTable">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Nama Peminjam</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Nama Barang</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Jumlah</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Tanggal Pinjam</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Tanggal Kembali</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Status</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Aksi</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% if (peminjaman.length > 0) { %>
+            <% peminjaman.forEach(item => { %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.nama_peminjam %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.nama_barang %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.jumlah %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= new Date(item.tanggal_pinjam).toLocaleDateString('id-ID') %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= new Date(item.tanggal_kembali).toLocaleDateString('id-ID') %></td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                      <%= item.status === 'Dikembalikan' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+                    <%= item.status %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-3">
+                  <a href="/peminjaman/detail/<%= item.id %>" class="text-blue-600 hover:text-blue-900">
+                    <img src="icons/detail.png" class="w-5 h-5" />
+                  </a>
+                  <a href="/peminjaman/update/<%= item.id %>" class="text-green-600 hover:text-green-900">
+                    <img src="icons/edit.png" class="w-5 h-5" />
+                  </a>
+                  <a href="#" class="text-red-600 hover:text-red-900 delete-btn" data-id="<%= item.id %>">
+                    <img src="icons/hapus.png" class="w-5 h-5" />
+                  </a>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada data peminjaman ditemukan.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include('./partials/closeAside.ejs') %>
