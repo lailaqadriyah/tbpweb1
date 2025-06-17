@@ -1,0 +1,39 @@
+<%- include('./partials/layoutStart.ejs') %> 
+<%- include('./partials/aside.ejs') %>
+
+<div class="flex-1 p-6 bg-gray-100 min-h-screen">
+  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
+    
+    <!-- Tombol Kembali -->
+    <div class="flex justify-between items-start mb-6">
+      <h2 class="text-xl font-semibold text-gray-800">Detail Ruangan</h2>
+      <a href="/ruangan" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">
+        &times;
+      </a>
+    </div>
+
+    <!-- Gambar atau Placeholder -->
+    <div class="mt-4 mb-6">
+      <div class="w-full h-56 bg-gray-100 flex items-center justify-center text-gray-500 rounded-md overflow-hidden">
+        <% if (ruangan.gambar) { %>
+          <img src="/uploads/<%= ruangan.gambar %>" alt="<%= ruangan.nama_ruangan %>" class="w-full h-full object-cover" />
+        <% } else { %>
+          <span class="text-lg font-medium"><%= ruangan.nama_ruangan %></span>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Informasi Ruangan -->
+    <div class="text-center mb-4">
+      <h1 class="text-xl font-semibold text-gray-800"><%= ruangan.nama_ruangan %></h1>
+      <p class="text-sm text-gray-500 mt-1"><%= ruangan.kode_ruangan %></p>
+    </div>
+
+    <p class="text-center text-gray-600 leading-relaxed">
+      <%= ruangan.deskripsi %>
+    </p>
+
+  </div>
+</div>
+
+<%- include('./partials/closeAside.ejs') %>

@@ -1,5 +1,5 @@
 var express = require('express');
-const { getAddRuanganPage } = require('../controllers/RuanganController');
+const { getAddRuanganPage, getRuanganForUpdate, getRuanganDetail } = require('../controllers/RuanganController');
 var router = express.Router();
 
 router.get('/ruangan', function(req, res, next) {
@@ -7,5 +7,7 @@ router.get('/ruangan', function(req, res, next) {
 });
 
 router.get('/addruangan', getAddRuanganPage);
+router.get('/updateruangan/:id', getRuanganForUpdate);
+router.get('/detailruangan/:id', getRuanganDetail);
 
 module.exports = router;

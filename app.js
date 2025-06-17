@@ -24,6 +24,8 @@ const logoutRouter = require('./routes/logout');
 const addBarangRouter = require('./routes/Aset');
 const ruanganRouter= require('./routes/Ruangan');
 const tambahRuangan = require('./routes/Ruangan');
+const updateRuangan = require('./routes/Ruangan');
+const detailRuangan = require('./routes/Ruangan');
 
 // ✅ Tambahan dari remote
 const addAslabRoutes = require('./routes/AddAslab');
@@ -108,6 +110,8 @@ async function startServer() {
         
         app.use("/", ruanganRouter);
         app.use("/", tambahRuangan);
+        app.use("/", updateRuangan);
+        app.use("/", detailRuangan);
 
         // Router baru dari remote
         app.use('/aslab', addAslabRoutes);
