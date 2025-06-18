@@ -1,6 +1,7 @@
 // controllers/PeminjamanController.js
 
 const { PeminjamanBarang } = require('../models/PeminjamanBarangModel'); // Model Sequelize
+const { PengembalianBarang } = require('../models/PengembalianBarangModel');
 const { Op } = require('sequelize'); // Diperlukan untuk operasi 'in' atau pencarian nanti
 
 // ==============================================================================
@@ -87,26 +88,46 @@ const hapusPeminjaman = async (req, res) => {
 // CONTROLLER: updateStatusPeminjaman
 // Mengupdate status peminjaman berdasarkan ID (misalnya: dari "Dipinjam" ke "Dikembalikan")
 // ==============================================================================
+
 const updateStatusPeminjaman = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { status_peminjaman } = req.body;
+        const { idsToUpdate } = req.body;
 
-        const peminjaman = await PeminjamanBarang.findByPk(id);
-        if (!peminjaman) {
-            return res.status(404).send('Data peminjaman tidak ditemukan.');
+        if (!Array.isArray(idsToUpdate) || idsToUpdate.length === 0) {
+            return res.status(400).json({ error: "Tidak ada ID yang dikirim." });
         }
 
-        peminjaman.status_peminjaman = status_peminjaman || 'Dipinjam';
-        await peminjaman.save();
+        // 1. Ambil semua data peminjaman yang ingin dikembalikan
+        const peminjamanData = await PeminjamanBarang.findAll({
+            where: { id: { [Op.in]: idsToUpdate } }
+        });
 
-        res.redirect('/peminjaman');
+        // 2. Buat data baru di tabel pengembalian
+        const pengembalianData = peminjamanData.map(item => ({
+            nama_peminjam: item.nama_peminjam,
+            nama_barang: item.nama_barang,
+            no_hp: item.no_hp,
+            email: item.email,
+            jumlah_barang: item.jumlah_barang,
+            status_pengembalian: 'Sudah Dikembalikan'
+        }));
+
+        await PengembalianBarang.bulkCreate(pengembalianData);
+
+        // 3. Hapus data dari tabel peminjaman
+        await PeminjamanBarang.destroy({
+            where: { id: { [Op.in]: idsToUpdate } }
+        });
+
+        // 4. Respon sukses
+        res.status(200).json({ message: "Barang berhasil dikembalikan dan dipindahkan ke riwayat pengembalian." });
 
     } catch (error) {
         console.error('Gagal mengupdate status peminjaman:', error);
-        res.status(500).send('Terjadi kesalahan saat mengupdate status.');
+        res.status(500).json({ error: 'Terjadi kesalahan saat mengupdate status peminjaman.' });
     }
 };
+
 
 // ==============================================================================
 // CONTROLLER: riwayatPeminjaman

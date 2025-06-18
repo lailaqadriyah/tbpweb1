@@ -20,7 +20,7 @@ router.post('/peminjaman/tambah', peminjamanController.tambahPeminjaman);
 router.post('/peminjaman/hapus/:id', peminjamanController.hapusPeminjaman);
 
 // Update status peminjaman
-router.post('/peminjaman/update-status/:id', peminjamanController.updateStatusPeminjaman);
+router.post('/peminjaman/update-status', peminjamanController.updateStatusPeminjaman);
 
 // Tampilkan riwayat
 router.get('/riwayat', riwayatPeminjaman);
