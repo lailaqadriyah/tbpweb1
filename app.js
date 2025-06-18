@@ -46,6 +46,9 @@ const notifikasiRouter = require("./routes/PengembalianBarang");  // Mengimpor n
 // Gunakan router untuk pengembalian barang / notifikasi
 app.use("/notifikasi", notifikasiRouter);  // Menambahkan rute '/notifikasi' untuk pengembalian barang
 
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+        
 // Router lainnya
 app.use("/", asetRouter);
 app.use('/', peminjamanBarangRouter);
@@ -121,8 +124,7 @@ async function startServer() {
         app.set('view engine', 'ejs');
 
         app.use(logger('dev'));
-        app.use(express.json());
-        app.use(express.urlencoded({ extended: false }));
+        
         app.use(cookieParser());
         app.use(express.static(path.join(__dirname, 'public')));
 
@@ -131,7 +133,8 @@ async function startServer() {
           req.kirimEMail = kirimEMail;
           next();
         });
-
+        
+      
         // Use all routers
         app.use("/", asetRouter);
         app.use('/', peminjamanBarangRouter);

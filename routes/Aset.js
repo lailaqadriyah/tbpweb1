@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { getAllAset, getAsetForUpdate, updateAset, getAsetDetail, addAset } = require('../controllers/AsetController');
+const { getAllAset, getAsetForUpdate, updateAset, getAsetDetail, addAset, tampilFormPengajuan, prosesPengajuan } = require('../controllers/AsetController');
 
 router.get('/addaset', function(req, res, next) {
   res.render('AddBarang', { title: 'Tambah Barang' });
@@ -18,6 +18,9 @@ router.post('/aset/update/:id', updateAset); // Rute POST untuk memproses update
 
 router.get('/aset/detail/:id', getAsetDetail);
 router.get('/aset/add', addAset);
+
+router.get('/aset/ajukan', tampilFormPengajuan);   // tampilkan form
+router.post('/aset/ajukan', prosesPengajuan);      // proses form dan tampilkan surat
 
 
 module.exports = router;  

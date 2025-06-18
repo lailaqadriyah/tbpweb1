@@ -234,6 +234,42 @@ const addAset = async (req, res) => {
     }
 };
 
+// Tampilkan halaman form pengajuan barang baru
+const tampilFormPengajuan = (req, res) => {
+    res.render('PengajuanBarangBaru', {
+        title: 'Pengajuan Barang Baru'
+    });
+};
+
+const prosesPengajuan = (req, res) => {
+  const {
+    namaPengaju,
+    jabatanPengaju,
+    namaBarang,
+    jumlahBarang,
+    ruanganTujuan,
+    spesifikasi,
+    alasan
+  } = req.body;
+
+  const tanggal = new Date().toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+
+  res.render('SuratPengajuanBarang', {
+    namaPengaju,
+    jabatanPengaju,
+    namaBarang,
+    jumlahBarang,
+    ruanganTujuan,
+    spesifikasi,
+    alasan,
+    tanggal
+  });
+};
+
 // Ekspor semua fungsi controller
 module.exports = {
     getAllAset,
@@ -242,5 +278,7 @@ module.exports = {
     deleteAset,
     getAsetDetail,
     getAddAsetPage, // Tambahkan ini
-    addAset         // Tambahkan ini
+    addAset,       // Tambahkan ini
+    tampilFormPengajuan,
+    prosesPengajuan
 };
