@@ -19,6 +19,7 @@ const { Ruangan } = require('./models/RuanganModel');
 
 // Import Router
 const asetRouter = require("./routes/Aset");
+const peminjamanBarangRouter = require("./routes/PeminjamanBarang");
 const pengembalianBarangRouter = require("./routes/PengembalianBarang");
 const laporanRouter = require("./routes/Laporan");
 const loginRouter = require('./routes/login');
@@ -45,6 +46,7 @@ app.use("/notifikasi", notifikasiRouter);  // Menambahkan rute '/notifikasi' unt
 
 // Router lainnya
 app.use("/", asetRouter);
+app.use('/', peminjamanBarangRouter);
 app.use("/", pengembalianBarangRouter);
 app.use("/", laporanRouter);
 app.use("/", loginRouter);
