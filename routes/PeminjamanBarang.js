@@ -5,18 +5,24 @@ const router = express.Router();
 const peminjamanController = require('../controllers/PeminjamanBarangController'); // Pastikan path ini sesuai!
 const { riwayatPeminjaman } = require('../controllers/PeminjamanBarangController');
 
-// Rute untuk menampilkan daftar semua peminjaman barang
+// Tampilkan form tambah peminjaman
+router.get('/peminjaman/tambah', (req, res) => {
+    res.render('FormPeminjamanBarang', { title: 'Tambah Peminjaman' });
+});
+
+// Tampilkan daftar semua peminjaman barang
 router.get('/peminjaman', peminjamanController.getAllPeminjaman);
 
-// Rute untuk menambahkan data peminjaman barang
+// Tambah data peminjaman barang (POST)
 router.post('/peminjaman/tambah', peminjamanController.tambahPeminjaman);
 
-// Rute untuk menghapus data peminjaman (misalnya melalui tombol hapus di tabel)
+// Hapus data peminjaman
 router.post('/peminjaman/hapus/:id', peminjamanController.hapusPeminjaman);
 
-// Rute untuk mengupdate status peminjaman (misalnya menjadi 'Selesai', 'Dipinjam', dll.)
+// Update status peminjaman
 router.post('/peminjaman/update-status/:id', peminjamanController.updateStatusPeminjaman);
 
+// Tampilkan riwayat
 router.get('/riwayat', riwayatPeminjaman);
 
 module.exports = router;

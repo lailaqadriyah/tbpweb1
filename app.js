@@ -58,7 +58,6 @@ app.use("/", ruanganRouter);
 app.use("/", tambahRuangan);
 app.use("/", updateRuangan);
 app.use("/", detailRuangan);
-
 app.use("/", riwayatAktivitas);
 
 // Rute lainnya
@@ -135,6 +134,7 @@ async function startServer() {
 
         // Use all routers
         app.use("/", asetRouter);
+        app.use('/', peminjamanBarangRouter);
         app.use("/", pengembalianBarangRouter);
         app.use("/", laporanRouter);
         app.use("/", loginRouter);
@@ -144,6 +144,7 @@ async function startServer() {
         app.use("/", tambahRuangan);
         app.use("/", updateRuangan);
         app.use("/", detailRuangan);
+        app.use("/", riwayatAktivitas);
 
         // Route for Add Aslab and Data Asisten
         app.use('/aslab', addAslabRoutes);

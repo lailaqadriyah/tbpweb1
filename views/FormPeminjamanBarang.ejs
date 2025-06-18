@@ -1,0 +1,87 @@
+<%- include('./partials/layoutStart.ejs') %>
+<%- include('./partials/aside.ejs') %>
+
+<div class="flex-1 bg-gray-100 p-6">
+    <div class="mb-6 bg-white rounded-md shadow-md p-6">
+        <div class="flex justify-between items-center mb-6 pb-4">
+            <h2 class="text-2xl font-semibold text-gray-800">Peminjaman Barang</h2>
+            <a href="/peminjaman" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times text-xl"></i>
+            </a>
+        </div>
+
+        <form action="/peminjaman/tambah" method="POST">
+            <div>
+                <!-- Icon Profil Kosong -->
+                <div class="flex flex-col items-center justify-center mb-4 p-6 md:h-full">
+                    <!-- Icon profil kosong -->
+                    <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+                        <span class="text-white text-xl">👤</span> <!-- Placeholder untuk icon profil kosong -->
+                    </div>
+                </div>
+
+                <!-- Form Fields -->
+                <div class="space-y-4">
+                    <div>
+                        <label for="namaPeminjam" class="block text-sm font-medium text-gray-700 mb-1">Nama Peminjam</label>
+                        <input type="text" id="namaPeminjam" name="nama_peminjam" placeholder="Masukkan nama peminjam" value=""
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="tanggalPinjam" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Peminjaman</label>
+                        <input type="date" id="tanggalPinjam" name="tanggal_pinjam" placeholder="Masukkan tanggal peminjaman" value=""
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="durasiPeminjaman" class="block text-sm font-medium text-gray-700 mb-1">Durasi Peminjaman</label>
+                        <input type="text" id="durasiPeminjaman" name="durasi_peminjaman" placeholder="Masukkan durasi peminjaman" value=""
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Masukkan email" value=""
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+
+                    <div>
+                        <label for="noHp" class="block text-sm font-medium text-gray-700 mb-1">No. HP</label>
+                        <input type="text" id="noHp" name="no_hp" placeholder="Masukkan nomor HP" value=""
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+
+                    <!-- Additional fields as per your form -->
+                    <div>
+                        <label for="barang" class="block text-sm font-medium text-gray-700 mb-1">Barang</label>
+                        <input type="text" id="barang" name="barang" placeholder="Masukkan kode barang" value=""
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tombol Detail Peminjaman -->
+            <div class="flex justify-end mt-4">
+                <button type="button"
+                    class="px-6 py-2 border border-gray-500 rounded-md text-gray-500 font-medium hover:bg-gray-300 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    Detail Peminjaman
+                </button>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-end mt-8 pt-4 border-t border-gray-200">
+                <button type="reset"
+                    class="px-6 py-2 border border-red-500 rounded-md text-red-500 font-medium hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mr-3">
+                    Reset
+                </button>
+                <button type="submit"
+                    class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Simpan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('./partials/closeAside.ejs') %>
