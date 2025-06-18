@@ -1,12 +1,12 @@
 <%- include('./partials/layoutStart.ejs') %>
-<%- include('./partials/aside.ejs') %> <%-- PERBAIKAN: Hapus ./ yang dobel --%>
+<%- include('./partials/aside.ejs') %> 
 
 <div class="flex-1 bg-gray-100 p-6">
     <div class="p-1 mb-4 flex justify-between items-center">
         <div class="relative flex items-center w-full max-w-md"></div>
         <div class="flex items-center space-x-4">
             <div>
-                <a href="/notifpengembalian"> <%-- Link untuk notifikasi pengembalian --%>
+                <a href="/notifpengembalian"> 
                     <img src="icons/bell.png" alt="Notification Bell" class="w-6 h-6">
                 </a>
             </div>
@@ -23,13 +23,13 @@
             <h2 class="text-xl font-semibold text-gray-800">Pengembalian</h2>
             <div class="flex space-x-2">
                 <a href="/form-pengembalian-baru" class="flex items-center bg-[#0D1F4B] text-white font-medium py-2 px-4 rounded-lg shadow-sm">
-                    Pengembalian Barang <%-- Ini mungkin link ke form untuk mencatat pengembalian baru --%>
+                    Pengembalian Barang 
                 </a>
             </div>
         </div>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200">
-            <table class="min-w-full divide-y divide-gray-200" id="returnsTable"> <%-- ID tabel diganti ke 'returnsTable' --%>
+            <table class="min-w-full divide-y divide-gray-200" id="returnsTable"> 
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Nama Peminjam</th>
@@ -39,7 +39,7 @@
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Status</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Jumlah</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Pilih</th>
-                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Aksi</th> <%-- Tambahkan kolom Aksi untuk Detail/Edit/Hapus --%>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Aksi</th> 
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" id="tabelPengembalian">
@@ -65,7 +65,6 @@
                                     <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500">
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-3">
-                                    <%-- Tombol Aksi (Detail, Edit, Hapus) untuk data Pengembalian --%>
                                     <a href="/pengembalian/detail/<%= item.id %>" class="text-blue-600 hover:text-blue-900">
                                         <img src="icons/detail.png" alt="Icon Detail" class="w-5 h-5">
                                     </a>
@@ -89,7 +88,6 @@
             </table>
         </div>
 
-        <%-- Bagian Pagination: Tombol dan info halaman disembunyikan karena pagination dilakukan di server (atau tidak ada) --%>
         <div class="flex justify-between items-center mt-6">
             <button id="prevPageBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm" style="display: none;">Sebelumnya</button>
             <span id="pageInfo" class="text-gray-600 text-sm" style="display: none;"></span>
@@ -101,7 +99,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const returnsTable = document.getElementById('returnsTable'); // Ganti ID tabel
+        const returnsTable = document.getElementById('returnsTable'); 
 
         if (returnsTable) {
             returnsTable.addEventListener('click', function(e) {
@@ -123,8 +121,7 @@
                         cancelButtonText: "Batal"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Lakukan permintaan DELETE ke server untuk menghapus data pengembalian
-                            fetch(`/pengembalian/${itemId}`, { // Sesuaikan URL API DELETE pengembalian Anda
+                            fetch(`/pengembalian/${itemId}`, { 
                                 method: 'DELETE'
                             })
                             .then(response => {
@@ -139,7 +136,6 @@
                                     text: data.message || `Data pengembalian dengan ID ${itemId} telah dihapus.`,
                                     icon: "success"
                                 }).then(() => {
-                                    // Muat ulang halaman setelah penghapusan berhasil
                                     window.location.reload(); 
                                 });
                             })
@@ -157,7 +153,6 @@
             });
         }
 
-        // --- LOGIKA SWEETALERT UNTUK NOTIFIKASI DARI URL QUERY PARAMETER ---
         const urlParams = new URLSearchParams(window.location.search);
         const status = urlParams.get('status');
         const message = urlParams.get('message');

@@ -1,6 +1,6 @@
 // controllers/PengembalianController.js
 
-const { Pengembalian } = require('../models/PengembalianModel'); // Sesuaikan path ke model Pengembalian Anda
+const { Pengembalian } = require('../models/PengembalianBarangModel'); // Sesuaikan path ke model Pengembalian Anda
 // const { Op } = require('sequelize'); // TIDAK DIPERLUKAN KARENA TIDAK ADA PENCARIAN/FILTER
 
 // ==============================================================================
@@ -33,5 +33,4 @@ const getAllPengembalian = async (req, res) => {
 
 module.exports = {
     getAllPengembalian,
-
 };

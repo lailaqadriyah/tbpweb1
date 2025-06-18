@@ -1,11 +1,15 @@
 var express = require('express');
 var router = express.Router();
+// Import controller Pengembalian Anda
+const pengembalianController = require('../controllers/PengembalianBarangController'); // PASTIKAN PATH INI BENAR!
 
-router.get('/pengembalian', function(req, res, next) {
-  res.render('PengembalianBarang', { title: 'Pengembalian Barang' });
-});
+// Rute untuk menampilkan daftar semua pengembalian barang
+// Sekarang kita menggunakan fungsi controller yang akan mengambil data dari DB dan merendernya
+router.get('/pengembalian', pengembalianController.getAllPengembalian);
 
+// Rute untuk notifikasi pengembalian (tidak berubah karena tidak ada tabel di sini)
 router.get('/notifpengembalian', function(req, res, next) {
   res.render('NotifikasiPengembalian', { title: 'Notifikasi Pengembalian' });
 });
+
 module.exports = router;
