@@ -1,134 +1,74 @@
-<aside
-  class="w-60 min-h-screen bg-[#0D1F4B] text-white flex flex-col justify-between p-4 rounded-r-xl"
->
+<aside class="w-60 min-h-screen bg-[#0D1F4B] text-white flex flex-col justify-between p-4 rounded-r-xl">
   <div class="w-fit">
     <img src="/images/logovensi.png" alt="Logo Vensi" class="w-42 mb-6" />
 
     <nav class="space-y-4">
-      <div >
-        <a
-          href="/aset"
-          class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
-        >
-          <img
-            src="/icons/Home.png"
-            class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
-            alt="Dashboard"
-          />
+      <!-- Dashboard Menu -->
+      <div>
+        <a href="/aset" class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md">
+          <img src="/icons/Home.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Dashboard" />
           Dashboard
         </a>
       </div>
 
-      <div class="relative"> 
-        <button
-          type="button"
-          class="group flex items-center text-white hover:text-orange-500 font-medium p-2"
-          id="menu-button"
-          aria-expanded="false"
-          aria-haspopup="true"
-        >
-          <img
-            src="/icons/Inventory.png"
-            class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
-            alt="Data Barang"
-          />
+      <!-- Data Barang Dropdown -->
+      <div class="relative">
+        <button type="button" class="group flex items-center text-white hover:text-orange-500 font-medium p-2" id="menu-button" aria-expanded="false" aria-haspopup="true">
+          <img src="/icons/Inventory.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Data Barang" />
           <span>Data Barang</span>
-          <svg
-            class="ml-auto size-5 text-gray-400 transform transition-transform duration-2 00"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-            data-slot="icon"
-            id="arrow-icon"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-              clip-rule="evenodd"
-            />
+          <svg class="ml-auto size-5 text-gray-400 transform transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" id="arrow-icon">
+            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
           </svg>
         </button>
 
-        <div
-          class="mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="menu-button"
-          tabindex="-1"
-          id="dropdown-menu"
-        >
-          <div class="py-1 " role="none">
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              role="menuitem"
-              tabindex="-1"
-              id="menu-item-0"
-              >Data Peminjaman</a
-            >
+        <div class="mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" id="dropdown-menu">
+          <div class="py-1" role="none">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1" id="menu-item-0">Data Peminjaman</a>
             <div class="border-t border-gray-200 mx-4"></div>
-            <a
-              href="/pengembalian"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              role="menuitem"
-              tabindex="-1"
-              id="menu-item-1"
-              >Data Pengembalian</a
-            >
+            <a href="/pengembalian" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1" id="menu-item-1">Data Pengembalian</a>
           </div>
         </div>
       </div>
 
+      <!-- Data Asisten Dropdown -->
+      <div class="relative">
+        <button type="button" class="group flex items-center text-white hover:text-orange-500 font-medium p-2" id="menu-button-asisten" aria-expanded="false" aria-haspopup="true">
+          <img src="/icons/Suppliers.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Data Asisten" />
+          <span>Data Asisten</span>
+          <svg class="ml-auto size-5 text-gray-400 transform transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" id="arrow-icon-asisten">
+            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <div class="mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button-asisten" tabindex="-1" id="dropdown-menu-asisten">
+          <div class="py-1" role="none">
+            <a href="/aslab/data" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1" id="menu-item-2">Tampilkan Data Asisten</a>
+            <div class="border-t border-gray-200 mx-4"></div>
+            <a href="/aslab/tambah" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1" id="menu-item-3">Tambah Data Asisten</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Laporan -->
       <div>
-        <a
-          href="/laporan"
-          class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
-        >
-          <img
-            src="/icons/Report.png"
-            class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
-            alt="Laporan"
-          />
+        <a href="/laporan" class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md">
+          <img src="/icons/Report.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Laporan" />
           Laporan
         </a>
       </div>
-      <div>
-        <a
-        href="/aslab/data"
-        class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
-        >
-        <img
-        src="/icons/Suppliers.png"
-        class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
-        alt="Data Asisten"
-/>
-Data Asisten
-</a>
 
-      </div>
+      <!-- Data Ruangan -->
       <div>
-        <a
-          href="/ruangan"
-          class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
-        >
-          <img
-            src="/icons/Manage Store.png"
-            class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
-            alt="Data Ruangan"
-          />
+        <a href="/ruangan" class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md">
+          <img src="/icons/Manage Store.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Data Ruangan" />
           Data Ruangan
         </a>
       </div>
+
+      <!-- Kalender Aktivitas -->
       <div>
-        <a
-          href="#"
-          class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
-        >
-          <img
-            src="/icons/Group.png"
-            class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
-            alt="Data Ruangan"
-          />
+        <a href="#" class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md">
+          <img src="/icons/Group.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Kalender Aktivitas" />
           Kalender Aktivitas
         </a>
       </div>
@@ -136,23 +76,16 @@ Data Asisten
   </div>
 
   <div class="space-y-4">
- 
     <div>
-      <a
-        href="/logout"
-        class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md"
-      >
-        <img
-          src="/icons/Log Out.png"
-          class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200"
-          alt="Log Out"
-        />
+      <a href="/logout" class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md">
+        <img src="/icons/Log Out.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Log Out" />
         Log Out
       </a>
     </div>
   </div>
 </aside>
 
+<!-- Script untuk menampilkan dropdown -->
 <script>
   const menuButton = document.getElementById("menu-button");
   const dropdownMenu = document.getElementById("dropdown-menu");
@@ -180,6 +113,36 @@ Data Asisten
       dropdownMenu.classList.add("hidden");
       menuButton.setAttribute("aria-expanded", "false");
       arrowIcon.classList.remove("rotate-180");
+    }
+  });
+
+  // Data Asisten dropdown
+  const menuButtonAsisten = document.getElementById("menu-button-asisten");
+  const dropdownMenuAsisten = document.getElementById("dropdown-menu-asisten");
+  const arrowIconAsisten = document.getElementById("arrow-icon-asisten");
+
+  menuButtonAsisten.addEventListener("click", () => {
+    const isExpanded = menuButtonAsisten.getAttribute("aria-expanded") === "true";
+
+    dropdownMenuAsisten.classList.toggle("hidden");
+
+    menuButtonAsisten.setAttribute("aria-expanded", !isExpanded);
+
+    if (!isExpanded) {
+      arrowIconAsisten.classList.add("rotate-180");
+    } else {
+      arrowIconAsisten.classList.remove("rotate-180");
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (
+      !menuButtonAsisten.contains(event.target) &&
+      !dropdownMenuAsisten.contains(event.target)
+    ) {
+      dropdownMenuAsisten.classList.add("hidden");
+      menuButtonAsisten.setAttribute("aria-expanded", "false");
+      arrowIconAsisten.classList.remove("rotate-180");
     }
   });
 </script>

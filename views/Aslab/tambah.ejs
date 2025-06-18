@@ -1,33 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Tambah Asisten</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Data Asisten</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 min-h-screen p-8">
-  <div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
-    <h2 class="text-2xl font-bold mb-4 text-blue-700">Tambah Data Asisten</h2>
 
-    <form action="/aslab/tambah" method="POST" class="space-y-4">
-      <input type="text" name="nama" placeholder="Nama" class="border p-2 w-full" required>
-      <input type="text" name="nomor_asisten" placeholder="Nomor Asisten" class="border p-2 w-full">
-      <input type="text" name="nim" placeholder="NIM" class="border p-2 w-full">
-      <input type="text" name="telepon" placeholder="Telepon" class="border p-2 w-full">
-      <input type="text" name="jabatan" placeholder="Jabatan" class="border p-2 w-full">
+<body>
+    <!-- Memanggil layoutStart -->
+    <%- include('../partials/layoutStart.ejs') %>
 
-      <select name="jenis_kelamin" class="border p-2 w-full">
-        <option value="">-- Jenis Kelamin --</option>
-        <option value="Laki-laki">Laki-laki</option>
-        <option value="Perempuan">Perempuan</option>
-      </select>
+    <!-- Memanggil Sidebar -->
+    <%- include('../partials/aside.ejs') %>
 
-      <input type="text" name="domisili" placeholder="Domisili" class="border p-2 w-full">
+    <!-- Konten Utama -->
+    <div class="flex-1 bg-gray-100 p-6">
+        <div class="p-1 mb-4 flex justify-between items-center">
+            <h1 class="text-xl font-semibold text-gray-800">Tambah Data Asisten</h1>
+        </div>
 
-      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-        Simpan
-      </button>
-    </form>
-  </div>
+        <!-- Form untuk menambah data asisten -->
+        <form action="/aslab/tambah" method="POST" enctype="multipart/form-data">
+            <div class="space-y-4 bg-white p-6 rounded-lg shadow-md">
+                <!-- Logo Section -->
+                <div class="flex justify-center">
+                    <div class="flex flex-col items-center">
+                        <img src="/images/logovensi.png" alt="Logo" class="w-24 mb-4" />
+                        <div class="text-center text-gray-500">
+                            <p>Tarik gambar ke sini</p>
+                            <p>atau</p>
+                            <label for="foto" class="text-blue-500 cursor-pointer">Upload gambar</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Fields -->
+                <div>
+                    <label for="nama" class="block text-gray-700">Nama:</label>
+                    <input type="text" name="nama" id="nama" placeholder="Masukkan nama" class="w-full p-2 border rounded-md" required />
+                </div>
+
+                <div>
+                    <label for="nomor_asisten" class="block text-gray-700">Nomor Asisten:</label>
+                    <input type="text" name="nomor_asisten" id="nomor_asisten" placeholder="Masukkan nomor asisten" class="w-full p-2 border rounded-md" required />
+                </div>
+
+                <div>
+                    <label for="nim" class="block text-gray-700">NIM:</label>
+                    <input type="text" name="nim" id="nim" placeholder="Masukkan NIM" class="w-full p-2 border rounded-md" required />
+                </div>
+
+                <div>
+                    <label for="telepon" class="block text-gray-700">Telepon:</label>
+                    <input type="text" name="telepon" id="telepon" placeholder="Masukkan No. Telepon" class="w-full p-2 border rounded-md" />
+                </div>
+
+                <div>
+                    <label for="jabatan" class="block text-gray-700">Jabatan:</label>
+                    <input type="text" name="jabatan" id="jabatan" placeholder="Masukkan jabatan" class="w-full p-2 border rounded-md" />
+                </div>
+
+                <div>
+                    <label for="jenis_kelamin" class="block text-gray-700">Jenis Kelamin:</label>
+                    <select name="jenis_kelamin" id="jenis_kelamin" class="w-full p-2 border rounded-md">
+                        <option value="Perempuan">Perempuan</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="domisili" class="block text-gray-700">Domisili:</label>
+                    <input type="text" name="domisili" id="domisili" placeholder="Masukkan domisili" class="w-full p-2 border rounded-md" />
+                </div>
+
+                <div>
+                    <label for="foto" class="block text-gray-700">Foto:</label>
+                    <input type="file" name="foto" id="foto" class="w-full p-2 border rounded-md" />
+                </div>
+
+                <div class="flex space-x-4 mt-4">
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">Simpan</button>
+                    <button type="reset" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tutup Sidebar -->
+    <%- include('../partials/closeAside.ejs') %>
 </body>
+
 </html>

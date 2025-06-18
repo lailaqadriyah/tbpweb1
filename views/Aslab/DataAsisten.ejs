@@ -1,4 +1,78 @@
-<main class="container">
-  <h2>Data Asisten</h2>
-  <p>Ini adalah halaman untuk menampilkan daftar asisten lab.</p>
-</main>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Asisten</title>
+</head>
+
+<body>
+    <!-- Memanggil layoutStart -->
+    <%- include('../partials/layoutStart.ejs') %>
+
+    <!-- Memanggil Sidebar -->
+    <%- include('../partials/aside.ejs') %>
+
+    <!-- Konten Utama -->
+    <div class="flex-1 bg-gray-100 p-6">
+        <div class="p-1 mb-4 flex justify-between items-center">
+            <h1 class="text-xl font-semibold text-gray-800">Data Asisten</h1>
+
+            <!-- Search Bar Section -->
+            <div class="flex items-center space-x-4">
+                <input type="text" placeholder="Cari" class="p-2 border rounded-md" value="<%= search %>" />
+                <button class="p-2">
+                    <img src="icons/filter.png" alt="Filter" class="w-6 h-6" />
+                </button>
+            </div>
+        </div>
+
+        <% if (asistenList.length === 0) { %>
+            <div class="text-center text-gray-600">
+                <p>Tidak ada data asisten</p>
+            </div>
+        <% } else { %>
+            <div class="overflow-x-auto rounded-lg border border-gray-200">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                                Nama
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                                Nomor Asisten
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                                NIM
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                                Telepon
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                                Jabatan
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <% asistenList.forEach(asisten => { %>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.nama %></td>
+                                <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.nomor_asisten %></td>
+                                <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.nim %></td>
+                                <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.telepon %></td>
+                                <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.jabatan %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Tutup Sidebar -->
+    <%- include('../partials/closeAside.ejs') %>
+
+</body>
+
+</html>
