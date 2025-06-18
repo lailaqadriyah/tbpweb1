@@ -12,4 +12,6 @@ router.get('/notifpengembalian', function(req, res, next) {
   res.render('NotifikasiPengembalian', { title: 'Notifikasi Pengembalian' });
 });
 
+router.post('/pengembalian/update-status', pengembalianController.updateStatusPengembalian);
+
 module.exports = router;

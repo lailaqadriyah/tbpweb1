@@ -1,12 +1,12 @@
 <%- include('./partials/layoutStart.ejs') %>
-<%- include('./partials/aside.ejs') %> 
+<%- include('./partials/aside.ejs') %>
 
 <div class="flex-1 bg-gray-100 p-6">
     <div class="p-1 mb-4 flex justify-between items-center">
         <div class="relative flex items-center w-full max-w-md"></div>
         <div class="flex items-center space-x-4">
             <div>
-                <a href="/notifpengembalian"> 
+                <a href="/notifpengembalian">
                     <img src="icons/bell.png" alt="Notification Bell" class="w-6 h-6">
                 </a>
             </div>
@@ -22,14 +22,17 @@
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-semibold text-gray-800">Pengembalian</h2>
             <div class="flex space-x-2">
-                <a href="/form-pengembalian-baru" class="flex items-center bg-[#0D1F4B] text-white font-medium py-2 px-4 rounded-lg shadow-sm">
-                    Pengembalian Barang 
+                <button id="btnPengembalianBarang" class="flex items-center bg-[#0D1F4B] text-white font-medium py-2 px-4 rounded-lg shadow-sm">
+                    Pengembalian Barang
+                </button>
+                <a href="/form-pengembalian-baru" class="flex items-center bg-gray-600 text-white font-medium py-2 px-4 rounded-lg shadow-sm ml-2">
+                    Tambah Pengembalian Baru
                 </a>
             </div>
         </div>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200">
-            <table class="min-w-full divide-y divide-gray-200" id="returnsTable"> 
+            <table class="min-w-full divide-y divide-gray-200" id="returnsTable">
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Nama Peminjam</th>
@@ -39,15 +42,14 @@
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Status</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Jumlah</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Pilih</th>
-                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Aksi</th> 
-                    </tr>
+                        </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" id="tabelPengembalian">
                     <% if (pengembalian && pengembalian.length > 0) { %>
                         <% pengembalian.forEach(function(item) { %>
-                            <% 
-                                const statusClass = item.status_pengembalian === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                                    item.status_pengembalian === 'Dikembalikan' ? 'bg-green-100 text-green-800' : 
+                            <%
+                                const statusClass = item.status_pengembalian === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                    item.status_pengembalian === 'Dikembalikan' ? 'bg-green-100 text-green-800' :
                                                     'bg-red-100 text-red-800'; // Asumsi nilai lain berarti Terlambat/Rusak
                             %>
                             <tr class="hover:bg-gray-50">
@@ -62,20 +64,9 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.jumlah_barang %></td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500">
+                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500" data-id="<%= item.id %>">
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-3">
-                                    <a href="/pengembalian/detail/<%= item.id %>" class="text-blue-600 hover:text-blue-900">
-                                        <img src="icons/detail.png" alt="Icon Detail" class="w-5 h-5">
-                                    </a>
-                                    <a href="/pengembalian/update/<%= item.id %>" class="text-green-600 hover:text-green-900">
-                                        <img src="icons/edit.png" alt="Icon Edit" class="w-5 h-5">
-                                    </a>
-                                    <a href="#" class="text-red-600 hover:text-red-900 delete-btn" data-id="<%= item.id %>">
-                                        <img src="icons/hapus.png" alt="Icon Hapus" class="w-5 h-5">
-                                    </a>
-                                </td>
-                            </tr>
+                                </tr>
                         <% }); %>
                     <% } else { %>
                         <tr>
@@ -99,11 +90,13 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const returnsTable = document.getElementById('returnsTable'); 
+        const returnsTable = document.getElementById('returnsTable');
+        const btnPengembalianBarang = document.getElementById('btnPengembalianBarang'); // Ambil tombol "Pengembalian Barang"
 
+        // Event listener untuk tombol hapus (jika ada di masa depan atau sudah ada tapi tidak ditunjukkan di EJS sebelumnya)
         if (returnsTable) {
             returnsTable.addEventListener('click', function(e) {
-                const deleteButton = e.target.closest('.delete-btn');
+                const deleteButton = e.target.closest('.delete-btn'); // Pastikan Anda memiliki tombol dengan class 'delete-btn' dan data-id
 
                 if (deleteButton) {
                     e.preventDefault();
@@ -121,7 +114,7 @@
                         cancelButtonText: "Batal"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            fetch(`/pengembalian/${itemId}`, { 
+                            fetch(`/pengembalian/${itemId}`, { // Sesuaikan URL API delete Anda
                                 method: 'DELETE'
                             })
                             .then(response => {
@@ -136,7 +129,7 @@
                                     text: data.message || `Data pengembalian dengan ID ${itemId} telah dihapus.`,
                                     icon: "success"
                                 }).then(() => {
-                                    window.location.reload(); 
+                                    window.location.reload();
                                 });
                             })
                             .catch(error => {
@@ -153,6 +146,69 @@
             });
         }
 
+        // Event listener untuk tombol "Pengembalian Barang" (aksi update status)
+        if (btnPengembalianBarang) {
+            btnPengembalianBarang.addEventListener('click', async function() {
+                const checkedCheckboxes = document.querySelectorAll('#tabelPengembalian input[type="checkbox"]:checked');
+                const idsToUpdate = Array.from(checkedCheckboxes).map(cb => cb.dataset.id);
+
+                if (idsToUpdate.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Peringatan',
+                        text: 'Pilih setidaknya satu item untuk dikembalikan.'
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: "Konfirmasi Pengembalian?",
+                    text: `Anda akan mengubah status ${idsToUpdate.length} item menjadi 'Dikembalikan'.`,
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya, Kembalikan!",
+                    cancelButtonText: "Batal"
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        try {
+                            const response = await fetch('/pengembalian/update-status', { // Endpoint POST untuk update status
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ idsToUpdate: idsToUpdate }) // Kirim array ID
+                            });
+
+                            if (!response.ok) {
+                                const errorData = await response.json();
+                                throw new Error(errorData.error || 'Gagal mengupdate status pengembalian.');
+                            }
+
+                            const data = await response.json();
+                            Swal.fire({
+                                title: "Berhasil!",
+                                text: data.message,
+                                icon: "success"
+                            }).then(() => {
+                                window.location.reload(); // Reload halaman untuk melihat perubahan status
+                            });
+
+                        } catch (error) {
+                            console.error('Error saat mengupdate status pengembalian:', error);
+                            Swal.fire({
+                                title: "Gagal!",
+                                text: error.message || "Terjadi kesalahan saat mengupdate status pengembalian.",
+                                icon: "error"
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
+        // Handle notifikasi SweetAlert dari URL query params (misal setelah redirect dari controller)
         const urlParams = new URLSearchParams(window.location.search);
         const status = urlParams.get('status');
         const message = urlParams.get('message');
@@ -163,7 +219,7 @@
                     title: "Berhasil!",
                     text: message,
                     icon: "success",
-                    timer: 3000, 
+                    timer: 3000,
                     timerProgressBar: true
                 });
             } else if (status === 'error') {
@@ -173,6 +229,7 @@
                     icon: "error",
                 });
             }
+            // Hapus parameter dari URL agar notifikasi tidak muncul lagi saat refresh manual
             history.replaceState({}, document.title, window.location.pathname);
         }
     });
