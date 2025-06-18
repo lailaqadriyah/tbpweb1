@@ -30,6 +30,7 @@ const ruanganRouter = require('./routes/Ruangan');
 const tambahRuangan = require('./routes/Ruangan');
 const updateRuangan = require('./routes/Ruangan');
 const detailRuangan = require('./routes/Ruangan');
+const riwayatAktivitas = require('./routes/RiwayatAktivitas');
 
 // ✅ Import router files for the views
 const addAslabRoutes = require('./routes/AddAslab');
@@ -57,6 +58,8 @@ app.use("/", ruanganRouter);
 app.use("/", tambahRuangan);
 app.use("/", updateRuangan);
 app.use("/", detailRuangan);
+
+app.use("/", riwayatAktivitas);
 
 // Rute lainnya
 var indexRouter = require('./routes/index');
