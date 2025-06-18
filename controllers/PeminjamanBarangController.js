@@ -108,9 +108,31 @@ const updateStatusPeminjaman = async (req, res) => {
     }
 };
 
+// ==============================================================================
+// CONTROLLER: riwayatPeminjaman
+// Menampilkan halaman riwayat peminjaman lengkap
+// ==============================================================================
+const riwayatPeminjaman = async (req, res) => {
+    try {
+        const data = await PeminjamanBarang.findAll({
+            order: [['id', 'DESC']]
+        });
+
+        res.render('views/RiwayatPeminjaman', {
+            title: 'Riwayat Peminjaman',
+            peminjaman: data
+        });
+
+    } catch (error) {
+        console.error('Gagal memuat riwayat peminjaman:', error);
+        res.status(500).send('Terjadi kesalahan saat mengambil riwayat peminjaman.');
+    }
+};
+
 module.exports = {
     getAllPeminjaman,
     tambahPeminjaman,
     hapusPeminjaman,
-    updateStatusPeminjaman
+    updateStatusPeminjaman,
+    riwayatPeminjaman
 };

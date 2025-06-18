@@ -1,0 +1,37 @@
+<%- include('../partials/layoutStart') %>
+<%- include('../partials/aside') %>
+
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-4">Riwayat Peminjaman</h2>
+
+  <table class="min-w-full bg-white text-sm shadow-md rounded-lg overflow-hidden">
+    <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+      <tr>
+        <th class="py-3 px-4 text-left">Nama Peminjam</th>
+        <th class="py-3 px-4 text-left">Barang</th>
+        <th class="py-3 px-4 text-left">Tanggal Pinjam</th>
+        <th class="py-3 px-4 text-left">No HP</th>
+        <th class="py-3 px-4 text-left">Status</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <% peminjaman.forEach(item => { %>
+        <tr class="border-b hover:bg-gray-50">
+          <td class="py-3 px-4"><%= item.nama_peminjam %></td>
+          <td class="py-3 px-4"><%= item.nama_barang %></td>
+          <td class="py-3 px-4"><%= new Date(item.tanggal_pinjam).toLocaleDateString() %></td>
+          <td class="py-3 px-4"><%= item.no_hp %></td>
+          <td class="py-3 px-4 font-semibold">
+            <% if (item.status_peminjaman === 'Dikembalikan') { %>
+              <span class="text-green-600"><%= item.status_peminjaman %></span>
+            <% } else { %>
+              <span class="text-red-600"><%= item.status_peminjaman %></span>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/closeAside') %>
