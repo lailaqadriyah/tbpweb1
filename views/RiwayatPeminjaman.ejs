@@ -2,36 +2,57 @@
 <%- include('../partials/aside') %>
 
 <div class="p-6">
-  <h2 class="text-2xl font-bold mb-4">Riwayat Peminjaman</h2>
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Riwayat Peminjaman</h2>
+    <div class="space-x-2">
+      <a href="/peminjaman" class="bg-[#0D1F4B] text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition">Beranda Peminjaman</a>
+      <button class="bg-white border px-4 py-2 rounded-lg text-sm">Select</button>
+      <button class="bg-white border px-4 py-2 rounded-lg text-sm">Filters</button>
+      <button class="bg-white border px-4 py-2 rounded-lg text-sm">Download all</button>
+    </div>
+  </div>
 
-  <table class="min-w-full bg-white text-sm shadow-md rounded-lg overflow-hidden">
-    <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-      <tr>
-        <th class="py-3 px-4 text-left">Nama Peminjam</th>
-        <th class="py-3 px-4 text-left">Barang</th>
-        <th class="py-3 px-4 text-left">Tanggal Pinjam</th>
-        <th class="py-3 px-4 text-left">No HP</th>
-        <th class="py-3 px-4 text-left">Status</th>
-      </tr>
-    </thead>
-    <tbody class="text-gray-700">
-      <% peminjaman.forEach(item => { %>
-        <tr class="border-b hover:bg-gray-50">
-          <td class="py-3 px-4"><%= item.nama_peminjam %></td>
-          <td class="py-3 px-4"><%= item.nama_barang %></td>
-          <td class="py-3 px-4"><%= new Date(item.tanggal_pinjam).toLocaleDateString() %></td>
-          <td class="py-3 px-4"><%= item.no_hp %></td>
-          <td class="py-3 px-4 font-semibold">
-            <% if (item.status_peminjaman === 'Dikembalikan') { %>
-              <span class="text-green-600"><%= item.status_peminjaman %></span>
-            <% } else { %>
-              <span class="text-red-600"><%= item.status_peminjaman %></span>
-            <% } %>
-          </td>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white text-sm shadow-md rounded-lg overflow-hidden">
+      <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+        <tr>
+          <th class="py-3 px-4 text-left">Nama Peminjam</th>
+          <th class="py-3 px-4 text-left">Barang</th>
+          <th class="py-3 px-4 text-left">Tanggal Pinjam</th>
+          <th class="py-3 px-4 text-left">Contact Number</th>
+          <th class="py-3 px-4 text-left">Email</th>
+          <th class="py-3 px-4 text-left">Status</th>
+          <th class="py-3 px-4 text-left">Jumlah Barang Dipinjam</th>
         </tr>
-      <% }) %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody class="text-gray-700">
+        <% peminjaman.forEach(item => { %>
+          <tr class="border-b hover:bg-gray-50">
+            <td class="py-3 px-4"><%= item.nama_peminjam %></td>
+            <td class="py-3 px-4"><%= item.nama_barang %></td>
+            <td class="py-3 px-4"><%= new Date(item.tanggal_pinjam).toLocaleDateString() %></td>
+            <td class="py-3 px-4"><%= item.no_hp %></td>
+            <td class="py-3 px-4"><%= item.email || '-' %></td>
+            <td class="py-3 px-4 font-semibold">
+              <% if (item.status_peminjaman === 'Dikembalikan' || item.status_peminjaman === 'Taking Return') { %>
+                <span class="text-green-600">Taking Return</span>
+              <% } else { %>
+                <span class="text-red-600">Not Taking Return</span>
+              <% } %>
+            </td>
+            <td class="py-3 px-4 text-center"><%= item.jumlah || '-' %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-between items-center mt-4 text-sm text-gray-600">
+    <button class="px-4 py-1 border rounded hover:bg-gray-100">Sebelumnya</button>
+    <span>Page 1 of 10</span>
+    <button class="px-4 py-1 border rounded hover:bg-gray-100">Berikutnya</button>
+  </div>
 </div>
 
 <%- include('../partials/closeAside') %>
