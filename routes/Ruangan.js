@@ -1,13 +1,37 @@
-var express = require('express');
-const { getAddRuanganPage, getRuanganForUpdate, getRuanganDetail } = require('../controllers/RuanganController');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 
-router.get('/ruangan', function(req, res, next) {
-  res.render('Ruangan', { title: 'Ruangan' });
+//  Konfigurasi multer langsung
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/ruangan');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
 });
+const upload = multer({ storage: storage });
 
+const {
+  getAllRuangan,
+  getAddRuanganPage,
+  addRuangan,
+  getRuanganForUpdate,
+  updateRuangan,
+  deleteRuangan,
+  getRuanganDetail
+} = require('../controllers/RuanganController');
+
+//  Route
+router.get('/ruangan', getAllRuangan);
 router.get('/addruangan', getAddRuanganPage);
-router.get('/updateruangan/:id', getRuanganForUpdate);
-router.get('/detailruangan/:id', getRuanganDetail);
+router.post('/ruangan/tambah', upload.single('gambar'), addRuangan);
+router.get('/ruangan/edit/:id', getRuanganForUpdate);
+router.post('/ruangan/edit/:id', upload.single('gambar'), updateRuangan);
+router.get('/ruangan/detail/:id', getRuanganDetail);
+router.post('/ruangan/delete/:id', deleteRuangan); // SUDAH ADA
+
 
 module.exports = router;

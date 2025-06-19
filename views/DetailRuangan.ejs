@@ -15,8 +15,8 @@
     <!-- Gambar atau Placeholder -->
     <div class="mt-4 mb-6">
       <div class="w-full h-56 bg-gray-100 flex items-center justify-center text-gray-500 rounded-md overflow-hidden">
-        <% if (ruangan.gambar) { %>
-          <img src="/uploads/<%= ruangan.gambar %>" alt="<%= ruangan.nama_ruangan %>" class="w-full h-full object-cover" />
+        <% if (ruangan.foto) { %>
+          <img src="<%= ruangan.foto %>" alt="<%= ruangan.nama_ruangan %>" class="w-full h-full object-cover" />
         <% } else { %>
           <span class="text-lg font-medium"><%= ruangan.nama_ruangan %></span>
         <% } %>

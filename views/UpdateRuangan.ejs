@@ -12,12 +12,12 @@
     </div>
 
     <!-- Form Edit -->
-    <form action="/UpdateRuangan/<%= ruangan.id %>" method="POST" enctype="multipart/form-data">
+    <form action="/ruangan/edit/<%= ruangan.id %>" method="POST" enctype="multipart/form-data">
       <!-- Upload Gambar -->
       <div class="flex justify-center mb-8">
         <label for="gambar" class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded w-40 h-40 text-gray-400 hover:border-blue-400 transition">
-          <% if (ruangan.gambar) { %>
-            <img src="/uploads/<%= ruangan.gambar %>" alt="Gambar Ruangan" class="w-full h-full object-cover rounded" />
+          <% if (ruangan.foto) { %>
+            <img src="<%= ruangan.foto %>" alt="Gambar Ruangan" class="w-full h-full object-cover rounded" />
           <% } else { %>
             <div class="text-center">
               <p class="text-sm">Tarik gambar ke sini</p>
@@ -75,3 +75,47 @@
 </div>
 
 <%- include('./partials/closeAside.ejs') %>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  const form = document.querySelector('form');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault(); // Mencegah submit langsung
+
+    const { value: confirmation } = await Swal.fire({
+      title: 'Apakah Anda yakin?',
+      text: 'Ketik "yakin" untuk melanjutkan update',
+      input: 'text',
+      inputPlaceholder: 'yakin',
+      inputValidator: (value) => {
+        if (value !== 'yakin') {
+          return 'Anda harus mengetik "yakin"!';
+        }
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Lanjutkan',
+      confirmButtonColor: '#0D1F4B',
+      cancelButtonText: 'Batal',
+      cancelButtonColor: '#d33',
+    });
+
+    if (confirmation === 'yakin') {
+      // Submit form secara manual setelah validasi
+      form.submit();
+    }
+  });
+
+  // Jika URL mengandung status success, tampilkan pop-up sukses
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('status') === 'success') {
+    Swal.fire({
+      icon: 'success',
+      title: 'Berhasil!',
+      text: 'Ruangan berhasil diupdate.',
+      confirmButtonColor: '#0D1F4B',
+    }).then(() => {
+      window.location.href = '/ruangan';
+    });
+  }
+</script>

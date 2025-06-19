@@ -231,6 +231,9 @@
   .absolute {
     position: absolute;
   }
+  .fixed {
+    position: fixed;
+  }
   .relative {
     position: relative;
   }
@@ -242,6 +245,12 @@
   }
   .right-0 {
     right: calc(var(--spacing) * 0);
+  }
+  .right-6 {
+    right: calc(var(--spacing) * 6);
+  }
+  .bottom-6 {
+    bottom: calc(var(--spacing) * 6);
   }
   .left-3 {
     left: calc(var(--spacing) * 3);
@@ -324,6 +333,9 @@
   .ml-2 {
     margin-left: calc(var(--spacing) * 2);
   }
+  .ml-4 {
+    margin-left: calc(var(--spacing) * 4);
+  }
   .ml-auto {
     margin-left: auto;
   }
@@ -369,6 +381,9 @@
   }
   .h-20 {
     height: calc(var(--spacing) * 20);
+  }
+  .h-32 {
+    height: calc(var(--spacing) * 32);
   }
   .h-40 {
     height: calc(var(--spacing) * 40);
@@ -423,6 +438,9 @@
   }
   .w-24 {
     width: calc(var(--spacing) * 24);
+  }
+  .w-32 {
+    width: calc(var(--spacing) * 32);
   }
   .w-40 {
     width: calc(var(--spacing) * 40);
@@ -612,6 +630,9 @@
     --tw-border-style: dashed;
     border-style: dashed;
   }
+  .border-\[\#0D1F4B\] {
+    border-color: #0D1F4B;
+  }
   .border-blue-500 {
     border-color: var(--color-blue-500);
   }
@@ -644,6 +665,9 @@
   }
   .bg-\[\#F0F1F3\] {
     background-color: #F0F1F3;
+  }
+  .bg-black {
+    background-color: var(--color-black);
   }
   .bg-blue-500 {
     background-color: var(--color-blue-500);
@@ -822,6 +846,9 @@
   .whitespace-pre-line {
     white-space: pre-line;
   }
+  .text-\[\#0D1F4B\] {
+    color: #0D1F4B;
+  }
   .text-blue-500 {
     color: var(--color-blue-500);
   }
@@ -953,6 +980,13 @@
     &:hover {
       @media (hover: hover) {
         border-color: var(--color-blue-400);
+      }
+    }
+  }
+  .hover\:bg-\[\#0D1F4B\] {
+    &:hover {
+      @media (hover: hover) {
+        background-color: #0D1F4B;
       }
     }
   }
@@ -1119,6 +1153,11 @@
     &:focus {
       --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+  .focus\:ring-\[\#0D1F4B\] {
+    &:focus {
+      --tw-ring-color: #0D1F4B;
     }
   }
   .focus\:ring-blue-500 {

@@ -12,8 +12,8 @@ const getAllRuangan = async (req, res) => {
 
         if (search) {
             whereConditions[Op.or] = [
-                { nama: { [Op.like]: `%${search}%` } },
-                { kode: { [Op.like]: `%${search}%` } },
+                { nama_ruangan: { [Op.like]: `%${search}%` } },
+                { kode_ruangan: { [Op.like]: `%${search}%` } },
             ];
         }
 
@@ -52,26 +52,30 @@ const getAddRuanganPage = (req, res) => {
 // POST: Menyimpan ruangan baru
 // ==============================================================================
 const addRuangan = async (req, res) => {
-    try {
-        const { nama, kode, deskripsi } = req.body;
-        const gambar = req.file ? `/uploads/${req.file.filename}` : null;
+  try {
+    const { nama, kode, deskripsi } = req.body;
+    const foto = req.file ? `/uploads/ruangan/${req.file.filename}` : null;
 
-        if (!nama || !kode) {
-            return res.status(400).redirect('/ruangan/tambah?status=error&message=Nama dan kode wajib diisi.');
-        }
-
-        await Ruangan.create({
-            nama,
-            kode,
-            deskripsi,
-            gambar
-        });
-
-        res.redirect('/ruangan?status=success&message=Ruangan berhasil ditambahkan!');
-    } catch (error) {
-        console.error('Error saat menambahkan ruangan:', error);
-        res.status(500).redirect('/ruangan/tambah?status=error&message=Gagal menambahkan ruangan.');
+    if (!nama || !kode) {
+      return res.status(400).redirect('/addruangan?status=error&message=Nama dan kode wajib diisi.');
     }
+
+    await Ruangan.create({
+      nama_ruangan: nama,
+      kode_ruangan: kode,
+      deskripsi: deskripsi,
+      foto: foto
+    });
+
+    res.render("TambahRuangan", {
+  title: "Tambah Ruangan Baru",
+  success: true
+});
+
+  } catch (error) {
+    console.error('Error saat menambahkan ruangan:', error);
+    res.status(500).redirect('/addruangan?status=error&message=Gagal menambahkan ruangan.');
+  }
 };
 
 // ==============================================================================
@@ -102,23 +106,23 @@ const getRuanganForUpdate = async (req, res) => {
 const updateRuangan = async (req, res) => {
     try {
         const ruanganId = req.params.id;
-        const { nama, kode, deskripsi } = req.body;
+        const { nama_ruangan, kode_ruangan, deskripsi } = req.body;
         const ruangan = await Ruangan.findByPk(ruanganId);
 
         if (!ruangan) {
             return res.status(404).redirect('/ruangan?status=error&message=Ruangan tidak ditemukan.');
         }
 
-        const gambar = req.file ? `/uploads/${req.file.filename}` : ruangan.gambar;
+        const foto = req.file ? `/uploads/ruangan/${req.file.filename}` : ruangan.foto;
 
         await ruangan.update({
-            nama,
-            kode,
+            nama_ruangan,
+            kode_ruangan,
             deskripsi,
-            gambar
+            foto
         });
 
-        res.redirect('/ruangan?status=success&message=Ruangan berhasil diupdate!');
+        res.redirect('/ruangan/edit/' + ruanganId + '?status=success');
     } catch (error) {
         console.error("Error update ruangan:", error);
         res.status(500).redirect('/ruangan?status=error&message=Gagal update ruangan.');
@@ -129,22 +133,19 @@ const updateRuangan = async (req, res) => {
 // DELETE: Hapus ruangan
 // ==============================================================================
 const deleteRuangan = async (req, res) => {
-    try {
-        const ruanganId = req.params.id;
+  try {
+    const ruanganId = req.params.id;
 
-        const deletedRows = await Ruangan.destroy({
-            where: { id: ruanganId }
-        });
+    const deleted = await Ruangan.destroy({ where: { id: ruanganId } });
 
-        if (deletedRows > 0) {
-            res.status(200).json({ message: "Ruangan berhasil dihapus." });
-        } else {
-            res.status(404).json({ error: "Ruangan tidak ditemukan." });
-        }
-    } catch (error) {
-        console.error("Error saat menghapus ruangan:", error);
-        res.status(500).json({ error: "Gagal menghapus ruangan." });
+    if (deleted) {
+      res.status(200).send("Ruangan dihapus.");
+    } else {
+      res.status(404).send("Tidak ditemukan.");
     }
+  } catch (error) {
+    res.status(500).send("Gagal menghapus.");
+  }
 };
 
 // ==============================================================================
