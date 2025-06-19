@@ -1,0 +1,55 @@
+<!-- views/aslab/updateasisten.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Asisten</title>
+</head>
+
+<body>
+    <!-- Memanggil layoutStart -->
+    <%- include('../partials/layoutStart.ejs') %>
+
+    <!-- Memanggil Sidebar -->
+    <%- include('../partials/aside.ejs') %>
+
+    <div class="flex-1 bg-gray-100 p-6">
+        <h1 class="text-xl font-semibold text-gray-800">Update Data Asisten</h1>
+
+        <% if (!asisten) { %>
+            <p class="text-red-500">Tidak ada data asisten yang ditemukan untuk diubah.</p>
+        <% } else { %>
+            <!-- Form untuk update asisten -->
+            <form action="/aslab/update/<%= asisten.id %>" method="POST" enctype="multipart/form-data">
+                <label for="nama">Nama:</label>
+                <input type="text" id="nama" name="nama" value="<%= asisten.nama %>" required>
+
+                <label for="nomor_asisten">Nomor Asisten:</label>
+                <input type="text" id="nomor_asisten" name="nomor_asisten" value="<%= asisten.nomor_asisten %>" required>
+
+                <label for="nim">NIM:</label>
+                <input type="text" id="nim" name="nim" value="<%= asisten.nim %>" required>
+
+                <label for="telepon">Telepon:</label>
+                <input type="text" id="telepon" name="telepon" value="<%= asisten.telepon %>" required>
+
+                <label for="jabatan">Jabatan:</label>
+                <input type="text" id="jabatan" name="jabatan" value="<%= asisten.jabatan %>" required>
+
+                <label for="foto">Foto:</label>
+                <input type="file" id="foto" name="foto">
+
+                <button type="submit">Update</button>
+            </form>
+        <% } %>
+    </div>
+
+    <!-- Tutup Sidebar -->
+    <%- include('../partials/closeAside.ejs') %>
+
+</body>
+
+</html>

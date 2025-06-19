@@ -8,7 +8,6 @@
 </head>
 
 <body>
-    <!-- Memanggil layoutStart -->
     <%- include('../partials/layoutStart.ejs') %>
 
     <!-- Memanggil Sidebar -->
@@ -22,9 +21,6 @@
             <!-- Search Bar Section -->
             <div class="flex items-center space-x-4">
                 <input type="text" placeholder="Cari" class="p-2 border rounded-md" value="<%= search %>" />
-                <button class="p-2">
-                    <img src="icons/filter.png" alt="Filter" class="w-6 h-6" />
-                </button>
             </div>
         </div>
 
@@ -52,6 +48,9 @@
                             <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
                                 Jabatan
                             </th>
+                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                                Aksi
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -62,15 +61,23 @@
                                 <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.nim %></td>
                                 <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.telepon %></td>
                                 <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.jabatan %></td>
+                                <td class="px-6 py-4 text-sm text-gray-800">
+                                    <a href="/aslab/update/<%= asisten.id %>" class="bg-black text-white px-4 py-2 rounded">Update</a>
+                                </td>
                             </tr>
                         <% }); %>
                     </tbody>
                 </table>
             </div>
         <% } %>
+
+        <!-- Tombol Update di kanan bawah -->
+        <div class="fixed bottom-6 right-6">
+            <a href="/aslab/update" class="bg-black text-white px-6 py-3 rounded-full shadow-md" style="background-color: #000000; color: #ffffff;">Update</a>
+
+        </div>
     </div>
 
-    <!-- Tutup Sidebar -->
     <%- include('../partials/closeAside.ejs') %>
 
 </body>

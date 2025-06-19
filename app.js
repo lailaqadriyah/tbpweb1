@@ -33,12 +33,15 @@ const detailRuangan = require('./routes/Ruangan');
 const riwayatAktivitas = require('./routes/RiwayatAktivitas');
 
 // ✅ Import router files for the views
+// Import router files
 const addAslabRoutes = require('./routes/AddAslab');
-const dataAsistenRoute = require('./routes/dataasisten');
+const dataAsistenRoute = require('./routes/dataasisten');  // Import router untuk data asisten
+
 
 // Menambahkan rute untuk '/aslab/tambah' dan '/aslab/data'
 app.use('/aslab', addAslabRoutes);  // Menangani '/aslab/tambah'
-app.use('/aslab', dataAsistenRoute);  // Menangani '/aslab/data'
+app.use('/aslab', dataAsistenRoute);  // Menangani '/aslab/data' dan '/aslab/update/:id'
+
 
 // **Import notifikasiRouter**
 const notifikasiRouter = require("./routes/PengembalianBarang");  // Mengimpor notifikasiRouter
