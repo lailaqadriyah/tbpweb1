@@ -130,29 +130,27 @@
     document.addEventListener("DOMContentLoaded", function () {
         const peminjamanTable = document.getElementById("peminjamanTable");
         const btnPengembalianBarang = document.getElementById("btnPengembalianBarang");
+        const btnRiwayatPeminjaman = document.getElementById("btnRiwayatPeminjaman");
 
-        // --- Event Listener untuk Tombol "Pengembalian Barang" (Aksi Update Status) ---
+        // --- Event Listener untuk Tombol "Pengembalian Barang" ---
         if (btnPengembalianBarang) {
             btnPengembalianBarang.addEventListener("click", async function () {
                 const checkedCheckboxes = document.querySelectorAll(
                     '#tabelPeminjaman input[type="checkbox"]:checked'
                 );
-                const idsToUpdate = Array.from(checkedCheckboxes).map(
-                    (cb) => cb.dataset.id
-                );
+                const idsToUpdate = Array.from(checkedCheckboxes).map(cb => cb.dataset.id);
 
                 if (idsToUpdate.length === 0) {
                     Swal.fire({
                         icon: "warning",
                         title: "Peringatan",
-                        text: "Pilih setidaknya satu item untuk dikembalikan.", // Teks lebih sesuai
+                        text: "Pilih setidaknya satu item untuk dikembalikan.",
                     });
                     return;
                 }
 
-                // SweetAlert pertama: Konfirmasi awal pengembalian
                 Swal.fire({
-                    title: "Konfirmasi Pengembalian?", // Lebih spesifik ke "Pengembalian"
+                    title: "Konfirmasi Pengembalian?",
                     text: `Anda akan mengubah status ${idsToUpdate.length} item menjadi 'Dikembalikan'.`,
                     icon: "info",
                     showCancelButton: true,
@@ -162,7 +160,6 @@
                     cancelButtonText: "Batal",
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        // SweetAlert kedua: Meminta pengguna mengetik "yakin"
                         Swal.fire({
                             title: 'Untuk konfirmasi, ketik "Yakin" di bawah ini',
                             input: "text",
@@ -171,27 +168,24 @@
                             confirmButtonText: "Konfirmasi",
                             cancelButtonText: "Batal",
                             inputValidator: (value) => {
-                                if (value.toLowerCase() !== "yakin") { // Tambahkan .toLowerCase() untuk case-insensitivity
+                                if (value.toLowerCase() !== "yakin") {
                                     return 'Anda harus mengetik "yakin" untuk melanjutkan!';
                                 }
                             },
                         }).then(async (inputResult) => {
                             if (inputResult.isConfirmed) {
                                 try {
-                                    // Mengirim permintaan ke backend untuk update status
                                     const response = await fetch("/peminjaman/update-status", {
                                         method: "POST",
                                         headers: {
                                             "Content-Type": "application/json",
                                         },
-                                        body: JSON.stringify({ idsToUpdate: idsToUpdate }),
+                                        body: JSON.stringify({ idsToUpdate }),
                                     });
 
                                     if (!response.ok) {
                                         const errorData = await response.json();
-                                        throw new Error(
-                                            errorData.error || "Gagal mengupdate status peminjaman."
-                                        );
+                                        throw new Error(errorData.error || "Gagal mengupdate status.");
                                     }
 
                                     const data = await response.json();
@@ -200,20 +194,12 @@
                                         text: data.message,
                                         icon: "success",
                                     }).then(() => {
-                                        // Mengarahkan ke halaman pengembalian dengan pesan sukses
-                                        window.location.href =
-                                            "/pengembalian?status=success&message=Barang berhasil dikembalikan dan data dipindahkan ke Pengembalian.";
+                                        window.location.href = "/pengembalian?status=success&message=Barang berhasil dikembalikan dan data dipindahkan ke Pengembalian.";
                                     });
                                 } catch (error) {
-                                    console.error(
-                                        "Error saat mengupdate status peminjaman:",
-                                        error
-                                    );
                                     Swal.fire({
                                         title: "Gagal!",
-                                        text:
-                                            error.message ||
-                                            "Terjadi kesalahan saat mengupdate status peminjaman.",
+                                        text: error.message,
                                         icon: "error",
                                     });
                                 }
@@ -224,31 +210,31 @@
             });
         }
 
-        // --- Handle Notifikasi SweetAlert dari URL Query Parameters ---
+        // --- Event Listener untuk Tombol "Riwayat Peminjaman" ---
+        if (btnRiwayatPeminjaman) {
+            btnRiwayatPeminjaman.addEventListener("click", function () {
+                window.location.href = "/riwayat";
+            });
+        }
+
+        // --- Handle Notifikasi SweetAlert dari URL ---
         const urlParams = new URLSearchParams(window.location.search);
         const status = urlParams.get("status");
         const message = urlParams.get("message");
 
         if (status && message) {
-            if (status === "success") {
-                Swal.fire({
-                    title: "Berhasil!",
-                    text: message,
-                    icon: "success",
-                    timer: 3000,
-                    timerProgressBar: true,
-                });
-            } else if (status === "error") {
-                Swal.fire({
-                    title: "Gagal!",
-                    text: message,
-                    icon: "error",
-                });
-            }
-            // Hapus parameter dari URL agar notifikasi tidak muncul lagi saat refresh manual
+            Swal.fire({
+                title: status === "success" ? "Berhasil!" : "Gagal!",
+                text: message,
+                icon: status === "success" ? "success" : "error",
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
             history.replaceState({}, document.title, window.location.pathname);
         }
     });
 </script>
+
 
 <%- include('./partials/closeAside.ejs') %>
