@@ -23,6 +23,6 @@ router.post('/peminjaman/hapus/:id', peminjamanController.hapusPeminjaman);
 router.post('/peminjaman/update-status', peminjamanController.updateStatusPeminjaman);
 
 // Tampilkan riwayat
-router.get('/riwayat', riwayatPeminjaman);
+router.get('/riwayat', peminjamanController.riwayatPeminjaman);
 
 module.exports = router;

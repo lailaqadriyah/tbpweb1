@@ -139,7 +139,7 @@ const riwayatPeminjaman = async (req, res) => {
             order: [['id', 'DESC']]
         });
 
-        res.render('views/RiwayatPeminjaman', {
+        res.render('RiwayatPeminjaman', {
             title: 'Riwayat Peminjaman',
             peminjaman: data
         });
