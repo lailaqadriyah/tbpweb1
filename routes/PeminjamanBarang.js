@@ -25,4 +25,7 @@ router.post('/peminjaman/update-status', peminjamanController.updateStatusPeminj
 // Tampilkan riwayat
 router.get('/riwayat', peminjamanController.riwayatPeminjaman);
 
+// Tampilkan detail peminjaman berdasarkan ID
+router.get('/detailpeminjaman', peminjamanController.getDetailPeminjaman);
+
 module.exports = router;

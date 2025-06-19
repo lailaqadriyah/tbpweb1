@@ -1,0 +1,127 @@
+<%- include('./partials/layoutStart.ejs') %>
+<%- include('./partials/aside.ejs') %>
+
+<div class="flex-1 bg-gray-100 p-6">
+    <div class="p-1 mb-4 flex justify-between items-center">
+        <div class="relative flex items-center w-full max-w-md"></div>
+        <div class="flex items-center space-x-4">
+            <div>
+                <a href="/detailpeminjaman">
+                    <img src="icons/bell.png" alt="Notification Bell" class="w-6 h-6" />
+                </a>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6 text-gray-600"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-md shadow-md p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-gray-800">Detail Peminjaman</h2>
+            <div class="flex space-x-2">
+                <!-- Tombol Pengembalian Barang Dihapus -->
+            </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200" id="peminjamanTable">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Kode Barang</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Nama Barang</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Nama Peminjam</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Email</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">No HP</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Tanggal Pinjam</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Tanggal Kembali</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Jumlah (buah)</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="tabelPeminjaman">
+                    <!-- Looping data peminjaman -->
+                    <% if (peminjaman && peminjaman.length > 0) { %>
+                        <% peminjaman.forEach(function(item) { %>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.kode_barang %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.nama_barang %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.nama_peminjam %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.email %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.no_hp %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.tanggal_pinjam %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.tanggal_kembali %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.jumlah_barang %></td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500">
+                                Tidak ada data peminjaman ditemukan saat ini.
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tombol "Kembali" Pindah ke Bawah Kanan -->
+        <div class="flex justify-end mt-6">
+            <button
+                id="btnKembali"
+                class="bg-[#0D1F4B] hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm"
+            >
+                Kembali
+            </button>
+        </div>
+
+        <div class="flex justify-between items-center mt-6">
+            <button
+                id="prevPageBtn"
+                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm"
+                style="display: none"
+            >
+                Sebelumnya
+            </button>
+            <span
+                id="pageInfo"
+                class="text-gray-600 text-sm"
+                style="display: none"
+            ></span>
+            <button
+                id="nextPageBtn"
+                class="bg-[#0D1F4B] hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm"
+                style="display: none"
+            >
+                Berikutnya
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnKembali = document.getElementById("btnKembali");
+
+        // --- Event Listener untuk Tombol "Kembali" ---
+        if (btnKembali) {
+            btnKembali.addEventListener("click", function () {
+                // Arahkan pengguna kembali ke halaman sebelumnya
+                window.history.back(); // Menggunakan browser history untuk kembali ke halaman sebelumnya
+            });
+        }
+    });
+</script>
+
+<%- include('./partials/closeAside.ejs') %>

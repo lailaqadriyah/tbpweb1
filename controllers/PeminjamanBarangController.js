@@ -150,10 +150,35 @@ const riwayatPeminjaman = async (req, res) => {
     }
 };
 
+// ==============================================================================
+// CONTROLLER: getDetailPeminjaman
+// Menampilkan detail peminjaman berdasarkan ID
+// ==============================================================================
+
+const getDetailPeminjaman = async (req, res) => {
+    try {
+        const { id } = req.params; // Ambil ID dari parameter URL
+
+        // Cari data peminjaman berdasarkan ID
+        const peminjaman = await PeminjamanBarang.findByPk(id);
+
+      
+        // Kirimkan data ke view DetailPeminjamanBarang.ejs
+        res.render('DetailPeminjamanBarang', {
+            title: 'Detail Peminjaman Barang',
+            peminjaman: peminjaman
+        });
+    } catch (error) {
+        console.error('Gagal mengambil data detail peminjaman:', error);
+        res.status(500).send('Terjadi kesalahan saat memuat detail peminjaman.');
+    }
+};
+
 module.exports = {
     getAllPeminjaman,
     tambahPeminjaman,
     hapusPeminjaman,
     updateStatusPeminjaman,
-    riwayatPeminjaman
+    riwayatPeminjaman,
+    getDetailPeminjaman
 };
