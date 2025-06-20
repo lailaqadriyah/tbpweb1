@@ -26,10 +26,6 @@ const PengembalianBarang = sequelize.define('Pengembalian Barang',{
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    tanggal_dikembalikan: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
 },{
     tableName: 'pengembalian_barang', // Nama tabel di database
     timestamps: false // Nonaktifkan timestamps jika tidak diperlukan
