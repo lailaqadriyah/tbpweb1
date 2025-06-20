@@ -2,6 +2,7 @@ const { Aset } = require('../models/AsetModel');
 const { Op } = require('sequelize'); // Import operator Sequelize untuk kondisi pencarian
 const pdf = require('html-pdf');
 
+
 // ==============================================================================
 // RUTE UTAMA UNTUK MENAMPILKAN DAFTAR ASET DENGAN DATA DARI DATABASE
 // ==============================================================================
@@ -93,7 +94,8 @@ const updateAset = async (req, res) => {
             tanggal_masuk,
             kondisi,
             lokasi,
-            kategori_barang
+            kategori_barang,
+            gambar_barang
         } = req.body;
 
         const asetToUpdate = await Aset.findByPk(asetId);
@@ -197,8 +199,9 @@ const getAddAsetPage = (req, res) => {
 // FUNGSI BARU: addAset - Untuk menambahkan aset baru ke database
 // ==============================================================================
 const addAset = async (req, res) => {
+    console.log(req.body);
+    console.log(req.file);
     try {
-        // Ambil data dari body permintaan POST
         const {
             kode_barang,
             nama_barang,
@@ -209,12 +212,12 @@ const addAset = async (req, res) => {
             kategori_barang
         } = req.body;
 
-        // Validasi sederhana (Anda bisa menambahkan validasi yang lebih kompleks)
+        const foto_barang = req.file ? `/uploads/aset/${req.file.filename}` : null;
+
         if (!kode_barang || !nama_barang || !kuantitas || !tanggal_masuk || !kondisi || !lokasi || !kategori_barang) {
             return res.status(400).redirect('/addaset?status=error&message=Semua field harus diisi.');
         }
 
-        // Buat entri aset baru di database menggunakan Sequelize
         await Aset.create({
             kode_barang,
             nama_barang,
@@ -222,18 +225,17 @@ const addAset = async (req, res) => {
             tanggal_masuk,
             kondisi,
             lokasi,
-            kategori_barang
+            kategori_barang,
+            gambar_barang: foto_barang, // ✅ diperbaiki
         });
 
-        // Redirect ke halaman daftar aset dengan pesan sukses
         res.redirect('/aset?status=success&message=Aset berhasil ditambahkan!');
-
     } catch (error) {
         console.error('Error saat menambahkan aset baru:', error);
-        // Redirect kembali ke halaman tambah aset dengan pesan error
-        res.status(500).redirect('aset/tambah?status=error&message=Gagal menambahkan aset. Pastikan kode barang unik atau coba lagi.');
+        res.status(500).redirect('/addaset?status=error&message=Gagal menambahkan aset.');
     }
 };
+
 
 // Tampilkan halaman form pengajuan barang baru
 const tampilFormPengajuan = async (req, res) => {
