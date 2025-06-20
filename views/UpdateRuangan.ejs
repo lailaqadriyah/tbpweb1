@@ -15,16 +15,13 @@
     <form action="/ruangan/edit/<%= ruangan.id %>" method="POST" enctype="multipart/form-data">
       <!-- Upload Gambar -->
       <div class="flex justify-center mb-8">
-        <label for="gambar" class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded w-40 h-40 text-gray-400 hover:border-blue-400 transition">
-          <% if (ruangan.foto) { %>
-            <img src="<%= ruangan.foto %>" alt="Gambar Ruangan" class="w-full h-full object-cover rounded" />
-          <% } else { %>
-            <div class="text-center">
-              <p class="text-sm">Tarik gambar ke sini</p>
-              <p class="text-sm">atau</p>
-              <p class="text-blue-600 text-sm hover:underline">Upload gambar</p>
-            </div>
-          <% } %>
+        <label for="gambar" class="cursor-pointer relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded w-40 h-40 text-gray-400 hover:border-blue-400 transition">
+          <img id="preview-gambar" src="<%= ruangan.foto ? ruangan.foto : '' %>" alt="Gambar Ruangan" class="w-full h-full object-cover rounded <%= ruangan.foto ? '' : 'hidden' %>" />
+          <div id="upload-label" class="<%= ruangan.foto ? 'hidden' : 'text-center' %> absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+            <p class="text-sm">Tarik gambar ke sini</p>
+            <p class="text-sm">atau</p>
+            <p class="text-blue-600 text-sm hover:underline">Upload gambar</p>
+          </div>
           <input id="gambar" name="gambar" type="file" accept="image/*" class="hidden" />
         </label>
       </div>
@@ -76,7 +73,9 @@
 
 <%- include('./partials/closeAside.ejs') %>
 
+<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
   const form = document.querySelector('form');
 
@@ -94,19 +93,18 @@
         }
       },
       showCancelButton: true,
+      cancelButtonText: 'Batal',
       confirmButtonText: 'Lanjutkan',
       confirmButtonColor: '#0D1F4B',
-      cancelButtonText: 'Batal',
       cancelButtonColor: '#d33',
     });
 
     if (confirmation === 'yakin') {
-      // Submit form secara manual setelah validasi
       form.submit();
     }
   });
 
-  // Jika URL mengandung status success, tampilkan pop-up sukses
+  // Jika URL mengandung status success, tampilkan notifikasi
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('status') === 'success') {
     Swal.fire({
@@ -118,4 +116,26 @@
       window.location.href = '/ruangan';
     });
   }
+
+  // Preview gambar baru
+  const inputFile = document.getElementById('gambar');
+  const previewImage = document.getElementById('preview-gambar');
+  const labelText = document.getElementById('upload-label');
+
+  inputFile.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        previewImage.src = e.target.result;
+        previewImage.classList.remove('hidden');
+        labelText.classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewImage.src = '';
+      previewImage.classList.add('hidden');
+      labelText.classList.remove('hidden');
+    }
+  });
 </script>

@@ -13,12 +13,14 @@
     <!-- Upload Gambar -->
     <form action="/ruangan/tambah" method="POST" enctype="multipart/form-data">
       <div class="flex justify-center mb-8">
-        <label for="gambar" class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded w-40 h-40 text-gray-400 hover:border-blue-400 transition">
-          <div class="text-center">
+        <label for="gambar" class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded w-40 h-40 text-gray-400 hover:border-blue-400 transition relative">
+          <div class="text-center" id="upload-label">
             <p class="text-sm">Tarik gambar ke sini</p>
             <p class="text-sm">atau</p>
             <p class="text-blue-600 text-sm hover:underline">Upload gambar</p>
           </div>
+          <!-- Preview Gambar -->
+          <img id="preview-gambar" class="absolute inset-0 w-full h-full object-cover rounded hidden" />
           <input id="gambar" name="gambar" type="file" accept="image/*" class="hidden" />
         </label>
       </div>
@@ -37,8 +39,8 @@
 
       <!-- Tombol Aksi -->
       <div class="flex justify-end mt-8 space-x-4">
-       <button type="reset" class="px-6 py-2 border border-red-500 rounded-md text-red-500 font-medium hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mr-3">Reset</button>
-            <button type="submit" href="./UpdateBarang.ejs" class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Simpan</button>
+        <button type="reset" class="px-6 py-2 border border-red-500 rounded-md text-red-500 font-medium hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mr-3">Reset</button>
+        <button type="submit" class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Simpan</button>
       </div>
     </form>
   </div>
@@ -46,6 +48,7 @@
 
 <%- include('./partials/closeAside.ejs') %>
 
+<!-- SweetAlert2 untuk notifikasi berhasil -->
 <% if (typeof success !== 'undefined' && success) { %>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
@@ -62,3 +65,29 @@
     });
   </script>
 <% } %>
+
+<!-- Script Preview Gambar -->
+<script>
+  const inputFile = document.getElementById('gambar');
+  const previewImage = document.getElementById('preview-gambar');
+  const labelText = document.getElementById('upload-label');
+
+  inputFile.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        previewImage.src = e.target.result;
+        previewImage.classList.remove('hidden');
+        labelText.classList.add('hidden');
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      previewImage.src = '';
+      previewImage.classList.add('hidden');
+      labelText.classList.remove('hidden');
+    }
+  });
+</script>

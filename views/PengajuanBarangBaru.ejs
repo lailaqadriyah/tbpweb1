@@ -42,9 +42,13 @@
             <select name="ruanganTujuan" id="ruanganTujuan"
                     class="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-500 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
               <option selected disabled value="">Pilih Ruangan</option>
-              <option>Lab Komputer</option>
-              <option>Ruang Asisten</option>
-              <option>Ruang Utama</option>
+              <% if (ruangan && ruangan.length > 0) { %>
+                <% ruangan.forEach(r => { %>
+                  <option value="<%= r.nama_ruangan %>"><%= r.nama_ruangan %></option>
+                <% }) %>
+              <% } else { %>
+                <option disabled>Tidak ada ruangan tersedia</option>
+              <% } %>
             </select>
           </div>
         </div>
@@ -64,12 +68,12 @@
 
         <!-- Tombol -->
         <div class="flex justify-end mt-8 space-x-4">
-         <a href="/aset" class="px-6 py-2 border border-red-500 rounded-md text-red-500 font-medium hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mr-3">
-          Batal
-        </a>
-        <button type="submit" class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-          Simpan
-        </button>
+          <a href="/aset" class="px-6 py-2 border border-red-500 rounded-md text-red-500 font-medium hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mr-3">
+            Batal
+          </a>
+          <button type="submit" class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Simpan
+          </button>
         </div>
       </form>
       <!-- ✅ AKHIR FORM -->

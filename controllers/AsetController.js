@@ -235,10 +235,18 @@ const addAset = async (req, res) => {
 };
 
 // Tampilkan halaman form pengajuan barang baru
-const tampilFormPengajuan = (req, res) => {
+const tampilFormPengajuan = async (req, res) => {
+  try {
+    const ruangan = await Ruangan.findAll({ order: [['nama_ruangan', 'ASC']] });
+
     res.render('PengajuanBarangBaru', {
-        title: 'Pengajuan Barang Baru'
+      title: 'Pengajuan Barang Baru',
+      ruangan // <- KIRIM data ruangan ke EJS
     });
+  } catch (error) {
+    console.error('Gagal mengambil data ruangan:', error);
+    res.status(500).send('Terjadi kesalahan saat memuat form pengajuan.');
+  }
 };
 
 const prosesPengajuan = (req, res) => {
@@ -269,6 +277,7 @@ const prosesPengajuan = (req, res) => {
     tanggal
   });
 };
+const { Ruangan } = require('../models/RuanganModel');
 
 // Ekspor semua fungsi controller
 module.exports = {
@@ -280,5 +289,5 @@ module.exports = {
     getAddAsetPage, // Tambahkan ini
     addAset,       // Tambahkan ini
     tampilFormPengajuan,
-    prosesPengajuan
+    prosesPengajuan,
 };
