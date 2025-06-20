@@ -1,5 +1,6 @@
 const { Aset } = require('../models/AsetModel');
 const { Op } = require('sequelize'); // Import operator Sequelize untuk kondisi pencarian
+const pdf = require('html-pdf');
 
 // ==============================================================================
 // RUTE UTAMA UNTUK MENAMPILKAN DAFTAR ASET DENGAN DATA DARI DATABASE
@@ -279,6 +280,139 @@ const prosesPengajuan = (req, res) => {
 };
 const { Ruangan } = require('../models/RuanganModel');
 
+// ==============================================================================
+// FUNGSI BARU: Export PDF Daftar Aset
+// ============================================================================== 
+const exportPDF = async (req, res) => {
+    try {
+        // Ambil data aset dari database
+        const allAset = await Aset.findAll({
+            order: [['id', 'ASC']],
+        });
+
+        // Buat HTML string untuk menampilkan data aset dengan desain yang lebih baik menggunakan Tailwind-like CSS
+        const htmlContent = `
+            <html>
+                <head>
+                    <style>
+                        /* Menggunakan gaya seperti Tailwind CSS untuk desain modern */
+                        body {
+                            font-family: 'Arial', sans-serif;
+                            margin: 20px;
+                            color: #333;
+                        }
+                        h1 {
+                            text-align: center;
+                            font-size: 30px;
+                            color: #4CAF50;
+                            margin-bottom: 20px;
+                        }
+                        p {
+                            font-size: 16px;
+                            line-height: 1.5;
+                            margin-bottom: 20px;
+                        }
+                        .container {
+                            max-width: 1000px;
+                            margin: 0 auto;
+                        }
+                        .table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 20px;
+                        }
+                        .table th, .table td {
+                            padding: 12px;
+                            text-align: left;
+                            border: 1px solid #ddd;
+                        }
+                        .table th {
+                            background-color: #4CAF50;
+                            color: white;
+                            font-size: 18px;
+                        }
+                        .table td {
+                            font-size: 14px;
+                        }
+                        .table tr:nth-child(even) {
+                            background-color: #f2f2f2;
+                        }
+                        .table tr:hover {
+                            background-color: #ddd;
+                        }
+                        .highlight {
+                            background-color: #e3f2fd;
+                        }
+                        .footer {
+                            margin-top: 30px;
+                            text-align: center;
+                            font-size: 14px;
+                            color: #777;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Daftar Aset Laboratorium</h1>
+                        <p>
+                            Berikut adalah daftar aset yang dimiliki oleh lab kami. Data ini mencakup informasi tentang barang, jumlah,
+                            kategori, lokasi, tanggal masuk, dan kondisi setiap barang. Semua informasi ini penting untuk mengelola
+                            inventaris dan memastikan kelancaran operasional laboratorium.
+                        </p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Kode Barang</th>
+                                    <th>Nama</th>
+                                    <th>Kuantitas</th>
+                                    <th>Kategori</th>
+                                    <th>Lokasi</th>
+                                    <th>Tanggal Masuk</th>
+                                    <th>Kondisi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${allAset.map(aset => `
+                                    <tr>
+                                        <td>${aset.kode_barang}</td>
+                                        <td>${aset.nama_barang}</td>
+                                        <td>${aset.kuantitas}</td>
+                                        <td>${aset.kategori_barang}</td>
+                                        <td>${aset.lokasi}</td>
+                                        <td>${new Date(aset.tanggal_masuk).toLocaleString()}</td>
+                                        <td class="${aset.kondisi === 'Baik' ? 'highlight' : ''}">${aset.kondisi}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <p>
+                            Informasi lebih lanjut dapat ditemukan di sistem manajemen aset kami. Semua aset ini terkelola dengan
+                            baik dan terintegrasi dalam sistem inventaris untuk memudahkan pemantauan dan pemeliharaan.
+                        </p>
+                        <div class="footer">
+                            <p>© 2025 Laboratorium Sistem Informasi - Semua Hak Dilindungi</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+        // Konversi HTML ke PDF
+        const options = { format: 'A4' };
+        pdf.create(htmlContent, options).toStream((err, stream) => {
+            if (err) {
+                return res.status(500).send('Gagal membuat PDF');
+            }
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'inline; filename="DaftarAset.pdf"');
+            stream.pipe(res);  // Kirim stream PDF langsung ke browser
+        });
+    } catch (error) {
+        console.error('Error saat mengekspor PDF:', error);
+        res.status(500).send('Gagal mengekspor PDF');
+    }
+};
+
 // Ekspor semua fungsi controller
 module.exports = {
     getAllAset,
@@ -286,8 +420,9 @@ module.exports = {
     updateAset,
     deleteAset,
     getAsetDetail,
-    getAddAsetPage, // Tambahkan ini
-    addAset,       // Tambahkan ini
+    getAddAsetPage, 
+    addAset,
+    exportPDF,       
     tampilFormPengajuan,
     prosesPengajuan,
 };
