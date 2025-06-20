@@ -1,148 +1,130 @@
-<aside class="w-60 min-h-screen bg-[#0D1F4B] text-white flex flex-col justify-between p-4 rounded-r-xl">
+<aside class="w-60 min-h-screen bg-[#0D1F4B] text-white flex flex-col justify-between p-4 rounded-r-xl text-[17px]">
   <div class="w-fit">
     <img src="/images/logovensi.png" alt="Logo Vensi" class="w-42 mb-6" />
 
     <nav class="space-y-4">
-      <!-- Dashboard Menu -->
+      <!-- Dashboard -->
       <div>
-        <a href="/aset" class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md">
-          <img src="/icons/Home.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Dashboard" />
+        <a href="/aset" class="menu-link group flex items-center p-2 rounded-md">
+          <i class="fas fa-home text-[18px] mr-3"></i>
           Dashboard
         </a>
       </div>
 
       <!-- Data Barang Dropdown -->
       <div class="relative">
-        <button type="button" class="group flex items-center text-white hover:text-orange-500 font-medium p-2" id="menu-button" aria-expanded="false" aria-haspopup="true">
-          <img src="/icons/Inventory.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Data Barang" />
+        <button onclick="toggleDropdown('barang')" class="group flex items-center text-white font-semibold p-2 w-full">
+          <i class="fas fa-boxes-stacked text-[18px] mr-3"></i>
           <span>Data Barang</span>
-          <svg class="ml-auto size-5 text-gray-400 transform transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" id="arrow-icon">
-            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-          </svg>
+          <i id="arrow-barang" class="fas fa-chevron-down ml-auto transition-transform duration-200"></i>
         </button>
-
-        <div class="mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" id="dropdown-menu">
-          <div class="py-1" role="none">
-            <a href="/peminjaman" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1" id="menu-item-0">Data Peminjaman</a>
-            <div class="border-t border-gray-200 mx-4"></div>
-            <a href="/pengembalian" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1" id="menu-item-1">Data Pengembalian</a>
-          </div>
+        <div id="menu-barang" class="hidden mt-1 space-y-1 text-white text-[15px] pl-9">
+          <a href="/peminjaman" class="menu-link block py-1">Data Peminjaman</a>
+          <a href="/pengembalian" class="menu-link block py-1">Data Pengembalian</a>
         </div>
       </div>
 
       <!-- Data Asisten Dropdown -->
       <div class="relative">
-        <button type="button" class="group flex items-center text-white hover:text-orange-500 font-medium p-2" id="menu-button-asisten" aria-expanded="false" aria-haspopup="true">
-          <img src="/icons/Suppliers.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Data Asisten" />
+        <button onclick="toggleDropdown('asisten')" class="group flex items-center text-white font-semibold p-2 w-full">
+          <i class="fas fa-users text-[18px] mr-3"></i>
           <span>Data Asisten</span>
-          <svg class="ml-auto size-5 text-gray-400 transform transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" id="arrow-icon-asisten">
-            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-          </svg>
+          <i id="arrow-asisten" class="fas fa-chevron-down ml-auto transition-transform duration-200"></i>
         </button>
-
-        <div class="mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button-asisten" tabindex="-1" id="dropdown-menu-asisten">
-          <div class="py-1" role="none">
-            <a href="/aslab/data" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1" id="menu-item-2">Tampilkan Data Asisten</a>
-            <div class="border-t border-gray-200 mx-4"></div>
-            <a href="/aslab/tambah" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1" id="menu-item-3">Tambah Data Asisten</a>
-          </div>
+        <div id="menu-asisten" class="hidden mt-1 space-y-1 text-white text-[15px] pl-9">
+          <a href="/aslab/data" class="menu-link block py-1">Tampilkan Asisten</a>
+          <a href="/aslab/tambah" class="menu-link block py-1">Tambah Asisten</a>
         </div>
       </div>
 
       <!-- Laporan -->
       <div>
-        <a href="/laporan" class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md">
-          <img src="/icons/Report.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Laporan" />
+        <a href="/laporan" class="menu-link group flex items-center p-2 rounded-md">
+          <i class="fas fa-chart-line text-[18px] mr-3"></i>
           Laporan
         </a>
       </div>
 
       <!-- Data Ruangan -->
       <div>
-        <a href="/ruangan" class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md">
-          <img src="/icons/Manage Store.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Data Ruangan" />
+        <a href="/ruangan" class="menu-link group flex items-center p-2 rounded-md">
+          <i class="fas fa-door-open text-[18px] mr-3"></i>
           Data Ruangan
         </a>
       </div>
 
-      <!-- Kalender Aktivitas -->
+      <!-- Kalender -->
       <div>
-        <a href="#" class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md">
-          <img src="/icons/Group.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Kalender Aktivitas" />
+        <a href="#" class="menu-link group flex items-center p-2 rounded-md">
+          <i class="fas fa-calendar-alt text-[18px] mr-3"></i>
           Kalender Aktivitas
         </a>
       </div>
     </nav>
   </div>
 
-  <div class="space-y-4">
-    <div>
-      <a href="/login" class="group flex items-center text-white hover:text-orange-500 font-medium p-2 rounded-md">
-        <img src="/icons/Log Out.png" class="w-6 h-6 mr-2 group-hover:brightness-125 transition duration-200" alt="Log Out" />
-        Log Out
-      </a>
-    </div>
+  <!-- Logout -->
+  <div>
+    <a href="/login" class="menu-link group flex items-center p-2 rounded-md">
+      <i class="fas fa-sign-out-alt text-[18px] mr-3"></i>
+      Log Out
+    </a>
   </div>
 </aside>
 
-<!-- Script untuk menampilkan dropdown -->
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<!-- Dropdown & Highlight Script -->
 <script>
-  const menuButton = document.getElementById("menu-button");
-  const dropdownMenu = document.getElementById("dropdown-menu");
-  const arrowIcon = document.getElementById("arrow-icon");
+  function toggleDropdown(type) {
+    const menu = document.getElementById('menu-' + type);
+    const arrow = document.getElementById('arrow-' + type);
 
-  menuButton.addEventListener("click", () => {
-    const isExpanded = menuButton.getAttribute("aria-expanded") === "true";
+    menu.classList.toggle('hidden');
+    arrow.classList.toggle('rotate-180');
 
-    dropdownMenu.classList.toggle("hidden");
+    ['barang', 'asisten'].forEach(t => {
+      if (t !== type) {
+        document.getElementById('menu-' + t).classList.add('hidden');
+        document.getElementById('arrow-' + t).classList.remove('rotate-180');
+      }
+    });
+  }
 
-    menuButton.setAttribute("aria-expanded", !isExpanded);
+  // Auto highlight active menu
+  const currentPath = window.location.pathname;
+  const menuLinks = document.querySelectorAll('.menu-link');
 
-    if (!isExpanded) {
-      arrowIcon.classList.add("rotate-180");
+  const dropdownPages = {
+    barang: ['/peminjaman', '/pengembalian'],
+    asisten: ['/aslab/data', '/aslab/tambah']
+  };
+
+  menuLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && currentPath.startsWith(href)) {
+      link.classList.add('text-orange-500', 'font-bold');
     } else {
-      arrowIcon.classList.remove("rotate-180");
+      link.classList.add('text-white', 'hover:text-orange-500');
     }
   });
 
-  document.addEventListener("click", (event) => {
-    if (
-      !menuButton.contains(event.target) &&
-      !dropdownMenu.contains(event.target)
-    ) {
-      dropdownMenu.classList.add("hidden");
-      menuButton.setAttribute("aria-expanded", "false");
-      arrowIcon.classList.remove("rotate-180");
+  // Auto expand dropdown if in subpage
+  Object.keys(dropdownPages).forEach(key => {
+    if (dropdownPages[key].some(p => currentPath.startsWith(p))) {
+      document.getElementById('menu-' + key).classList.remove('hidden');
+      document.getElementById('arrow-' + key).classList.add('rotate-180');
     }
   });
 
-  // Data Asisten dropdown
-  const menuButtonAsisten = document.getElementById("menu-button-asisten");
-  const dropdownMenuAsisten = document.getElementById("dropdown-menu-asisten");
-  const arrowIconAsisten = document.getElementById("arrow-icon-asisten");
-
-  menuButtonAsisten.addEventListener("click", () => {
-    const isExpanded = menuButtonAsisten.getAttribute("aria-expanded") === "true";
-
-    dropdownMenuAsisten.classList.toggle("hidden");
-
-    menuButtonAsisten.setAttribute("aria-expanded", !isExpanded);
-
-    if (!isExpanded) {
-      arrowIconAsisten.classList.add("rotate-180");
-    } else {
-      arrowIconAsisten.classList.remove("rotate-180");
-    }
-  });
-
-  document.addEventListener("click", (event) => {
-    if (
-      !menuButtonAsisten.contains(event.target) &&
-      !dropdownMenuAsisten.contains(event.target)
-    ) {
-      dropdownMenuAsisten.classList.add("hidden");
-      menuButtonAsisten.setAttribute("aria-expanded", "false");
-      arrowIconAsisten.classList.remove("rotate-180");
+  // Optional: Tutup dropdown jika klik di luar
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest("button") && !e.target.closest("div[id^='menu-']")) {
+      ['barang', 'asisten'].forEach(t => {
+        document.getElementById('menu-' + t).classList.add('hidden');
+        document.getElementById('arrow-' + t).classList.remove('rotate-180');
+      });
     }
   });
 </script>
