@@ -70,26 +70,7 @@ const updateStatusPengembalian = async (req, res) => {
     }
 };
 
-// CONTROLLER: laporanPengembalian
-const laporanPengembalian = async (req, res) => {
-    try {
-        const laporan = await PengembalianBarang.findAll({
-            where: { status_pengembalian: 'Sudah Dikembalikan' }, // ambil yang dikembalikan saja
-            order: [['id', 'DESC']]
-        });
-
-        res.render('laporan', {
-            title: 'Laporan Barang Dikembalikan',
-            laporan // ⬅️ kirim ke EJS
-        });
-    } catch (error) {
-        console.error('Gagal memuat laporan:', error);
-        res.status(500).send('Gagal memuat laporan pengembalian.');
-    }
-};
-
 module.exports = {
     getAllPengembalian,
     updateStatusPengembalian,
-    laporanPengembalian
 };

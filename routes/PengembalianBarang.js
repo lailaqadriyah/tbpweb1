@@ -14,6 +14,4 @@ router.get('/notifpengembalian', function(req, res, next) {
 
 router.post('/pengembalian/update-status', pengembalianController.updateStatusPengembalian);
 
-router.get('/laporan', pengembalianController.laporanPengembalian)
-
 module.exports = router;
