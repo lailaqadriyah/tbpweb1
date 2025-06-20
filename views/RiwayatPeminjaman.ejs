@@ -1,20 +1,20 @@
 <%- include('./partials/layoutStart') %>
 <%- include('./partials/aside') %>
 
-<div class="p-6">
+<div class="p-6 w-full">
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-2xl font-bold">Riwayat Peminjaman</h2>
+    <h2 class="text-2xl font-semibold text-gray-800">Riwayat Peminjaman</h2>
     <div class="space-x-2">
-      <a href="/riwayat" class="bg-[#0D1F4B] text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition">Beranda Peminjaman</a>
-      <button class="bg-white border px-4 py-2 rounded-lg text-sm">Select</button>
-      <button class="bg-white border px-4 py-2 rounded-lg text-sm">Filters</button>
-      <button class="bg-white border px-4 py-2 rounded-lg text-sm">Download all</button>
+      <a href="/riwayat" class="bg-[#0D1F4B] text-white px-6 py-2 rounded-lg hover:bg-blue-900 transition duration-300 ease-in-out">Beranda Peminjaman</a>
+      <button class="bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 focus:outline-none transition duration-300">Select</button>
+      <button class="bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 focus:outline-none transition duration-300">Filters</button>
+      <button class="bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 focus:outline-none transition duration-300">Download all</button>
     </div>
   </div>
 
-  <div class="overflow-x-auto">
-    <table class="min-w-full bg-white text-sm shadow-md rounded-lg overflow-hidden">
-      <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+  <div class="overflow-x-auto rounded-lg shadow-lg bg-white w-full">
+    <table class="min-w-full bg-white text-sm text-gray-700 shadow-md rounded-lg overflow-hidden w-full">
+      <thead class="bg-[#0D1F4B] text-white uppercase text-xs">
         <tr>
           <th class="py-3 px-4 text-left">Nama Peminjam</th>
           <th class="py-3 px-4 text-left">Barang</th>
@@ -48,10 +48,10 @@
   </div>
 
   <!-- Pagination -->
-  <div class="flex justify-between items-center mt-4 text-sm text-gray-600">
-    <button class="px-4 py-1 border rounded hover:bg-gray-100">Sebelumnya</button>
-    <span>Page 1 of 10</span>
-    <button class="px-4 py-1 border rounded hover:bg-gray-100">Berikutnya</button>
+  <div class="flex justify-between items-center mt-6 text-sm text-gray-600">
+    <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none transition duration-300">Sebelumnya</button>
+    <span class="text-gray-600">Page 1 of 10</span>
+    <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none transition duration-300">Berikutnya</button>
   </div>
 </div>
 
