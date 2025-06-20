@@ -7,7 +7,7 @@ const Asisten = sequelize.define('Asisten', {
     autoIncrement: true,
     primaryKey: true,
   },
-  nama: {
+  nama_asisten: {
     type: DataTypes.STRING,
     allowNull: false,
   },
