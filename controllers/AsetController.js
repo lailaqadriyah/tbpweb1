@@ -114,7 +114,7 @@ const updateAset = async (req, res) => {
 
         // Arahkan kembali ke halaman daftar aset setelah sukses
         // Anda bisa menambahkan query param untuk pesan sukses jika mau
-        res.redirect('/aset?status=success&message=Status berhasil diupdate!');
+        res.redirect('/aset?status=success&message=Barang berhasil diupdate!');
 
     } catch (error) {
         console.error('Error saat memperbarui aset:', error);
@@ -210,7 +210,7 @@ const addAset = async (req, res) => {
 
         // Validasi sederhana (Anda bisa menambahkan validasi yang lebih kompleks)
         if (!kode_barang || !nama_barang || !kuantitas || !tanggal_masuk || !kondisi || !lokasi || !kategori_barang) {
-            return res.status(400).redirect('/add-aset?status=error&message=Semua field harus diisi.');
+            return res.status(400).redirect('/addaset?status=error&message=Semua field harus diisi.');
         }
 
         // Buat entri aset baru di database menggunakan Sequelize
@@ -230,7 +230,7 @@ const addAset = async (req, res) => {
     } catch (error) {
         console.error('Error saat menambahkan aset baru:', error);
         // Redirect kembali ke halaman tambah aset dengan pesan error
-        res.status(500).redirect('/add-aset?status=error&message=Gagal menambahkan aset. Pastikan kode barang unik atau coba lagi.');
+        res.status(500).redirect('aset/tambah?status=error&message=Gagal menambahkan aset. Pastikan kode barang unik atau coba lagi.');
     }
 };
 

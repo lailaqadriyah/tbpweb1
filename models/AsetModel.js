@@ -40,6 +40,11 @@ const Aset = sequelize.define(
       type: DataTypes.ENUM("Baik", "Rusak"),
       allowNull: false,
     },
+    gambar_barang: {
+        type: DataTypes.STRING, // hanya menyimpan nama file, bukan isi file
+        allowNull: true,
+    }    
+
   },
   {
     tableName: "aset",

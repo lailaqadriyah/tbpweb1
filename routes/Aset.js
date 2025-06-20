@@ -18,6 +18,7 @@ router.post('/aset/update/:id', updateAset); // Rute POST untuk memproses update
 
 router.get('/aset/detail/:id', getAsetDetail);
 router.get('/aset/add', addAset);
+router.post('/aset/tambah', addAset)
 
 router.get('/aset/ajukan', tampilFormPengajuan);   // tampilkan form
 router.post('/aset/ajukan', prosesPengajuan);      // proses form dan tampilkan surat
