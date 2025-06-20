@@ -1,85 +1,73 @@
-<%- include('./partials/layoutStart.ejs') %> 
+<%- include('./partials/layoutStart.ejs') %>
 <%- include('./partials/aside.ejs') %>
 
 <div class="flex-1 bg-gray-100 p-6">
-    <div class="container mx-auto p-1 mb-4">
-        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 class="text-xl font-semibold text-gray-800 mb-6">Laporan Barang Rusak</h2>
+  <div class="container mx-auto p-1 mb-4">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <h2 class="text-xl font-semibold text-gray-800 mb-6">Laporan Barang Rusak</h2>
 
-        
-
-            <div class="flex items-end justify-between md:justify-start gap-4">
-                <div class="flex-grow md:flex-grow-0">
-                    <label for="formatExport" class="block text-sm font-medium text-gray-700 mb-2">Format Export</label>
-                    <select id="formatExport" class="block w-full md:w-32 py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <option>CSV</option>
-                        <option>PDF</option>
-                        <option>Excel</option>
-                    </select>
-                </div>
-
-                <div class="flex gap-4">
-                    <button class="bg-blue-600 text-white px-5 py-2 rounded-md flex items-center hover:bg-blue-700 transition-colors shadow-sm">
-                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0v-3a1 1 0 00-1-1zM9 6a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
-                        Export Data
-                    </button>
-                    <a href="/laporan" </a>
-                    <button class="bg-red-500 text-white px-5 py-2 rounded-md hover:bg-red-600 transition-colors shadow-sm">
-                        Kembali
-                    </button>
-                </div>
-            </div>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <label for="formatExport" class="block text-sm font-medium text-gray-700 mb-2">Format Export</label>
+          <form action="/laporan/export" method="POST" class="flex items-center gap-4">
+            <select id="formatExport" name="format" required
+              class="block w-32 py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+              <option value="csv">CSV</option>
+              <option value="excel">Excel</option>
+              <option value="pdf">PDF</option>
+            </select>
+            <button type="submit"
+              class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors shadow-sm flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0v-3a1 1 0 00-1-1zM9 6a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"/>
+              </svg>
+              Export
+            </button>
+          </form>
         </div>
+        <a href="/laporan" class="bg-red-500 text-white px-5 py-2 rounded-md hover:bg-red-600 transition-colors shadow-sm">
+          Kembali
+        </a>
+      </div>
 
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Barang Rusak</h2>
-
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Barang</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kuantitas</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Masuk</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kondisi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">BRG-001</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Monitor LCD</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">3</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Elektronik</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Gudang A</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">01/04/2024</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-red-600">Rusak</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">BRG-002</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Kursi Lipat</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">5</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Furniture</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Ruang Serbaguna</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">15/03/2024</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-red-600">Rusak</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">BRG-003</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Printer</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">1</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Elektronik</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Ruang IT</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">20/02/2024</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-red-600">Rusak</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 text-sm">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="px-6 py-3 text-left font-medium text-gray-600 uppercase">Kode Barang</th>
+                <th class="px-6 py-3 text-left font-medium text-gray-600 uppercase">Nama Barang</th>
+                <th class="px-6 py-3 text-left font-medium text-gray-600 uppercase">Kuantitas</th>
+                <th class="px-6 py-3 text-left font-medium text-gray-600 uppercase">Kategori</th>
+                <th class="px-6 py-3 text-left font-medium text-gray-600 uppercase">Lokasi</th>
+                <th class="px-6 py-3 text-left font-medium text-gray-600 uppercase">Tanggal Masuk</th>
+                <th class="px-6 py-3 text-left font-medium text-gray-600 uppercase">Kondisi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              <% if (aset && aset.length > 0) { %>
+                <% aset.forEach(barang => { %>
+                  <tr>
+                    <td class="px-6 py-4 text-gray-800"><%= barang.kode_barang %></td>
+                    <td class="px-6 py-4"><%= barang.nama_barang %></td>
+                    <td class="px-6 py-4"><%= barang.kuantitas %></td>
+                    <td class="px-6 py-4"><%= barang.kategori_barang %></td>
+                    <td class="px-6 py-4"><%= barang.lokasi %></td>
+                    <td class="px-6 py-4"><%= new Date(barang.tanggal_masuk).toLocaleDateString('id-ID') %></td>
+                    <td class="px-6 py-4 text-red-600 font-semibold"><%= barang.kondisi %></td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="7" class="px-6 py-4 text-center text-gray-500">Tidak ada data barang rusak.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <%- include('./partials/closeAside.ejs') %>
