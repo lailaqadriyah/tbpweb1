@@ -13,8 +13,17 @@ router.get('/peminjaman/tambah', (req, res) => {
 // Tampilkan daftar semua peminjaman barang
 router.get('/peminjaman', peminjamanController.getAllPeminjaman);
 
+// Tampilkan form edit peminjaman
+router.get('/peminjaman/edit/:id', peminjamanController.getDetailPeminjamanById);
+
+// Update data peminjaman
+router.post('/peminjaman/update/:id', peminjamanController.updatePeminjamanById);
+
 // Tambah data peminjaman barang (POST)
 router.post('/peminjaman/tambah', peminjamanController.tambahPeminjaman);
+
+// Rute baru untuk menghapus beberapa peminjaman
+router.post('/peminjaman/delete', peminjamanController.deletePeminjaman);
 
 // Hapus data peminjaman
 router.post('/peminjaman/hapus/:id', peminjamanController.hapusPeminjaman);

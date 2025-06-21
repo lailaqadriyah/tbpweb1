@@ -213,6 +213,89 @@ const getDetailPeminjaman = async (req, res) => {
     }
 };
 
+// ==============================================================================
+// CONTROLLER: deletePeminjaman
+// Menghapus beberapa data peminjaman berdasarkan ID yang dipilih
+// ==============================================================================
+const deletePeminjaman = async (req, res) => {
+    try {
+        const { ids } = req.body;
+
+        if (!Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({ error: "Tidak ada ID yang dipilih untuk dihapus." });
+        }
+
+        await PeminjamanBarang.destroy({
+            where: { id: { [Op.in]: ids } }
+        });
+
+        res.status(200).json({ message: "Data peminjaman yang dipilih berhasil dihapus." });
+
+    } catch (error) {
+        console.error('Gagal menghapus data peminjaman:', error);
+        res.status(500).json({ error: 'Terjadi kesalahan saat menghapus data peminjaman.' });
+    }
+};
+
+// ==============================================================================
+// CONTROLLER: getDetailPeminjamanById
+// Menampilkan halaman edit untuk satu item peminjaman berdasarkan ID
+// ==============================================================================
+const getDetailPeminjamanById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const peminjaman = await PeminjamanBarang.findByPk(id);
+
+        if (!peminjaman) {
+            return res.status(404).send('Data peminjaman tidak ditemukan.');
+        }
+
+        res.render('UpdatePeminjaman', {
+            title: 'Ubah Data Peminjaman',
+            peminjaman: peminjaman
+        });
+
+    } catch (error) {
+        console.error('Gagal mengambil data peminjaman untuk diubah:', error);
+        res.status(500).send('Terjadi kesalahan saat memuat halaman edit.');
+    }
+};
+
+// ==============================================================================
+// CONTROLLER: updatePeminjamanById
+// Mengupdate data peminjaman berdasarkan ID
+// ==============================================================================
+const updatePeminjamanById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            nama_peminjam,
+            nama_barang,
+            no_hp,
+            email,
+            jumlah_barang
+        } = req.body;
+
+        const peminjaman = await PeminjamanBarang.findByPk(id);
+        if (!peminjaman) {
+            return res.status(404).send('Data peminjaman tidak ditemukan untuk diperbarui.');
+        }
+
+        await peminjaman.update({
+            nama_peminjam,
+            nama_barang,
+            no_hp,
+            email,
+            jumlah_barang
+        });
+
+        res.redirect('/peminjaman');
+
+    } catch (error) {
+        console.error('Gagal memperbarui data peminjaman:', error);
+        res.status(500).send('Terjadi kesalahan saat memperbarui data peminjaman.');
+    }
+};
 
 module.exports = {
     getAllPeminjaman,
@@ -220,5 +303,8 @@ module.exports = {
     hapusPeminjaman,
     updateStatusPeminjaman,
     riwayatPeminjaman,
-    getDetailPeminjaman
+    getDetailPeminjaman,
+    deletePeminjaman,
+    getDetailPeminjamanById,
+    updatePeminjamanById
 };
