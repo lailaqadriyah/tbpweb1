@@ -31,7 +31,6 @@ const ruanganRouter = require('./routes/Ruangan');
 const tambahRuangan = require('./routes/Ruangan');
 const updateRuangan = require('./routes/Ruangan');
 const detailRuangan = require('./routes/Ruangan');
-const riwayatAktivitas = require('./routes/RiwayatAktivitas');
 
 // ✅ Import router files for the views
 // Import router files
@@ -65,8 +64,8 @@ app.use("/", ruanganRouter);
 app.use("/", tambahRuangan);
 app.use("/", updateRuangan);
 app.use("/", detailRuangan);
-app.use("/", riwayatAktivitas);
 app.use("/", tambahBarangRouter)
+
 // Rute lainnya
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -151,7 +150,6 @@ async function startServer() {
         app.use("/", tambahRuangan);
         app.use("/", updateRuangan);
         app.use("/", detailRuangan);
-        app.use("/", riwayatAktivitas);
         app.use("/", tambahBarangRouter)
         // Route for Add Aslab and Data Asisten
         app.use('/aslab', addAslabRoutes);
