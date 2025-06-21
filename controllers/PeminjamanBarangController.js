@@ -192,16 +192,20 @@ const riwayatPeminjaman = async (req, res) => {
 
 const getDetailPeminjaman = async (req, res) => {
     try {
-        const { id } = req.params; // Ambil ID dari parameter URL
+        const { items } = req.query;  // Ambil ID barang dari query string
+        const itemIds = items ? items.split(',') : [];  // Mengonversi string ke array ID
 
-        // Cari data peminjaman berdasarkan ID
-        const peminjaman = await PeminjamanBarang.findByPk(id);
+        // Ambil data barang berdasarkan ID yang dipilih
+        const asetDetail = await Aset.findAll({
+            where: {
+                id: itemIds
+            }
+        });
 
-      
         // Kirimkan data ke view DetailPeminjamanBarang.ejs
         res.render('DetailPeminjamanBarang', {
             title: 'Detail Peminjaman Barang',
-            peminjaman: peminjaman
+            asetDetail: asetDetail  // Kirim data barang yang dipilih ke view
         });
     } catch (error) {
         console.error('Gagal mengambil data detail peminjaman:', error);

@@ -11,17 +11,8 @@
                 </a>
             </div>
             <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    class="w-6 h-6 text-gray-600"
-                >
-                    <path
-                        fill-rule="evenodd"
-                        d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
-                        clip-rule="evenodd"
-                    />
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-600">
+                    <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
                 </svg>
             </div>
         </div>
@@ -31,19 +22,8 @@
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-semibold text-gray-800">Peminjaman</h2>
             <div class="flex space-x-2">
-                <button
-                    id="btnPengembalianBarang"
-                    class="flex items-center bg-[#0D1F4B] text-white font-medium py-2 px-4 rounded-lg shadow-sm"
-                >
-                    Pengembalian Barang
-                </button>
-  <button
-                id="btnRiwayatPeminjaman"
-                class="flex items-center bg-white text-[#0D1F4B] font-medium py-2 px-4 rounded-lg border border-[#0D1F4B] shadow-sm hover:bg-[#0D1F4B] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0D1F4B]">
-                    Riwayat Peminjaman
-                </button>
-
-                
+                <button id="btnPengembalianBarang" class="flex items-center bg-[#0D1F4B] text-white font-medium py-2 px-4 rounded-lg shadow-sm">Pengembalian Barang</button>
+                <button id="btnRiwayatPeminjaman" class="flex items-center bg-white text-[#0D1F4B] font-medium py-2 px-4 rounded-lg border border-[#0D1F4B] shadow-sm hover:bg-[#0D1F4B] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0D1F4B]">Riwayat Peminjaman</button>
             </div>
         </div>
 
@@ -51,13 +31,14 @@
             <table class="min-w-full divide-y divide-gray-200" id="peminjamanTable">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Pilih</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Nama Peminjam</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Barang</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Nomor HP</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Email</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Status</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Jumlah</th>
-                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Pilih</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" id="tabelPeminjaman">
@@ -67,10 +48,14 @@
                                 // Menentukan kelas CSS berdasarkan status_pengembalian
                                 let statusClass = 'bg-red-100 text-red-800'; // Default untuk 'Belum Dikembalikan'
                                 if (item.status_pengembalian === 'Sudah Dikembalikan') {
-                                statusClass = 'bg-green-100 text-green-800';
+                                    statusClass = 'bg-green-100 text-green-800';
                                 }
                             %>
                             <tr class="hover:bg-gray-50">
+                                <!-- Checkbox di depan -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500" data-id="<%= item.id %>" />
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.nama_peminjam %></td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.nama_barang %></td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.no_hp %></td>
@@ -82,17 +67,15 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.jumlah_barang %></td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <input
-                                        type="checkbox"
-                                        class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
-                                        data-id="<%= item.id %>"
-                                    />
+                                    <a href="/peminjaman/edit/<%= item.id %>" class="text-blue-600 hover:text-blue-900">
+                                        Edit
+                                    </a>
                                 </td>
                             </tr>
                         <% }); %>
                     <% } else { %>
                         <tr>
-                            <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
+                            <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500">
                                 Tidak ada data peminjaman ditemukan saat ini.
                             </td>
                         </tr>
@@ -102,25 +85,9 @@
         </div>
 
         <div class="flex justify-between items-center mt-6">
-            <button
-                id="prevPageBtn"
-                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm"
-                style="display: none"
-            >
-                Sebelumnya
-            </button>
-            <span
-                id="pageInfo"
-                class="text-gray-600 text-sm"
-                style="display: none"
-            ></span>
-            <button
-                id="nextPageBtn"
-                class="bg-[#0D1F4B] hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm"
-                style="display: none"
-            >
-                Berikutnya
-            </button>
+            <button id="prevPageBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm" style="display: none">Sebelumnya</button>
+            <span id="pageInfo" class="text-gray-600 text-sm" style="display: none"></span>
+            <button id="nextPageBtn" class="bg-[#0D1F4B] hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm" style="display: none">Berikutnya</button>
         </div>
     </div>
 </div>
@@ -235,6 +202,5 @@
         }
     });
 </script>
-
 
 <%- include('./partials/closeAside.ejs') %>

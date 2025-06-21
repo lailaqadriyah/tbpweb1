@@ -121,6 +121,10 @@
       <table class="min-w-full divide-y divide-gray-200" id="assetsTable">
         <thead class="bg-gray-50">
           <tr>
+            <!-- Menambahkan kolom untuk checkbox -->
+            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
+              <input type="checkbox" id="selectAll" class="select-all-checkbox" />
+            </th>
             <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
               Kode Barang
             </th>
@@ -151,10 +155,15 @@
           <% if (aset.length > 0) { %>
             <% aset.forEach(function(item) { %>
               <tr class="hover:bg-gray-50">
+                <!-- Checkbox untuk setiap item -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                  <input type="checkbox" class="asset-checkbox" data-id="<%= item.id %>" />
+                </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.kode_barang %></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.nama_barang %></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.kuantitas %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.kategori_barang %></td> <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.lokasi %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.kategori_barang %></td> 
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.lokasi %></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.tanggal_masuk ? new Date(item.tanggal_masuk).toLocaleDateString('id-ID') : '-' %></td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
@@ -200,14 +209,25 @@
     document.addEventListener('DOMContentLoaded', function() {
         const assetsTable = document.getElementById('assetsTable');
 
+        // Logic for handling the checkbox functionality
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const assetCheckboxes = document.querySelectorAll('.asset-checkbox');
+
+        // Handle the "Select All" checkbox
+        selectAllCheckbox.addEventListener('change', function() {
+            const isChecked = selectAllCheckbox.checked;
+            assetCheckboxes.forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+        });
+
+        // Logic for deleting assets
         if (assetsTable) {
             assetsTable.addEventListener('click', function(e) {
                 const deleteButton = e.target.closest('.delete-btn');
-
                 if (deleteButton) {
                     e.preventDefault();
                     const itemId = deleteButton.dataset.id;
-                    console.log('Menghapus item dengan ID:', itemId);
 
                     Swal.fire({
                         title: "Apakah Anda yakin?",
@@ -235,8 +255,7 @@
                                     text: data.message || `Item ${itemId} telah dihapus.`,
                                     icon: "success"
                                 }).then(() => {
-                                    // Setelah hapus berhasil, muat ulang halaman untuk mendapatkan data terbaru dari server
-                                    window.location.reload(); 
+                                    window.location.reload();
                                 });
                             })
                             .catch(error => {
@@ -253,7 +272,7 @@
             });
         }
 
-        // --- LOGIKA SWEETALERT UNTUK NOTIFIKASI UPDATE DARI URL QUERY PARAMETER ---
+        // Handle notifications via SweetAlert (from URL query params)
         const urlParams = new URLSearchParams(window.location.search);
         const status = urlParams.get('status');
         const message = urlParams.get('message');
@@ -264,7 +283,7 @@
                     title: "Berhasil!",
                     text: message,
                     icon: "success",
-                    timer: 3000, // Opsional: otomatis menutup setelah 3 detik
+                    timer: 3000,
                     timerProgressBar: true
                 });
             } else if (status === 'error') {
@@ -272,14 +291,10 @@
                     title: "Gagal!",
                     text: message,
                     icon: "error",
-                    // timer: 5000, // Opsional: otomatis menutup setelah 5 detik
-                    // timerProgressBar: true
                 });
             }
-            // Penting: Hapus query parameter dari URL agar pesan tidak muncul lagi saat refresh
             history.replaceState({}, document.title, window.location.pathname);
         }
-        // --- AKHIR LOGIKA SWEETALERT ---
     });
 </script>
 
