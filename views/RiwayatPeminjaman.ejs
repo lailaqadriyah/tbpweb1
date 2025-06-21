@@ -12,6 +12,14 @@
     </div>
   </div>
 
+  <!-- Search Form -->
+<div class="mb-4">
+  <form action="/riwayat" method="GET" class="flex items-center space-x-2">
+    <input type="text" name="search" placeholder="Search by Name, Barang, or Status" class="border px-4 py-2 rounded-lg w-full max-w-md" />
+    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg">Search</button>
+  </form>
+</div>
+
   <div class="overflow-x-auto rounded-lg shadow-lg bg-white w-full">
     <table class="min-w-full bg-white text-sm text-gray-700 shadow-md rounded-lg overflow-hidden w-full">
       <thead class="bg-[#0D1F4B] text-white uppercase text-xs">
@@ -40,7 +48,7 @@
                 <span class="text-red-600">Not Taking Return</span>
               <% } %>
             </td>
-            <td class="py-3 px-4 text-center"><%= item.jumlah || '-' %></td>
+            <td class="py-3 px-4 text-center"><%= item.jumlah_barang || '-' %></td>
           </tr>
         <% }) %>
       </tbody>

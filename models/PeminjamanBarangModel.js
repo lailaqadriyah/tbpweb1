@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
-const PeminjamanBarang = sequelize.define('Peminjaman Barang',{
+const PeminjamanBarang = sequelize.define('PeminjamanBarang', {
     nama_peminjam: {
         type: DataTypes.STRING(100),
         allowNull: false
@@ -26,9 +26,17 @@ const PeminjamanBarang = sequelize.define('Peminjaman Barang',{
         type: DataTypes.INTEGER,
         allowNull: false
     },
-},{
+    tanggal_pinjam: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    tanggal_kembali: {
+        type: DataTypes.DATE,
+        allowNull: false
+    }
+}, {
     tableName: 'peminjaman_barang', // Nama tabel di database
     timestamps: false // Nonaktifkan timestamps jika tidak diperlukan
-})
+});
 
 module.exports = { PeminjamanBarang };

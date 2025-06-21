@@ -135,18 +135,53 @@ const updateStatusPeminjaman = async (req, res) => {
 // ==============================================================================
 const riwayatPeminjaman = async (req, res) => {
     try {
-        const data = await PeminjamanBarang.findAll({
-            order: [['id', 'DESC']]
+        const { search, kategori, lokasi, status } = req.query; // search, kategori, lokasi, status
+
+        const whereConditions = {}; // Initialize search conditions
+
+        // If there's a search term, add conditions for `nama_peminjam`, `nama_barang`, and `status_pengembalian`
+        if (search) {
+            whereConditions[Op.or] = [
+                { nama_peminjam: { [Op.like]: `%${search}%` } },
+                { nama_barang: { [Op.like]: `%${search}%` } },
+                { status_pengembalian: { [Op.like]: `%${search}%` } }
+            ];
+        }
+
+        // If there's a specific `kategori`, filter by that field
+        if (kategori && kategori !== '') {
+            whereConditions.kategori_barang = kategori;
+        }
+
+        // If there's a specific `lokasi`, filter by that field
+        if (lokasi && lokasi !== '') {
+            whereConditions.lokasi = lokasi;
+        }
+
+        // If there's a specific `status`, filter by that field
+        if (status && status !== '') {
+            whereConditions.status_pengembalian = status;
+        }
+
+        // Fetch data based on the constructed `whereConditions`
+        const peminjaman = await PeminjamanBarang.findAll({
+            where: whereConditions,
+            order: [['id', 'DESC']] // Order by the latest records
         });
 
+        // Render the view with the filtered data
         res.render('RiwayatPeminjaman', {
             title: 'Riwayat Peminjaman',
-            peminjaman: data
+            peminjaman: peminjaman,
+            search: search || '', // Send the search query back to the view
+            kategori: kategori || '',
+            lokasi: lokasi || '',
+            status: status || ''
         });
 
     } catch (error) {
-        console.error('Gagal memuat riwayat peminjaman:', error);
-        res.status(500).send('Terjadi kesalahan saat mengambil riwayat peminjaman.');
+        console.error('Error fetching Riwayat Peminjaman:', error);
+        res.status(500).send('Error loading Riwayat Peminjaman.');
     }
 };
 
@@ -173,6 +208,7 @@ const getDetailPeminjaman = async (req, res) => {
         res.status(500).send('Terjadi kesalahan saat memuat detail peminjaman.');
     }
 };
+
 
 module.exports = {
     getAllPeminjaman,
