@@ -57,24 +57,39 @@ const addRuangan = async (req, res) => {
     const foto = req.file ? `/uploads/ruangan/${req.file.filename}` : null;
 
     if (!nama || !kode) {
-      return res.status(400).redirect('/addruangan?status=error&message=Nama dan kode wajib diisi.');
+      return res.render("TambahRuangan", {
+        title: "Tambah Ruangan Baru",
+        error: 'Nama dan kode ruangan wajib diisi.'
+      });
+    }
+
+    // Cek duplikat kode
+    const existing = await Ruangan.findOne({ where: { kode_ruangan: kode } });
+    if (existing) {
+      return res.render("TambahRuangan", {
+        title: "Tambah Ruangan Baru",
+        error: 'Kode ruangan sudah digunakan!'
+      });
     }
 
     await Ruangan.create({
       nama_ruangan: nama,
       kode_ruangan: kode,
-      deskripsi: deskripsi,
-      foto: foto
+      deskripsi,
+      foto
     });
 
     res.render("TambahRuangan", {
-  title: "Tambah Ruangan Baru",
-  success: true
-});
+      title: "Tambah Ruangan Baru",
+      success: true
+    });
 
   } catch (error) {
     console.error('Error saat menambahkan ruangan:', error);
-    res.status(500).redirect('/addruangan?status=error&message=Gagal menambahkan ruangan.');
+    res.render("TambahRuangan", {
+      title: "Tambah Ruangan Baru",
+      error: 'Terjadi kesalahan saat menambahkan ruangan.'
+    });
   }
 };
 
@@ -104,30 +119,55 @@ const getRuanganForUpdate = async (req, res) => {
 // POST: Update data ruangan
 // ==============================================================================
 const updateRuangan = async (req, res) => {
-    try {
-        const ruanganId = req.params.id;
-        const { nama_ruangan, kode_ruangan, deskripsi } = req.body;
-        const ruangan = await Ruangan.findByPk(ruanganId);
+  try {
+    const ruanganId = req.params.id;
+    const { nama_ruangan, kode_ruangan, deskripsi } = req.body;
 
-        if (!ruangan) {
-            return res.status(404).redirect('/ruangan?status=error&message=Ruangan tidak ditemukan.');
-        }
-
-        const foto = req.file ? `/uploads/ruangan/${req.file.filename}` : ruangan.foto;
-
-        await ruangan.update({
-            nama_ruangan,
-            kode_ruangan,
-            deskripsi,
-            foto
-        });
-
-        res.redirect('/ruangan/edit/' + ruanganId + '?status=success');
-    } catch (error) {
-        console.error("Error update ruangan:", error);
-        res.status(500).redirect('/ruangan?status=error&message=Gagal update ruangan.');
+    const ruangan = await Ruangan.findByPk(ruanganId);
+    if (!ruangan) {
+      return res.status(404).render("UpdateRuangan", {
+        title: "Edit Ruangan",
+        ruangan: {},
+        error: "Ruangan tidak ditemukan."
+      });
     }
+
+    // Cek apakah kode sudah digunakan oleh ruangan lain
+    const existing = await Ruangan.findOne({
+      where: {
+        kode_ruangan,
+        id: { [Op.ne]: ruanganId } // id tidak sama dengan yang sedang diedit
+      }
+    });
+
+    if (existing) {
+      return res.render("UpdateRuangan", {
+        title: "Edit Ruangan",
+        ruangan,
+        error: "Kode ruangan sudah digunakan ruangan lain!"
+      });
+    }
+
+    const foto = req.file ? `/uploads/ruangan/${req.file.filename}` : ruangan.foto;
+
+    await ruangan.update({
+      nama_ruangan,
+      kode_ruangan,
+      deskripsi,
+      foto
+    });
+
+    res.redirect(`/ruangan/edit/${ruanganId}?status=success`);
+  } catch (error) {
+    console.error("Error update ruangan:", error);
+    res.render("UpdateRuangan", {
+      title: "Edit Ruangan",
+      ruangan: {},
+      error: "Terjadi kesalahan saat mengupdate ruangan."
+    });
+  }
 };
+
 
 // ==============================================================================
 // DELETE: Hapus ruangan

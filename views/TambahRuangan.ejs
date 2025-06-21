@@ -66,6 +66,20 @@
   </script>
 <% } %>
 
+<% if (typeof error !== 'undefined' && error) { %>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal!',
+      text: '<%= error %>',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#d33'
+    });
+  </script>
+<% } %>
+
+
 <!-- Script Preview Gambar -->
 <script>
   const inputFile = document.getElementById('gambar');
