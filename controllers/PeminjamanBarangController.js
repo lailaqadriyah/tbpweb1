@@ -135,48 +135,35 @@ const updateStatusPeminjaman = async (req, res) => {
 // ==============================================================================
 const riwayatPeminjaman = async (req, res) => {
     try {
-        const { search, kategori, lokasi, status } = req.query; // search, kategori, lokasi, status
+        const { search } = req.query;
 
-        const whereConditions = {}; // Initialize search conditions
+        // Ambil data dari kedua tabel
+        const peminjamanAktif = await PeminjamanBarang.findAll({ raw: true });
+        const peminjamanSelesai = await PengembalianBarang.findAll({ raw: true });
 
-        // If there's a search term, add conditions for `nama_peminjam`, `nama_barang`, and `status_pengembalian`
+        // Gabungkan dan format data
+        let riwayatGabungan = [
+            ...peminjamanAktif.map(item => ({ ...item, status: item.status_pengembalian || 'Belum Dikembalikan' })),
+            ...peminjamanSelesai.map(item => ({ ...item, status: item.status_pengembalian || 'Sudah Dikembalikan' }))
+        ];
+
+        // Urutkan berdasarkan ID secara menurun (menampilkan yang terbaru)
+        riwayatGabungan.sort((a, b) => b.id - a.id);
+        
+        // Terapkan filter pencarian jika ada
         if (search) {
-            whereConditions[Op.or] = [
-                { nama_peminjam: { [Op.like]: `%${search}%` } },
-                { nama_barang: { [Op.like]: `%${search}%` } },
-                { status_pengembalian: { [Op.like]: `%${search}%` } }
-            ];
+            riwayatGabungan = riwayatGabungan.filter(item =>
+                (item.nama_peminjam && item.nama_peminjam.toLowerCase().includes(search.toLowerCase())) ||
+                (item.nama_barang && item.nama_barang.toLowerCase().includes(search.toLowerCase())) ||
+                (item.status && item.status.toLowerCase().includes(search.toLowerCase()))
+            );
         }
 
-        // If there's a specific `kategori`, filter by that field
-        if (kategori && kategori !== '') {
-            whereConditions.kategori_barang = kategori;
-        }
-
-        // If there's a specific `lokasi`, filter by that field
-        if (lokasi && lokasi !== '') {
-            whereConditions.lokasi = lokasi;
-        }
-
-        // If there's a specific `status`, filter by that field
-        if (status && status !== '') {
-            whereConditions.status_pengembalian = status;
-        }
-
-        // Fetch data based on the constructed `whereConditions`
-        const peminjaman = await PeminjamanBarang.findAll({
-            where: whereConditions,
-            order: [['id', 'DESC']] // Order by the latest records
-        });
-
-        // Render the view with the filtered data
+        // Render view dengan data gabungan
         res.render('RiwayatPeminjaman', {
             title: 'Riwayat Peminjaman',
-            peminjaman: peminjaman,
-            search: search || '', // Send the search query back to the view
-            kategori: kategori || '',
-            lokasi: lokasi || '',
-            status: status || ''
+            peminjaman: riwayatGabungan, // Gunakan nama variabel yang sama
+            search: search || ''
         });
 
     } catch (error) {
