@@ -4,10 +4,14 @@ const { Aset } = require("../models/AsetModel");
 const { PengembalianBarang } = require("../models/PengembalianBarangModel"); // Asumsi ini model untuk tabel pengembalian_barang
 const { Op } = require("sequelize");
 
+
 // Impor library untuk ekspor
 const { stringify } = require("csv-stringify"); // Untuk CSV
 const ExcelJS = require("exceljs"); // Untuk Excel
-const PDFDocument = require("pdfkit"); // Untuk PDF (membutuhkan font jika ingin karakter non-standar)
+const PDFDocument = require("pdfkit");
+const puppeteer = require('puppeteer');
+const path = require('path');
+
 
 // ==============================================================================
 // CONTROLLER: tampilBarangRusak
@@ -16,234 +20,101 @@ const PDFDocument = require("pdfkit"); // Untuk PDF (membutuhkan font jika ingin
 const tampilBarangRusak = async (req, res) => {
   try {
     const asetRusak = await Aset.findAll({
-      where: { kondisi: "Rusak" },
-      order: [["tanggal_masuk", "DESC"]],
+      where: { kondisi: 'Rusak' },
+      order: [['tanggal_masuk', 'DESC']]
     });
 
-    res.render("ExportBarangRusak", {
-      // Nama EJS yang sesuai dengan laporan barang rusak
-      title: "Laporan Barang Rusak",
-      aset: asetRusak,
+    res.render('ExportBarangRusak', {
+      title: 'Export Barang Rusak',
+      aset: asetRusak
     });
   } catch (error) {
-    console.error("Gagal mengambil data barang rusak:", error);
-    res.status(500).send("Gagal memuat laporan barang rusak.");
+    console.error('Gagal mengambil data barang rusak:', error);
+    res.status(500).send('Gagal memuat laporan barang rusak.');
   }
 };
 
-// ==============================================================================
-// CONTROLLER: exportBarangRusak
-// Fungsi untuk mengekspor data barang dengan kondisi 'Rusak' ke CSV, Excel, atau PDF.
-// ==============================================================================
 const exportBarangRusak = async (req, res) => {
   const format = req.body.format;
 
   try {
-    const rusak = await Aset.findAll({
-      where: { kondisi: "Rusak" },
-      raw: true, // Penting untuk mendapatkan objek plain
-    });
+    const rusak = await Aset.findAll({ where: { kondisi: 'Rusak' } });
 
-    // Definisikan headers untuk semua format export
-    const headers = [
-      "Kode Barang",
-      "Nama Barang",
-      "Kuantitas",
-      "Kategori",
-      "Lokasi",
-      "Tanggal Masuk",
-      "Kondisi",
-    ];
-
-    // Format data agar sesuai dengan header (untuk semua format)
-    const formattedData = rusak.map((item) => ({
-      "Kode Barang": item.kode_barang,
-      "Nama Barang": item.nama_barang,
-      Kuantitas: item.kuantitas,
-      Kategori: item.kategori_barang,
-      Lokasi: item.lokasi,
-      "Tanggal Masuk": item.tanggal_masuk
-        ? new Date(item.tanggal_masuk).toLocaleDateString("id-ID")
-        : "",
-      Kondisi: item.kondisi,
-    }));
-
-    const fileName = `laporan_barang_rusak_${new Date()
-      .toISOString()
-      .slice(0, 10)}`;
-
-    switch (format) {
-      case "csv":
-        res.setHeader("Content-Type", "text/csv");
-        res.setHeader(
-          "Content-Disposition",
-          `attachment; filename="${fileName}.csv"`
-        );
-        // Gunakan stringify dengan header: true dan pastikan formattedData memiliki key yang sesuai
-        stringify(formattedData, { header: true }).pipe(res);
-        break;
-
-      case "excel":
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet("Barang Rusak");
-
-        // Tambahkan header
-        worksheet.columns = headers.map((header) => ({
-          header: header,
-          key: header,
-          width: 20,
-        }));
-
-        // Tambahkan data. 'addRow' di ExcelJS bisa menerima objek dengan kunci yang cocok
-        formattedData.forEach((row) => {
-          worksheet.addRow(row);
-        });
-
-        res.setHeader(
-          "Content-Type",
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        );
-        res.setHeader(
-          "Content-Disposition",
-          `attachment; filename="${fileName}.xlsx"`
-        );
-        await workbook.xlsx.write(res);
-        res.end();
-        break;
-
-      case "pdf":
-        const doc = new PDFDocument({ margin: 40 });
-        res.setHeader(
-          "Content-Disposition",
-          `attachment; filename="${fileName}.pdf"`
-        );
-        res.setHeader("Content-Type", "application/pdf");
-        doc.pipe(res);
-
-        // Judul
-        doc
-          .fontSize(16)
-          .font("Helvetica-Bold")
-          .text("Laporan Barang Rusak", { align: "center" });
-        doc.moveDown(1.5);
-
-        // Header tabel
-        const pdfHeadersRusak = [
-          "No",
-          "Kode Barang",
-          "Nama Barang",
-          "Kuantitas",
-          "Kategori",
-          "Lokasi",
-          "Tgl Masuk",
-          "Kondisi",
-        ];
-        const colWidthsRusak = [30, 70, 90, 60, 70, 70, 70, 50];
-        let yRusak = doc.y;
-
-        // Gambar header tabel
-        doc.fontSize(9).font("Helvetica-Bold");
-        let xRusak = doc.page.margins.left;
-        pdfHeadersRusak.forEach((header, i) => {
-          doc.text(header, xRusak, yRusak, {
-            width: colWidthsRusak[i],
-            align: "left",
-            continued: true,
-          });
-          xRusak += colWidthsRusak[i];
-        });
-        doc.text(""); // Pindah baris setelah header
-
-        // Garis bawah header
-        doc
-          .moveTo(doc.page.margins.left, yRusak + doc.currentLineHeight + 5)
-          .lineTo(
-            doc.page.width - doc.page.margins.right,
-            yRusak + doc.currentLineHeight + 5
-          )
-          .stroke();
-
-        // Isi data
-        doc.font("Helvetica").fontSize(8);
-        let rowYRusak = yRusak + doc.currentLineHeight + 10;
-
-        formattedData.forEach((item, index) => {
-          // Cek apakah halaman baru diperlukan
-          if (rowYRusak + 20 > doc.page.height - doc.page.margins.bottom) {
-            doc.addPage();
-            yRusak = doc.y;
-            xRusak = doc.page.margins.left;
-            doc.fontSize(9).font("Helvetica-Bold");
-            pdfHeadersRusak.forEach((header, i) => {
-              doc.text(header, xRusak, yRusak, {
-                width: colWidthsRusak[i],
-                align: "left",
-                continued: true,
-              });
-              xRusak += colWidthsRusak[i];
-            });
-            doc.text("");
-            doc
-              .moveTo(doc.page.margins.left, yRusak + doc.currentLineHeight + 5)
-              .lineTo(
-                doc.page.width - doc.page.margins.right,
-                yRusak + doc.currentLineHeight + 5
-              )
-              .stroke();
-            rowYRusak = yRusak + doc.currentLineHeight + 10;
-            doc.font("Helvetica").fontSize(8);
-          }
-
-          const values = [
-            index + 1,
-            item["Kode Barang"],
-            item["Nama Barang"],
-            item["Kuantitas"],
-            item["Kategori"],
-            item["Lokasi"],
-            item["Tanggal Masuk"], // Sudah diformat di formattedData
-            item["Kondisi"],
-          ];
-          let rowXRusak = doc.page.margins.left;
-          values.forEach((val, i) => {
-            doc.text(String(val), rowXRusak, rowYRusak, {
-              width: colWidthsRusak[i],
-              align: "left",
-              continued: true,
-            });
-            rowXRusak += colWidthsRusak[i];
-          });
-          doc.text("");
-          rowYRusak += doc.currentLineHeight + 5;
-        });
-
-        doc.end();
-        break;
-
-      default:
-        res.status(400).send("Format export tidak valid.");
-        break;
+    if (format === 'csv') {
+      const parser = new Parser();
+      const csv = parser.parse(rusak.map(r => r.toJSON()));
+      res.header('Content-Type', 'text/csv');
+      res.attachment('laporan-barang-rusak.csv');
+      return res.send(csv);
     }
+
+    if (format === 'excel') {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Barang Rusak');
+
+      worksheet.columns = [
+        { header: 'Kode Barang', key: 'kode_barang', width: 20 },
+        { header: 'Nama Barang', key: 'nama_barang', width: 30 },
+        { header: 'Kuantitas', key: 'kuantitas', width: 10 },
+        { header: 'Kategori', key: 'kategori_barang', width: 20 },
+        { header: 'Lokasi', key: 'lokasi', width: 20 },
+        { header: 'Tanggal Masuk', key: 'tanggal_masuk', width: 20 },
+        { header: 'Kondisi', key: 'kondisi', width: 10 },
+      ];
+
+      rusak.forEach(data => {
+        worksheet.addRow(data.toJSON());
+      });
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename=laporan-barang-rusak.xlsx');
+
+      await workbook.xlsx.write(res);
+      res.end();
+      return;
+    }
+
+if (format === 'pdf') {
+  const ejs = require('ejs'); 
+  const html = await ejs.renderFile(
+    path.join(__dirname, '../views/ExportBarangRusakPDF.ejs'),
+    { aset: rusak }
+  );
+
+  const browser = await puppeteer.launch({ headless: true }); 
+  const page = await browser.newPage();
+
+  await page.setContent(html, { waitUntil: 'networkidle0' });
+
+  const pdfBuffer = await page.pdf({
+    format: 'A4',
+    printBackground: true,
+    margin: { top: '20mm', bottom: '20mm' },
+  });
+
+  await browser.close();
+
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', 'attachment; filename=laporan-barang-rusak.pdf');
+  return res.end(pdfBuffer); 
+}
+
   } catch (error) {
-    console.error("Gagal mengekspor data barang rusak:", error);
-    res.status(500).send("Gagal mengekspor data barang rusak.");
+    console.error('Gagal mengekspor data:', error);
+    res.status(500).send('Gagal mengekspor data.');
   }
 };
 
-// ==============================================================================
-// CONTROLLER: tampilDashboard
-// Fungsi untuk menampilkan dashboard (misalnya, menunjukkan jumlah barang rusak)
-// ==============================================================================
 const tampilDashboard = async (req, res) => {
   try {
     const barangRusak = await Aset.findAll({
-      where: { kondisi: "Rusak" },
+      where: { kondisi: 'Rusak' }
     });
 
-    res.render("Laporan", { barangRusak }); // sesuaikan dengan nama file view-nya
+    res.render('Laporan', { barangRusak }); 
   } catch (error) {
-    console.error("Gagal mengambil data barang rusak untuk dashboard:", error);
-    res.status(500).send("Gagal memuat dashboard");
+    console.error('Gagal mengambil data barang rusak:', error);
+    res.status(500).send('Gagal memuat dashboard');
   }
 };
 

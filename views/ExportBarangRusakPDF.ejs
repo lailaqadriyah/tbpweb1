@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Laporan Barang Rusak</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px 40px 40px 40px;
+    }
+
+    .kop-surat {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .kop-lab {
+      background-color: #0D1F4B;
+      color: white;
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: bold;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+    }
+
+    .kop-judul {
+      font-size: 19px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .kop-alamat {
+      font-size: 13px;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    .tanggal {
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 10px 0 20px;
+      font-size: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th, td {
+      border: 1px solid #999;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    td.red {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Kop Surat -->
+  <div class="kop-surat">
+    <div class="kop-lab">LAB</div>
+    <div class="kop-judul">LABORATORIUM SISTEM DEVELOPMENT</div>
+    <div class="kop-alamat">
+      Jl. Contoh No. 123, Kota Simulasi, Provinsi ABC<br>
+      Telp: (021) 12345678 | Email: info@labsistemdev.ac.id
+    </div>
+    <div class="tanggal">
+      Tanggal: <%= new Date().toLocaleDateString('id-ID') %>
+    </div>
+  </div>
+
+  <!-- Judul -->
+  <h2><u>Laporan Barang Rusak</u></h2>
+
+  <!-- Tabel -->
+  <table>
+    <thead>
+      <tr>
+        <th>Kode Barang</th>
+        <th>Nama Barang</th>
+        <th>Kuantitas</th>
+        <th>Kategori</th>
+        <th>Lokasi</th>
+        <th>Tanggal Masuk</th>
+        <th>Kondisi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (aset && aset.length > 0) { %>
+        <% aset.forEach(barang => { %>
+          <tr>
+            <td><%= barang.kode_barang %></td>
+            <td><%= barang.nama_barang %></td>
+            <td><%= barang.kuantitas %></td>
+            <td><%= barang.kategori_barang %></td>
+            <td><%= barang.lokasi %></td>
+            <td><%= new Date(barang.tanggal_masuk).toLocaleDateString('id-ID') %></td>
+            <td class="red"><%= barang.kondisi %></td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="7" style="text-align:center;">Tidak ada data barang rusak.</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+</body>
+</html>
