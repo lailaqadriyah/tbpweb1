@@ -1,7 +1,7 @@
 // controllers/PengembalianController.js
 
 const { PengembalianBarang } = require('../models/PengembalianBarangModel'); // Model yang diimpor
-// const { Op } = require('sequelize'); // TIDAK DIPERLUKAN KARENA TIDAK ADA PENCARIAN/FILTER
+const { Op } = require('sequelize'); 
 
 // ==============================================================================
 // CONTROLLER: getAllPengembalian
@@ -9,28 +9,59 @@ const { PengembalianBarang } = require('../models/PengembalianBarangModel'); // 
 // ==============================================================================
 const getAllPengembalian = async (req, res) => {
     try {
-        // Mengambil semua data dari tabel 'pengembalian'
-        // Tanpa kondisi 'where' akan mengambil semua baris.
-        const allPengembalian = await PengembalianBarang.findAll({ // <--- PERBAIKAN DI SINI!
-            order: [['id', 'DESC']] // Urutkan berdasarkan ID secara descending (terbaru di atas)
-            // Anda bisa urutkan berdasarkan 'tanggal_pinjam' atau 'tanggal_aktual_kembali' jika ada kolom tersebut
+        const { search, kategori, lokasi, status } = req.query; // Menerima query search, kategori, lokasi, dan status
+
+        const whereConditions = {};  // Inisialisasi kondisi pencarian
+
+        // Jika ada parameter pencarian, tambahkan kondisi untuk `nama_peminjam`, `nama_barang`, dan `status_pengembalian`
+        if (search) {
+            whereConditions[Op.or] = [
+                { nama_peminjam: { [Op.like]: `%${search}%` } }, // Pencarian berdasarkan nama peminjam
+                { nama_barang: { [Op.like]: `%${search}%` } },   // Pencarian berdasarkan nama barang
+                { status_pengembalian: { [Op.like]: `%${search}%` } } // Pencarian berdasarkan status pengembalian
+            ];
+        }
+
+        // Jika ada kategori, tambahkan filter berdasarkan kategori_barang
+        if (kategori && kategori !== '') {
+            whereConditions.kategori_barang = kategori;
+        }
+
+        // Jika ada lokasi, tambahkan filter berdasarkan lokasi
+        if (lokasi && lokasi !== '') {
+            whereConditions.lokasi = lokasi;
+        }
+
+        // Jika ada status, tambahkan filter berdasarkan status_pengembalian
+        if (status && status !== '') {
+            whereConditions.status_pengembalian = status;
+        }
+
+        // Ambil data pengembalian berdasarkan filter (jika ada)
+        const allPengembalian = await PengembalianBarang.findAll({
+            where: whereConditions,  // Menggunakan kondisi pencarian
+            order: [['id', 'DESC']]  // Urutkan berdasarkan ID secara descending (terbaru di atas)
         });
 
-        // Merender template EJS 'PengembalianBarang.ejs'
+        // Render template EJS 'PengembalianBarang.ejs'
         // dan meneruskan data yang diambil dari database ke view.
         res.render('PengembalianBarang', {
-            title: 'Daftar Pengembalian Barang', // Judul halaman untuk EJS
-            pengembalian: allPengembalian        // Variabel 'pengembalian' yang akan diakses di EJS
-
+            title: 'Daftar Pengembalian Barang',  // Judul halaman untuk EJS
+            pengembalian: allPengembalian,  // Variabel 'pengembalian' yang akan diakses di EJS
+            search,  // Kirim parameter pencarian kembali ke frontend
+            kategori,  // Kirim kategori ke frontend
+            lokasi,  // Kirim lokasi ke frontend
+            status  // Kirim status ke frontend
         });
 
     } catch (error) {
         console.error('Error saat mengambil data pengembalian:', error);
-
         res.status(500).send('Terjadi kesalahan server saat memuat daftar pengembalian barang.');
     }
 };
 
+
+// ==============================================================================
 // CONTROLLER: updateStatusPengembalian
 // Fungsi untuk mengupdate status pengembalian barang berdasarkan ID.
 // ==============================================================================
