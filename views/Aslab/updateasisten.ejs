@@ -1,16 +1,57 @@
-<!-- views/aslab/updateasisten.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Asisten</title>
+    <title>Update Data Asisten</title>
+    <style>
+        .form-container {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .btn-delete:hover {
+            background-color: #d32f2f;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Memanggil layoutStart -->
     <%- include('../partials/layoutStart.ejs') %>
 
     <!-- Memanggil Sidebar -->
@@ -22,32 +63,76 @@
         <% if (!asisten) { %>
             <p class="text-red-500">Tidak ada data asisten yang ditemukan untuk diubah.</p>
         <% } else { %>
-            <!-- Form untuk update asisten -->
-            <form action="/aslab/update/<%= asisten.id %>" method="POST" enctype="multipart/form-data">
-                <label for="nama">Nama:</label>
-                <input type="text" id="nama" name="nama" value="<%= asisten.nama %>" required>
+            <!-- Form untuk update asisten dalam kotak -->
+            <div class="form-container">
+                <form action="/aslab/update/<%= asisten.id %>" method="POST" enctype="multipart/form-data">
+                    <!-- Nama -->
+                    <div>
+                        <label for="nama" class="block">Nama:</label>
+                        <input type="text" id="nama" name="nama" value="<%= asisten.nama %>" required class="input-field">
+                    </div>
 
-                <label for="nomor_asisten">Nomor Asisten:</label>
-                <input type="text" id="nomor_asisten" name="nomor_asisten" value="<%= asisten.nomor_asisten %>" required>
+                    <!-- Nomor Asisten -->
+                    <div>
+                        <label for="nomor_asisten" class="block">Nomor Asisten:</label>
+                        <input type="text" id="nomor_asisten" name="nomor_asisten" value="<%= asisten.nomor_asisten %>" required class="input-field">
+                    </div>
 
-                <label for="nim">NIM:</label>
-                <input type="text" id="nim" name="nim" value="<%= asisten.nim %>" required>
+                    <!-- NIM -->
+                    <div>
+                        <label for="nim" class="block">NIM:</label>
+                        <input type="text" id="nim" name="nim" value="<%= asisten.nim %>" required class="input-field">
+                    </div>
 
-                <label for="telepon">Telepon:</label>
-                <input type="text" id="telepon" name="telepon" value="<%= asisten.telepon %>" required>
+                    <!-- Telepon -->
+                    <div>
+                        <label for="telepon" class="block">Telepon:</label>
+                        <input type="text" id="telepon" name="telepon" value="<%= asisten.telepon %>" required class="input-field">
+                    </div>
 
-                <label for="jabatan">Jabatan:</label>
-                <input type="text" id="jabatan" name="jabatan" value="<%= asisten.jabatan %>" required>
+                    <!-- Jabatan -->
+                    <div>
+                        <label for="jabatan" class="block">Jabatan:</label>
+                        <input type="text" id="jabatan" name="jabatan" value="<%= asisten.jabatan %>" required class="input-field">
+                    </div>
 
-                <label for="foto">Foto:</label>
-                <input type="file" id="foto" name="foto">
+                    <!-- Jenis Kelamin -->
+                    <div>
+                        <label for="jenis_kelamin" class="block">Jenis Kelamin:</label>
+                        <select id="jenis_kelamin" name="jenis_kelamin" required class="input-field">
+                            <option value="Laki-laki" <%= asisten.jenis_kelamin === 'Laki-laki' ? 'selected' : '' %>>Laki-laki</option>
+                            <option value="Perempuan" <%= asisten.jenis_kelamin === 'Perempuan' ? 'selected' : '' %>>Perempuan</option>
+                        </select>
+                    </div>
 
-                <button type="submit">Update</button>
-            </form>
+                    <!-- Domisili -->
+                    <div>
+                        <label for="domisili" class="block">Domisili:</label>
+                        <input type="text" id="domisili" name="domisili" value="<%= asisten.domisili %>" required class="input-field">
+                    </div>
+
+                    <!-- Foto -->
+                    <div>
+                        <label for="foto" class="block">Foto:</label>
+                        <input type="file" id="foto" name="foto" class="input-field">
+                        <% if (asisten.foto) { %>
+                            <p>Foto yang sudah ada:</p>
+                            <img src="<%= asisten.foto %>" alt="Foto Asisten" width="100">
+                        <% } %>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <button type="submit" class="btn-submit">Update</button>
+                        <!-- Tombol Hapus -->
+                        <form action="/aslab/delete/<%= asisten.id %>" method="POST" style="display: inline-block;">
+                            <button type="submit" class="btn-delete">Hapus</button>
+                        </form>
+                    </div>
+                </form>
+            </div>
         <% } %>
     </div>
 
-    <!-- Tutup Sidebar -->
     <%- include('../partials/closeAside.ejs') %>
 
 </body>

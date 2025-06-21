@@ -1,6 +1,7 @@
 // controllers/Aslabcontrol.js
 
 const { Asisten } = require('../models/Asistenmodel');
+const { Op } = require("sequelize"); // Import operator Sequelize
 
 // Fungsi untuk menampilkan form tambah asisten
 exports.formTambahAslab = (req, res) => {
@@ -29,16 +30,31 @@ exports.simpanAslab = async (req, res) => {
 // Fungsi untuk menampilkan daftar asisten
 exports.viewAsisten = async (req, res) => {
   try {
-    const { search, kategori, lokasi } = req.query;
+    const { search } = req.query;
+    let whereClause = {};
 
-    // Ambil data asisten dari database
-    const asistenList = await Asisten.findAll();
+    if (search) {
+      whereClause = {
+        [Op.or]: [
+          { nama: { [Op.like]: `%${search}%` } },
+          { nim: { [Op.like]: `%${search}%` } },
+          { nomor_asisten: { [Op.like]: `%${search}%` } }
+        ]
+      };
+    }
+
+    // DEBUG: Tampilkan klausa where yang digunakan
+    console.log('Klausa Pencarian yang Digunakan:', JSON.stringify(whereClause, null, 2));
+
+    // Ambil data asisten dari database dengan filter pencarian
+    const asistenList = await Asisten.findAll({ where: whereClause });
+
+    // DEBUG: Tampilkan data yang didapat dari database ke konsol
+    console.log('Data Asisten yang Ditemukan:', JSON.stringify(asistenList, null, 2));
 
     res.render('aslab/DataAsisten', { 
       asistenList,
-      search: search || '',
-      kategori: kategori || '',
-      lokasi: lokasi || ''
+      search: search || ''
     });
   } catch (err) {
     console.error(err);
@@ -68,8 +84,8 @@ exports.updateForm = async (req, res) => {
 exports.updateAsisten = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nama, nomor_asisten, nim, telepon, jabatan } = req.body;
-    const foto = req.file ? req.file.path : null; // Jika ada foto baru
+    const { nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili } = req.body;
+    const foto = req.file ? req.file.path : null; // Jika ada foto baru, simpan path-nya
 
     const asisten = await Asisten.findByPk(id);
     if (!asisten) {
@@ -83,7 +99,9 @@ exports.updateAsisten = async (req, res) => {
       nim,
       telepon,
       jabatan,
-      foto: foto || asisten.foto, // Gunakan foto yang ada jika tidak ada yang baru
+      jenis_kelamin,
+      domisili,
+      foto: foto || asisten.foto, // Gunakan foto yang ada jika tidak ada foto baru
     });
 
     // Redirect ke halaman data asisten setelah berhasil

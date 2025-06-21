@@ -18,10 +18,13 @@
         <div class="p-1 mb-4 flex justify-between items-center">
             <h1 class="text-xl font-semibold text-gray-800">Data Asisten</h1>
 
-            <!-- Search Bar Section -->
-            <div class="flex items-center space-x-4">
-                <input type="text" placeholder="Cari" class="p-2 border rounded-md" value="<%= search %>" />
-            </div>
+            <!-- Search Form -->
+            <form action="/aslab/data" method="GET" class="flex items-center space-x-2">
+                <input type="text" name="search" placeholder="Cari Nama, NIM, No. Asisten" class="p-2 border rounded-md" value="<%= search %>" />
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                    Cari
+                </button>
+            </form>
         </div>
 
         <% if (asistenList.length === 0) { %>
@@ -63,6 +66,10 @@
                                 <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.jabatan %></td>
                                 <td class="px-6 py-4 text-sm text-gray-800">
                                     <a href="/aslab/update/<%= asisten.id %>" class="bg-black text-white px-4 py-2 rounded">Update</a>
+                                    <!-- Tombol Hapus -->
+                                    <form action="/aslab/delete/<%= asisten.id %>" method="POST" style="display: inline-block;">
+                                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Hapus</button>
+                                    </form>
                                 </td>
                             </tr>
                         <% }); %>
@@ -70,12 +77,6 @@
                 </table>
             </div>
         <% } %>
-
-        <!-- Tombol Update di kanan bawah -->
-        <div class="fixed bottom-6 right-6">
-            <a href="/aslab/update" class="bg-black text-white px-6 py-3 rounded-full shadow-md" style="background-color: #000000; color: #ffffff;">Update</a>
-
-        </div>
     </div>
 
     <%- include('../partials/closeAside.ejs') %>
