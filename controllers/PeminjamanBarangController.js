@@ -2,6 +2,7 @@
 
 const { PeminjamanBarang } = require('../models/PeminjamanBarangModel'); // Model Sequelize
 const { PengembalianBarang } = require('../models/PengembalianBarangModel');
+const sequelize = require('../config/db'); // Impor instance Sequelize
 const { Op } = require('sequelize'); // Diperlukan untuk operasi 'in' atau pencarian nanti
 
 // ==============================================================================
@@ -88,46 +89,58 @@ const hapusPeminjaman = async (req, res) => {
 // CONTROLLER: updateStatusPeminjaman
 // Mengupdate status peminjaman berdasarkan ID (misalnya: dari "Dipinjam" ke "Dikembalikan")
 // ==============================================================================
-
 const updateStatusPeminjaman = async (req, res) => {
+    const { idsToUpdate } = req.body;
+
+    if (!Array.isArray(idsToUpdate) || idsToUpdate.length === 0) {
+        return res.status(400).json({ error: "Tidak ada ID yang dikirim." });
+    }
+    
+    const t = await sequelize.transaction();
+
     try {
-        const { idsToUpdate } = req.body;
-
-        if (!Array.isArray(idsToUpdate) || idsToUpdate.length === 0) {
-            return res.status(400).json({ error: "Tidak ada ID yang dikirim." });
-        }
-
         // 1. Ambil semua data peminjaman yang ingin dikembalikan
         const peminjamanData = await PeminjamanBarang.findAll({
-            where: { id: { [Op.in]: idsToUpdate } }
+            where: { id: { [Op.in]: idsToUpdate } },
+            transaction: t
         });
 
-        // 2. Buat data baru di tabel pengembalian
+        // 2. Buat data baru di tabel pengembalian dengan kode_barang unik
         const pengembalianData = peminjamanData.map(item => ({
+            kode_barang: `RET-${item.id}-${Date.now()}`, // Membuat kode unik sementara
             nama_peminjam: item.nama_peminjam,
             nama_barang: item.nama_barang,
             no_hp: item.no_hp,
             email: item.email,
             jumlah_barang: item.jumlah_barang,
-            status_pengembalian: 'Sudah Dikembalikan'
+            status_pengembalian: 'Sudah Dikembalikan',
+            tanggal_pinjam: item.tanggal_pinjam,
+            tanggal_kembali: new Date(),
+            kondisi: 'Baik' // Menambahkan kondisi default
         }));
 
-        await PengembalianBarang.bulkCreate(pengembalianData);
+        // 3. Simpan data baru ke tabel pengembalian
+        await PengembalianBarang.bulkCreate(pengembalianData, { transaction: t });
 
-        // 3. Hapus data dari tabel peminjaman
+        // 4. Hapus data dari tabel peminjaman
         await PeminjamanBarang.destroy({
-            where: { id: { [Op.in]: idsToUpdate } }
+            where: { id: { [Op.in]: idsToUpdate } },
+            transaction: t
         });
+        
+        // Commit transaksi jika semua berhasil
+        await t.commit();
 
-        // 4. Respon sukses
+        // 5. Respon sukses
         res.status(200).json({ message: "Barang berhasil dikembalikan dan dipindahkan ke riwayat pengembalian." });
 
     } catch (error) {
+        // Rollback transaksi jika terjadi kesalahan
+        await t.rollback();
         console.error('Gagal mengupdate status peminjaman:', error);
         res.status(500).json({ error: 'Terjadi kesalahan saat mengupdate status peminjaman.' });
     }
 };
-
 
 // ==============================================================================
 // CONTROLLER: riwayatPeminjaman
