@@ -2,6 +2,11 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
 const PengembalianBarang = sequelize.define('Pengembalian Barang',{
+    kode_barang: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+    },
     nama_peminjam: {
         type: DataTypes.STRING(100),
         allowNull: false
@@ -25,6 +30,18 @@ const PengembalianBarang = sequelize.define('Pengembalian Barang',{
     jumlah_barang: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    tanggal_pinjam: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  tanggal_kembali: {
+    type: DataTypes.DATE,
+    allowNull: true // TANGGAL KEMBALI can be null if the item hasn't been returned yet
+  },
+  kondisi: {
+      type: DataTypes.ENUM("Baik", "Rusak"),
+      allowNull: false,
     },
 },{
     tableName: 'pengembalian_barang', // Nama tabel di database

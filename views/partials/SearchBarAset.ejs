@@ -23,160 +23,20 @@
             autocomplete="off"
             value="<%= typeof search !== 'undefined' ? search : '' %>"
         />
-
-        <input type="hidden" name="kategori" id="hidden-kategori-input" value="<%= typeof kategori !== 'undefined' ? kategori : '' %>">
-        <input type="hidden" name="lokasi" id="hidden-lokasi-input" value="<%= typeof lokasi !== 'undefined' ? lokasi : '' %>">
-
-        <div id="filter-button" class="ml-2 cursor-pointer">
-            <img src="icons/filter.png" alt="Icon Filter" class="w-6 h-6" />
-        </div>
-
-        <div
-            id="filter-menu"
-            class="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10 hidden"
-        >
-            <ul>
-                <li class="p-2 hover:bg-gray-100 cursor-pointer" id="category-option">
-                    Kategori
-                    <ul
-                        id="category-submenu"
-                        class="pl-4 mt-1 hidden border-t border-gray-200"
-                    >
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="Elektronik">Elektronik</li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="Perabotan">Perabotan</li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="Laporan TA">Laporan TA</li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="Laporan KP">Laporan KP</li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="Buku">Buku</li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="ATK">ATK</li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="">Semua Kategori</li> </ul>
-                </li>
-                <li class="p-2 hover:bg-gray-100 cursor-pointer" id="location-option">
-                    Lokasi
-                    <ul
-                        id="location-submenu"
-                        class="pl-4 mt-1 hidden border-t border-gray-200"
-                    >
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="Ruang Kepala Lab">Ruang Kepala Lab</li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="Ruang Aslab">Ruang Aslab</li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="Ruang Utama">Ruang Utama</li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer" data-filter-value="">Semua Lokasi</li> </ul>
-                </li>
-            </ul>
-        </div>
     </form>
 </div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const searchInput = document.getElementById('search');
-        const filterButton = document.getElementById('filter-button');
-        const filterMenu = document.getElementById('filter-menu');
-        const categoryOption = document.getElementById('category-option');
-        const categorySubmenu = document.getElementById('category-submenu');
-        const locationOption = document.getElementById('location-option');
-        const locationSubmenu = document.getElementById('location-submenu');
-        const hiddenKategoriInput = document.getElementById('hidden-kategori-input');
-        const hiddenLokasiInput = document.getElementById('hidden-lokasi-input');
         const searchFilterForm = document.getElementById('search-filter-form');
 
-        // Fungsi untuk menutup semua menu filter
-        const closeFilterMenu = () => {
-            filterMenu.classList.add('hidden');
-            categorySubmenu.classList.add('hidden');
-            locationSubmenu.classList.add('hidden');
-        };
-
-        // 1. Mengaktifkan/Menonaktifkan Menu Filter Utama
-        filterButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            filterMenu.classList.toggle('hidden');
-            // Pastikan submenu tertutup saat menu utama dibuka/ditutup
-            categorySubmenu.classList.add('hidden');
-            locationSubmenu.classList.add('hidden');
-        });
-
-        // 2. Mengaktifkan/Menonaktifkan Submenu Kategori
-        categoryOption.addEventListener('click', (event) => {
-            event.stopPropagation();
-            categorySubmenu.classList.toggle('hidden');
-            locationSubmenu.classList.add('hidden'); // Selalu sembunyikan submenu lokasi jika kategori dibuka
-        });
-
-        // 3. Mengaktifkan/Menonaktifkan Submenu Lokasi
-        locationOption.addEventListener('click', (event) => {
-            event.stopPropagation();
-            locationSubmenu.classList.toggle('hidden');
-            categorySubmenu.classList.add('hidden'); // Selalu sembunyikan submenu kategori jika lokasi dibuka
-        });
-
-        // 4. Menutup Menu Saat Klik di Luar Area Menu
-        document.addEventListener('click', (event) => {
-            if (!filterMenu.contains(event.target) && !filterButton.contains(event.target)) {
-                closeFilterMenu();
-            }
-        });
-
-        // 5. Menangani Pilihan dari Submenu Kategori
-        categorySubmenu.querySelectorAll('li').forEach(item => {
-            item.addEventListener('click', (event) => {
-                event.stopPropagation(); // Penting agar click pada item tidak menutup menu utama
-                const selectedCategory = item.dataset.filterValue; // Ambil nilai dari data-filter-value
-
-                // Set nilai hidden input kategori
-                hiddenKategoriInput.value = selectedCategory;
-
-                // Submit form untuk memicu pencarian dengan filter baru
-                searchFilterForm.submit();
-                closeFilterMenu(); // Tutup menu setelah pilihan
-            });
-        });
-
-        // 6. Menangani Pilihan dari Submenu Lokasi
-        locationSubmenu.querySelectorAll('li').forEach(item => {
-            item.addEventListener('click', (event) => {
-                event.stopPropagation(); // Penting agar click pada item tidak menutup menu utama
-                const selectedLocation = item.dataset.filterValue; // Ambil nilai dari data-filter-value
-
-                // Set nilai hidden input lokasi
-                hiddenLokasiInput.value = selectedLocation;
-
-                // Submit form untuk memicu pencarian dengan filter baru
-                searchFilterForm.submit();
-                closeFilterMenu(); // Tutup menu setelah pilihan
-            });
-        });
-
-        // 7. Menangani Submit Form saat Enter pada Search Input
+        // Submit saat tekan Enter
         searchInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
-                event.preventDefault(); // Mencegah submit default jika ada tombol submit lain
+                event.preventDefault();
                 searchFilterForm.submit();
-            }
-        });
-
-        // Mempertahankan nilai search input saat halaman dimuat ulang (sudah ada di EJS value attribute)
-        // Untuk mempertahankan filter di menu dropdown, ini lebih kompleks karena dropdown-nya custom.
-        // Anda mungkin perlu menambahkan visualisasi di UI bahwa filter tertentu aktif, misalnya:
-        // - Mengubah warna teks "Kategori" atau "Lokasi" di menu utama.
-        // - Menampilkan tag di samping search bar yang menunjukkan filter aktif.
-
-        // Contoh sederhana untuk menandai pilihan aktif (opsional, visual feedback)
-        const currentCategory = hiddenKategoriInput.value;
-        const currentLocation = hiddenLokasiInput.value;
-
-        categorySubmenu.querySelectorAll('li').forEach(item => {
-            if (item.dataset.filterValue === currentCategory) {
-                item.classList.add('font-bold', 'text-blue-600'); // Atau warna lain
-            } else {
-                item.classList.remove('font-bold', 'text-blue-600');
-            }
-        });
-
-        locationSubmenu.querySelectorAll('li').forEach(item => {
-            if (item.dataset.filterValue === currentLocation) {
-                item.classList.add('font-bold', 'text-blue-600'); // Atau warna lain
-            } else {
-                item.classList.remove('font-bold', 'text-blue-600');
             }
         });
     });
