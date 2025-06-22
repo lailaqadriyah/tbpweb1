@@ -1,4 +1,5 @@
 const { Ruangan } = require('../models/RuanganModel');
+const { Aset } = require('../models/AsetModel');
 const { Op } = require('sequelize');
 
 // ==============================================================================
@@ -197,9 +198,18 @@ const getRuanganDetail = async (req, res) => {
         const ruangan = await Ruangan.findByPk(ruanganId);
 
         if (ruangan) {
+            // Fetch assets that are located in this room
+            const asetDiRuangan = await Aset.findAll({
+                where: {
+                    lokasi: ruangan.nama_ruangan
+                },
+                order: [['nama_barang', 'ASC']]
+            });
+
             res.render("DetailRuangan", {
                 title: "Detail Ruangan",
-                ruangan
+                ruangan,
+                asetDiRuangan
             });
         } else {
             res.status(404).render("404", { title: "Tidak Ditemukan", message: "Ruangan tidak ditemukan." });
