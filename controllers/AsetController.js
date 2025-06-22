@@ -308,8 +308,10 @@ const prosesPengajuan = async (req, res) => {
         jabatanPengaju,
         namaBarang,
         jumlahBarang,
-        ruanganTujuan, 
-        alasan
+        ruanganTujuan,
+        spesifikasi, 
+        alasan,
+        
     } = req.body;
 
     const tanggal = new Date().toLocaleDateString('id-ID', {
