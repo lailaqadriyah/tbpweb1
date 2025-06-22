@@ -83,30 +83,15 @@
       </div>
     </div>
 
-    <% 
+<%
         let hasSearchParams = false;
         let searchMessage = "";
 
-        // Pastikan variabel 'search', 'kategori', dan 'lokasi' sudah didefinisikan
-        // Jika tidak ada di query, mungkin undefined atau kosong
         const currentSearch = search || '';
-        const currentKategori = kategori || '';
-        const currentLokasi = lokasi || '';
+
 
         if (currentSearch.trim() !== '') {
             searchMessage += `"${currentSearch.trim()}"`;
-            hasSearchParams = true;
-        }
-
-        if (currentKategori.trim() !== '') {
-            if (hasSearchParams) searchMessage += " dan ";
-            searchMessage += `Kategori: "${currentKategori.trim()}"`;
-            hasSearchParams = true;
-        }
-
-        if (currentLokasi.trim() !== '') {
-            if (hasSearchParams) searchMessage += " dan ";
-            searchMessage += `Lokasi: "${currentLokasi.trim()}"`;
             hasSearchParams = true;
         }
     %>
