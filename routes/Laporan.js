@@ -1,19 +1,32 @@
-var express = require('express');
-var router = express.Router();
-const { tampilBarangRusak, exportBarangRusak, getLaporanDikembalikan, exportLaporanPengembalian, exportRiwayatPeminjaman, getLaporanRiwayatPeminjaman } = require('../controllers/Laporan');
 
-router.get('/laporan', function(req, res, next) {
+// ================= routes/Laporan.js =================
+const express = require('express');
+const router = express.Router();
+
+const {
+  tampilBarangRusak,
+  exportBarangRusak,
+  getLaporanDikembalikan,
+  exportLaporanPengembalian,
+  getLaporanRiwayatPeminjaman,
+  exportRiwayatPeminjaman
+} = require('../controllers/Laporan');
+
+// Halaman utama laporan
+router.get('/laporan', (req, res) => {
   res.render('Laporan', { title: 'Laporan' });
 });
 
-router.get('/barang-rusak', tampilBarangRusak);
-router.post('/laporan/export', exportBarangRusak);
+// Laporan Barang Rusak
+router.get('/laporan/barang-rusak', tampilBarangRusak);
+router.post('/laporan/barang-rusak/export', exportBarangRusak);
 
+// Laporan Pengembalian
 router.get('/laporan/dikembalikan', getLaporanDikembalikan);
 router.post('/laporan/dikembalikan/export', exportLaporanPengembalian);
 
-router.post('/export-riwayat-peminjaman', exportRiwayatPeminjaman);
-
-router.get('/laporan-riwayat-peminjaman', getLaporanRiwayatPeminjaman);
+// Laporan Riwayat Peminjaman
+router.get('/laporan/riwayat-peminjaman', getLaporanRiwayatPeminjaman);
+router.post('/laporan/riwayat-peminjaman/export', exportRiwayatPeminjaman);
 
 module.exports = router;
