@@ -388,5 +388,5 @@ module.exports = {
     deletePeminjaman,
     getDetailPeminjamanById,
     updatePeminjamanById,
-    upload // Ekspor upload untuk digunakan di rute
+    upload 
 };
