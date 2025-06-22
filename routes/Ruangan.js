@@ -28,10 +28,10 @@ const {
 router.get('/ruangan', getAllRuangan);
 router.get('/addruangan', getAddRuanganPage);
 router.post('/ruangan/tambah', upload.single('gambar'), addRuangan);
-router.get('/ruangan/edit/:id', getRuanganForUpdate);
-router.post('/ruangan/edit/:id', upload.single('gambar'), updateRuangan);
-router.get('/ruangan/detail/:id', getRuanganDetail);
-router.post('/ruangan/delete/:id', deleteRuangan); // SUDAH ADA
+router.get('/ruangan/edit/:kode_ruangan', getRuanganForUpdate);
+router.post('/ruangan/edit/:kode_ruangan', upload.single('gambar'), updateRuangan);
+router.get('/ruangan/detail/:kode_ruangan', getRuanganDetail);
+router.post('/ruangan/delete/:kode_ruangan', deleteRuangan); // SUDAH ADA
 
 
 module.exports = router;

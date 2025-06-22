@@ -23,7 +23,7 @@
             <% if (!asisten) { %>
                 <p class="text-red-500 text-center">Data asisten tidak ditemukan.</p>
             <% } else { %>
-                <form action="/aslab/update/<%= asisten.id %>" method="POST" enctype="multipart/form-data">
+                <form action="/aslab/update/<%= asisten.nomor_asisten %>" method="POST" enctype="multipart/form-data">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <!-- Kolom Upload Foto -->
                         <div class="md:col-span-1 flex flex-col items-center text-center">
@@ -80,12 +80,12 @@
                                 <input type="text" name="domisili" id="domisili" value="<%= asisten.domisili %>" placeholder="Contoh: Yogyakarta" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
                             </div>
                             <div class="md:col-span-2">
-                                <label for="ruangan_id" class="block text-sm font-medium text-gray-700">Ruangan</label>
-                                <select name="ruangan_id" id="ruangan_id" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <label for="kode_ruangan" class="block text-sm font-medium text-gray-700">Ruangan</label>
+                                <select name="kode_ruangan" id="kode_ruangan" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                     <option value="">Pilih Ruangan</option>
                                     <% if (ruanganList && ruanganList.length > 0) { %>
                                         <% ruanganList.forEach(ruangan => { %>
-                                            <option value="<%= ruangan.id %>" <%= asisten.ruangan_id == ruangan.id ? 'selected' : '' %>><%= ruangan.kode_ruangan %> - <%= ruangan.nama_ruangan %></option>
+                                            <option value="<%= ruangan.kode_ruangan %>" <%= asisten.kode_ruangan == ruangan.kode_ruangan ? 'selected' : '' %>><%= ruangan.nama_ruangan %></option>
                                         <% }); %>
                                     <% } else { %>
                                         <option value="" disabled>Tidak ada data ruangan</option>

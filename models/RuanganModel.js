@@ -2,11 +2,6 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); 
 
 const Ruangan = sequelize.define('Ruangan', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
     kode_ruangan: {
         type: DataTypes.STRING(20),
         primaryKey: true,

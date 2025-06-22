@@ -55,16 +55,16 @@
 
           <!-- Tombol Aksi -->
           <div class="flex space-x-3 text-lg">
-            <a href="/ruangan/detail/<%= r.id %>" class="text-sky-500 hover:text-sky-600" title="Detail">
+            <a href="/ruangan/detail/<%= r.kode_ruangan %>" class="text-sky-500 hover:text-sky-600" title="Detail">
               <i class="fas fa-info-circle"></i>
             </a>
-            <a href="/ruangan/edit/<%= r.id %>" class="text-green-500 hover:text-green-600" title="Edit">
+            <a href="/ruangan/edit/<%= r.kode_ruangan %>" class="text-green-500 hover:text-green-600" title="Edit">
               <i class="fas fa-edit"></i>
             </a>
             <button 
               type="button"
               class="text-red-500 hover:text-red-600 tombol-hapus"
-              data-id="<%= r.id %>"
+              data-id="<%= r.kode_ruangan %>"
               data-nama="<%= r.nama_ruangan.replace(/"/g, '&quot;') %>"
               title="Hapus">
               <i class="fas fa-trash-alt"></i>

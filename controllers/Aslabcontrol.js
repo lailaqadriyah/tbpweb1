@@ -10,7 +10,7 @@ exports.formTambahAslab = async (req, res) => {
   try {
     // Ambil data ruangan untuk dropdown
     const ruanganList = await Ruangan.findAll({
-      attributes: ['id', 'kode_ruangan', 'nama_ruangan'],
+      attributes: ['kode_ruangan', 'nama_ruangan'],
       order: [['nama_ruangan', 'ASC']]
     });
 
@@ -28,7 +28,7 @@ exports.formTambahAslab = async (req, res) => {
 // Fungsi untuk menyimpan data asisten
 exports.simpanAslab = async (req, res) => {
   try {
-    const { nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, ruangan_id } = req.body;
+    const { nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, kode_ruangan } = req.body;
     const foto = req.file ? req.file.path : null;
 
     // Validasi: Cek apakah nomor_asisten sudah ada
@@ -57,7 +57,7 @@ exports.simpanAslab = async (req, res) => {
 
     // Simpan data asisten ke database
     const newAsisten = await Asisten.create({
-      nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, ruangan_id, foto
+      nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, kode_ruangan, foto
     });
 
     // Setelah berhasil, redirect ke halaman daftar asisten
@@ -136,8 +136,8 @@ exports.viewAsisten = async (req, res) => {
 // Fungsi untuk menampilkan form update asisten berdasarkan ID
 exports.updateForm = async (req, res) => {
   try {
-    const { id } = req.params; // Ambil id dari URL
-    const asisten = await Asisten.findByPk(id); // Cari data asisten berdasarkan ID
+    const { nomor_asisten } = req.params; // Ambil nomor_asisten dari URL
+    const asisten = await Asisten.findOne({ where: { nomor_asisten } }); // Cari data asisten berdasarkan nomor_asisten
 
     if (!asisten) {
       return res.send('Asisten tidak ditemukan');
@@ -145,7 +145,7 @@ exports.updateForm = async (req, res) => {
 
     // Ambil data ruangan untuk dropdown
     const ruanganList = await Ruangan.findAll({
-      attributes: ['id', 'kode_ruangan', 'nama_ruangan'],
+      attributes: ['kode_ruangan', 'nama_ruangan'],
       order: [['nama_ruangan', 'ASC']]
     });
 
@@ -163,12 +163,12 @@ exports.updateForm = async (req, res) => {
 // Fungsi untuk update data asisten
 exports.updateAslab = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, ruangan_id } = req.body;
+    const { nomor_asisten } = req.params;
+    const { nama, nim, telepon, jabatan, jenis_kelamin, domisili, kode_ruangan } = req.body;
     const foto = req.file ? req.file.path : null;
 
     // Cari asisten yang akan diupdate
-    const asisten = await Asisten.findByPk(id);
+    const asisten = await Asisten.findOne({ where: { nomor_asisten } });
     if (!asisten) {
       return res.status(404).json({
         success: false,
@@ -212,7 +212,7 @@ exports.updateAslab = async (req, res) => {
 
     // Update data asisten
     const updateData = {
-      nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, ruangan_id
+      nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, kode_ruangan
     };
 
     // Hanya update foto jika ada file baru
@@ -255,9 +255,9 @@ exports.updateAslab = async (req, res) => {
 // Fungsi untuk menghapus data asisten
 exports.deleteAsisten = async (req, res) => {
   try {
-    const { id } = req.params;
-    
-    const asisten = await Asisten.findByPk(id);
+    const { nomor_asisten } = req.params;
+
+    const asisten = await Asisten.findOne({ where: { nomor_asisten } });
     if (!asisten) {
       return res.send('Asisten tidak ditemukan');
     }

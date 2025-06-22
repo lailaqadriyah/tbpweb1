@@ -75,12 +75,12 @@
                             <input type="text" name="domisili" id="domisili" placeholder="Contoh: Yogyakarta" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
                         </div>
                         <div class="md:col-span-2">
-                            <label for="ruangan_id" class="block text-sm font-medium text-gray-700">Ruangan</label>
-                            <select name="ruangan_id" id="ruangan_id" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <label for="kode_ruangan" class="block text-sm font-medium text-gray-700">Ruangan</label>
+                            <select name="kode_ruangan" id="kode_ruangan" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                 <option value="">Pilih Ruangan</option>
                                 <% if (ruanganList && ruanganList.length > 0) { %>
                                     <% ruanganList.forEach(ruangan => { %>
-                                        <option value="<%= ruangan.id %>"><%= ruangan.kode_ruangan %> - <%= ruangan.nama_ruangan %></option>
+                                        <option value="<%= ruangan.kode_ruangan %>"><%= ruangan.nama_ruangan %></option>
                                     <% }); %>
                                 <% } else { %>
                                     <option value="" disabled>Tidak ada data ruangan</option>

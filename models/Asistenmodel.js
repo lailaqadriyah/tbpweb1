@@ -2,17 +2,13 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); 
 
 const Asisten = sequelize.define('Asisten', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
   nama: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   nomor_asisten: {
     type: DataTypes.STRING,
+    primaryKey: true,
     allowNull: false,
     unique: true,
   },
@@ -36,12 +32,12 @@ const Asisten = sequelize.define('Asisten', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  ruangan_id: {
-    type: DataTypes.INTEGER,
+  kode_ruangan: {
+    type: DataTypes.STRING,
     allowNull: true,
     references: {
       model: 'ruangan',
-      key: 'id'
+      key: 'kode_ruangan'
     }
   },
   foto: {

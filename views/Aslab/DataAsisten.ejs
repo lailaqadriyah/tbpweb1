@@ -95,10 +95,10 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex items-center space-x-2">
                                 <form style="display: inline-block;">
-                                    <button type="button" onclick="window.location.href='/aslab/update/<%= asisten.id %>'"
+                                    <button type="button" onclick="window.location.href='/aslab/update/<%= asisten.nomor_asisten %>'"
                                         class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition-colors">Update</button>
                                 </form>
-                                <form action="/aslab/delete/<%= asisten.id %>" method="POST"
+                                <form action="/aslab/delete/<%= asisten.nomor_asisten %>" method="POST"
                                     onsubmit="return confirm('Apakah Anda yakin ingin menghapus asisten ini?');"
                                     style="display: inline-block;">
                                     <button type="submit"

@@ -21,7 +21,7 @@ const getAllRuangan = async (req, res) => {
 
         const semuaRuangan = await Ruangan.findAll({
             where: whereConditions,
-            order: [['id', 'ASC']]
+            order: [['kode_ruangan', 'ASC']]
         });
 
         res.render("Ruangan", {
@@ -100,8 +100,9 @@ const addRuangan = async (req, res) => {
 // ==============================================================================
 const getRuanganForUpdate = async (req, res) => {
     try {
-        const ruanganId = req.params.id;
-        const ruangan = await Ruangan.findByPk(ruanganId);
+        const ruanganId = req.params.kode_ruangan;
+const ruangan = await Ruangan.findOne({ where: { kode_ruangan: ruanganId } });
+
 
         if (ruangan) {
             res.render("UpdateRuangan", {
@@ -122,10 +123,11 @@ const getRuanganForUpdate = async (req, res) => {
 // ==============================================================================
 const updateRuangan = async (req, res) => {
   try {
-    const ruanganId = req.params.id;
+    const kodeLama = req.params.kode_ruangan; // ini kode lama dari URL
     const { nama_ruangan, kode_ruangan, deskripsi } = req.body;
 
-    const ruangan = await Ruangan.findByPk(ruanganId);
+    // Cari ruangan berdasarkan kode lama
+    const ruangan = await Ruangan.findOne({ where: { kode_ruangan: kodeLama } });
     if (!ruangan) {
       return res.status(404).render("UpdateRuangan", {
         title: "Edit Ruangan",
@@ -134,11 +136,11 @@ const updateRuangan = async (req, res) => {
       });
     }
 
-    // Cek apakah kode sudah digunakan oleh ruangan lain
+    // Cek apakah kode baru bentrok dengan ruangan lain
     const existing = await Ruangan.findOne({
       where: {
         kode_ruangan,
-        id: { [Op.ne]: ruanganId } // id tidak sama dengan yang sedang diedit
+        kode_ruangan: { [Op.ne]: kodeLama }
       }
     });
 
@@ -150,8 +152,10 @@ const updateRuangan = async (req, res) => {
       });
     }
 
+    // Jika ada file baru, pakai yang baru
     const foto = req.file ? `/uploads/ruangan/${req.file.filename}` : ruangan.foto;
 
+    // Update data
     await ruangan.update({
       nama_ruangan,
       kode_ruangan,
@@ -159,7 +163,8 @@ const updateRuangan = async (req, res) => {
       foto
     });
 
-    res.redirect(`/ruangan/edit/${ruanganId}?status=success`);
+    // Redirect ke halaman edit dengan kode baru
+    res.redirect(`/ruangan/edit/${kode_ruangan}?status=success`);
   } catch (error) {
     console.error("Error update ruangan:", error);
     res.render("UpdateRuangan", {
@@ -176,9 +181,9 @@ const updateRuangan = async (req, res) => {
 // ==============================================================================
 const deleteRuangan = async (req, res) => {
   try {
-    const ruanganId = req.params.id;
+    const ruanganId = req.params.kode_ruangan;
 
-    const deleted = await Ruangan.destroy({ where: { id: ruanganId } });
+    const deleted = await Ruangan.destroy({ where: { kode_ruangan: ruanganId } });
 
     if (deleted) {
       res.status(200).send("Ruangan dihapus.");
@@ -195,7 +200,7 @@ const deleteRuangan = async (req, res) => {
 // ==============================================================================
 const getRuanganDetail = async (req, res) => {
     try {
-        const ruanganId = req.params.id;
+        const ruanganId = req.params.kode_ruangan;
         const ruangan = await Ruangan.findByPk(ruanganId);
 
         if (ruangan) {
@@ -210,7 +215,7 @@ const getRuanganDetail = async (req, res) => {
             // Fetch assistants responsible for this room
             const penanggungJawabRuangan = await Asisten.findAll({
                 where: {
-                    ruangan_id: ruanganId
+                    kode_ruangan: ruanganId
                 },
                 order: [['nama', 'ASC']]
             });
