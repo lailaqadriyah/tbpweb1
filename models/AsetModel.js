@@ -7,6 +7,7 @@ const Aset = sequelize.define(
     kode_barang: {
       type: DataTypes.STRING(20),
       allowNull: false,
+      primaryKey: true,
       unique: true,
     },
     nama_barang: {

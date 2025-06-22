@@ -16,7 +16,7 @@ const pdf = require('html-pdf');
 // ==============================================================================
 const getAllAset = async (req, res) => {
     try {
-        const { search, kategori, lokasi } = req.query;
+        const { search } = req.query;
         const whereConditions = {};
 
         if (search) {
@@ -30,7 +30,7 @@ const getAllAset = async (req, res) => {
 
         const allAset = await Aset.findAll({
             where: whereConditions,
-            order: [['id', 'ASC']],
+            order: [['kode_barang', 'ASC']],
             include: [{
                 model: Ruangan,
                 as: 'ruangan',
@@ -45,8 +45,7 @@ const getAllAset = async (req, res) => {
             title: "Daftar Aset",
             aset: allAset,
             search: search || '',
-            kategori: kategori || '',
-            lokasi: lokasi || ''
+
         });
 
     } catch (error) {
@@ -58,7 +57,7 @@ const getAllAset = async (req, res) => {
 
 const getAsetForUpdate = async (req, res) => {
     try {
-        const asetId = req.params.id;
+        const asetId = req.params.kode_barang; // Menggunakan kode_barang sebagai ID untuk update
         const asetToUpdate = await Aset.findByPk(asetId);
 
         const ruanganList = await Ruangan.findAll({
@@ -87,14 +86,14 @@ const getAsetForUpdate = async (req, res) => {
 // ==============================================================================
 const updateAset = async (req, res) => {
     try {
-        const asetId = req.params.id;
+        const asetId = req.params.kode_barang; 
         const {
             kode_barang,
             nama_barang,
             kuantitas,
             tanggal_masuk,
             kondisi,
-            ruangan_kode, // <-- Ganti ruangan_id menjadi ruangan_kode
+            ruangan_kode, 
             kategori_barang
         } = req.body;
 
@@ -115,7 +114,7 @@ const updateAset = async (req, res) => {
             kuantitas,
             tanggal_masuk,
             kondisi,
-            ruangan_kode, // <-- Simpan ruangan_kode
+            ruangan_kode, 
             kategori_barang,
             gambar_barang: foto_barang
         });
@@ -133,7 +132,7 @@ const updateAset = async (req, res) => {
 // ==============================================================================
 const deleteAset = async (req, res) => {
     try {
-        const asetId = req.params.id;
+        const asetId = req.params.kode_barang;
 
         const deletedRows = await Aset.destroy({
             where: { id: asetId }
@@ -157,7 +156,7 @@ const deleteAset = async (req, res) => {
 // FUNGSI BARU: getAssetDetail - Menggunakan Sequelize
 // ==============================================================================
 const getAsetDetail = async (req, res) => {
-    const asetId = req.params.id;
+    const asetId = req.params.kode_barang; // Menggunakan 'kode_barang' dari URL
 
     try {
         const asset = await Aset.findByPk(asetId, {
@@ -280,6 +279,7 @@ const addAset = async (req, res) => {
     } catch (error) {
         console.error('Error saat menambahkan aset baru:', error);
         res.status(500).send('Terjadi kesalahan saat menyimpan aset baru.');
+        res.redirect('/aset');
     }
 };
 
@@ -347,7 +347,7 @@ const prosesPengajuan = async (req, res) => { // <-- Ubah menjadi async jika And
 const exportPDF = async (req, res) => {
     try {
         const allAset = await Aset.findAll({
-            order: [['id', 'ASC']],
+            order: [['kode_barang', 'ASC']],
             include: [{
                 model: Ruangan,
                 as: 'ruangan',

@@ -151,6 +151,41 @@
   </div>
 </div>
 
+
+
+<%- include('./partials/closeAside.ejs') %>
+
+<!-- SweetAlert2 untuk notifikasi berhasil -->
+<% if (typeof success !== 'undefined' && success) { %>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    Swal.fire({
+      icon: 'success',
+      title: 'Berhasil!',
+      text: 'Data berhasil disimpan!',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#0D1F4B'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "/aset";
+      }
+    });
+  </script>
+<% } %>
+
+<% if (typeof error !== 'undefined' && error) { %>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal!',
+      text: '<%= error %>',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#d33'
+    });
+  </script>
+<% } %>
+
 <script>
   document
     .getElementById("gambar")
@@ -174,5 +209,3 @@
       }
     });
 </script>
-
-<%- include('./partials/closeAside.ejs') %>
