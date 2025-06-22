@@ -23,16 +23,6 @@ const getAllAset = async (req, res) => {
             ];
         }
 
-        // Tambahkan kondisi filter kategori jika 'kategori' ada dan tidak kosong
-        if (kategori && kategori !== '') {
-            whereConditions.kategori_barang = kategori;
-        }
-
-        // Tambahkan kondisi filter lokasi jika 'lokasi' ada dan tidak kosong
-        if (lokasi && lokasi !== '') {
-            whereConditions.lokasi = lokasi;
-        }
-
         const allAset = await Aset.findAll({
             where: whereConditions, // Terapkan kondisi pencarian dan filter
             order: [['id', 'ASC']]
@@ -94,8 +84,7 @@ const updateAset = async (req, res) => {
             tanggal_masuk,
             kondisi,
             lokasi,
-            kategori_barang,
-            gambar_barang
+            kategori_barang
         } = req.body;
 
         const asetToUpdate = await Aset.findByPk(asetId);
@@ -105,6 +94,14 @@ const updateAset = async (req, res) => {
             return res.status(404).redirect('/aset?status=error&message=Aset tidak ditemukan untuk diupdate.');
         }
 
+        // Proses upload file jika ada
+        let foto_barang = asetToUpdate.gambar_barang; // Gunakan gambar yang sudah ada sebagai default
+        
+        if (req.file) {
+            // Jika ada file baru yang diupload
+            foto_barang = `/uploads/aset/${req.file.filename}`;
+        }
+
         await asetToUpdate.update({
             kode_barang,
             nama_barang,
@@ -112,7 +109,8 @@ const updateAset = async (req, res) => {
             tanggal_masuk,
             kondisi,
             lokasi,
-            kategori_barang
+            kategori_barang,
+            gambar_barang: foto_barang // Update dengan gambar baru atau yang sudah ada
         });
 
         // Arahkan kembali ke halaman daftar aset setelah sukses

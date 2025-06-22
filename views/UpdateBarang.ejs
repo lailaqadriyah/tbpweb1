@@ -2,92 +2,99 @@
 <%- include('./partials/aside.ejs') %>
 
 <div class="flex-1 bg-gray-100 p-6">
-    <div class="mb-6 bg-white rounded-md shadow-md p-6">
-        <div class="flex justify-between items-center mb-6 pb-4">
-            <h2 class="text-2xl font-semibold text-gray-800">Ubah Data Barang</h2>
-            <a href="/aset" class="text-gray-500 hover:text-gray-700">
-                <i class="fas fa-times text-xl"></i>
-            </a>
-        </div>
-
-        <form action="/aset/update/<%= asset.id %>" method="POST" enctype="multipart/form-data">
-            <!-- Upload Gambar -->
-            <div class="flex justify-center mb-8">
-                <label for="imageUpload" class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded w-40 h-40 text-gray-400 hover:border-blue-400 transition relative">
-                    <div class="text-center" id="upload-label">
-                        <p class="text-sm">Tarik gambar ke sini</p>
-                        <p class="text-sm">atau</p>
-                        <p class="text-blue-600 text-sm hover:underline">Upload gambar</p>
-                    </div>
-                    
-                    <!-- Preview Gambar -->
-                    <img 
-                        id="preview-gambar" 
-                        class="absolute inset-0 w-full h-full object-cover rounded <%= asset.gambarBarang ? '' : 'hidden' %>" 
-                        src="<%= asset.gambarBarang ? '/uploads/' + asset.gambarBarang : '' %>"
-                    />
-
-                    <input 
-                        id="imageUpload" 
-                        name="gambarBarang" 
-                        type="file" 
-                        accept="image/*" 
-                        class="hidden"
-                        onchange="previewImage(event)"
-                    />
-                </label>
-            </div>
-
-            <!-- Input Lain -->
-            <div class="space-y-4">
-                <div>
-                    <label for="namaBarang" class="block text-sm font-medium text-gray-700 mb-1">Nama Barang</label>
-                    <input type="text" id="namaBarang" name="nama_barang" placeholder="Masukkan nama barang" value="<%= asset.nama_barang %>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div>
-                    <label for="kodeBarang" class="block text-sm font-medium text-gray-700 mb-1">Kode Barang</label>
-                    <input type="text" id="kodeBarang" name="kode_barang" placeholder="Masukkan kode barang" value="<%= asset.kode_barang %>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div>
-                    <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                    <select id="kategori" name="kategori_barang" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <option value="">Pilih kategori barang</option>
-                        <option value="Barang elektronik" <%= asset.kategori_barang === 'Barang elektronik' ? 'selected' : '' %>>Barang elektronik</option>
-                        <option value="Perabotan" <%= asset.kategori_barang === 'Perabotan' ? 'selected' : '' %>>Perabotan</option>
-                        <option value="Laporan TA" <%= asset.kategori_barang === 'Laporan TA' ? 'selected' : '' %>>Laporan TA</option>
-                        <option value="Laporan KP" <%= asset.kategori_barang === 'Laporan KP' ? 'selected' : '' %>>Laporan KP</option>
-                        <option value="Buku" <%= asset.kategori_barang === 'Buku' ? 'selected' : '' %>>Buku</option>
-                        <option value="ATK" <%= asset.kategori_barang === 'ATK' ? 'selected' : '' %>>ATK</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="lokasi" class="block text-sm font-medium text-gray-700 mb-1">Lokasi</label>
-                    <input type="text" id="lokasi" name="lokasi" placeholder="Masukkan lokasi" value="<%= asset.lokasi %>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div>
-                    <label for="kondisi" class="block text-sm font-medium text-gray-700 mb-1">Kondisi</label>
-                    <select id="kondisi" name="kondisi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <option value="">Pilih kondisi barang</option>
-                        <option value="Baik" <%= asset.kondisi === 'Baik' ? 'selected' : '' %>>Baik</option>
-                        <option value="Rusak" <%= asset.kondisi === 'Rusak' ? 'selected' : '' %>>Rusak</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="jumlah" class="block text-sm font-medium text-gray-700 mb-1">Jumlah</label>
-                    <input type="number" id="jumlah" name="kuantitas" placeholder="Masukkan jumlah barang" value="<%= asset.kuantitas %>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div>
-                    <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                    <input type="date" id="tanggal" name="tanggal_masuk" value="<%= asset.tanggal_masuk ? new Date(asset.tanggal_masuk).toISOString().slice(0,10) : '' %>" class="mt-1 block w-full pr-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-            </div>
-
-            <div class="flex justify-end mt-8 pt-4 border-t border-gray-200">
-                <button type="reset" class="px-6 py-2 border border-red-500 rounded-md text-red-500 font-medium hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mr-3">Reset</button>
-                <button type="submit" class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Simpan</button>
-            </div>
-        </form>
+  <div class="mb-6 bg-white rounded-md shadow-md p-6">
+    <div class="flex justify-between items-center mb-6 pb-4">
+      <h2 class="text-2xl font-semibold text-gray-800">Ubah Data Barang</h2>
+      <a href="/aset" class="text-gray-500 hover:text-gray-700">
+        <i class="fas fa-times text-xl"></i>
+      </a>
     </div>
+
+    <form action="/aset/update/<%= asset.id %>" method="POST" enctype="multipart/form-data">
+      <!-- Upload Gambar -->
+      <div class="flex justify-center mb-8">
+        
+        <label for="gambar" class="relative cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded w-40 h-40 text-gray-400 hover:border-blue-400 transition overflow-hidden">
+          
+          <!-- Preview Gambar -->
+          <img
+            id="preview-gambar"
+            src="<%= asset.gambar_barang ? asset.gambar_barang : '' %>"
+            alt="Gambar asset"
+            class="w-full h-full object-cover rounded <%= asset.gambar_barang ? '' : 'hidden' %>"
+            onerror="this.style.display='none'; document.getElementById('upload-label').classList.remove('hidden');"
+          />
+
+          <!-- Label Upload -->
+          <div id="upload-label" class="<%= asset.gambar_barang ? 'hidden' : 'flex' %> absolute inset-0 flex-col items-center justify-center text-center text-gray-400">
+            <p class="text-sm">Tarik gambar ke sini</p>
+            <p class="text-sm">atau</p>
+            <p class="text-blue-600 text-sm hover:underline">Upload gambar</p>
+          </div>
+          <div>Ubah Gambar</div>
+          <!-- Input Gambar -->
+          <input
+            id="gambar"
+            name="gambar_barang"
+            type="file"
+            accept="image/*"
+            class="hidden"
+            onchange="previewImage(event)"
+          />
+        </label>
+      </div>
+
+      <!-- Input Lain -->
+      <div class="space-y-4">
+        <div>
+          <label for="namaBarang" class="block text-sm font-medium text-gray-700 mb-1">Nama Barang</label>
+          <input type="text" id="namaBarang" name="nama_barang" placeholder="Masukkan nama barang" value="<%= asset.nama_barang %>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="kodeBarang" class="block text-sm font-medium text-gray-700 mb-1">Kode Barang</label>
+          <input type="text" id="kodeBarang" name="kode_barang" placeholder="Masukkan kode barang" value="<%= asset.kode_barang %>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+          <select id="kategori" name="kategori_barang" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <option value="">Pilih kategori barang</option>
+            <option value="Barang elektronik" <%= asset.kategori_barang === 'Barang elektronik' ? 'selected' : '' %>>Barang elektronik</option>
+            <option value="Perabotan" <%= asset.kategori_barang === 'Perabotan' ? 'selected' : '' %>>Perabotan</option>
+            <option value="Laporan TA" <%= asset.kategori_barang === 'Laporan TA' ? 'selected' : '' %>>Laporan TA</option>
+            <option value="Laporan KP" <%= asset.kategori_barang === 'Laporan KP' ? 'selected' : '' %>>Laporan KP</option>
+            <option value="Buku" <%= asset.kategori_barang === 'Buku' ? 'selected' : '' %>>Buku</option>
+            <option value="ATK" <%= asset.kategori_barang === 'ATK' ? 'selected' : '' %>>ATK</option>
+          </select>
+        </div>
+        <div>
+          <label for="lokasi" class="block text-sm font-medium text-gray-700 mb-1">Lokasi</label>
+          <input type="text" id="lokasi" name="lokasi" placeholder="Masukkan lokasi" value="<%= asset.lokasi %>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="kondisi" class="block text-sm font-medium text-gray-700 mb-1">Kondisi</label>
+          <select id="kondisi" name="kondisi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <option value="">Pilih kondisi barang</option>
+            <option value="Baik" <%= asset.kondisi === 'Baik' ? 'selected' : '' %>>Baik</option>
+            <option value="Rusak" <%= asset.kondisi === 'Rusak' ? 'selected' : '' %>>Rusak</option>
+          </select>
+        </div>
+        <div>
+          <label for="jumlah" class="block text-sm font-medium text-gray-700 mb-1">Jumlah</label>
+          <input type="number" id="jumlah" name="kuantitas" placeholder="Masukkan jumlah barang" value="<%= asset.kuantitas %>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+          <input type="date" id="tanggal" name="tanggal_masuk" value="<%= asset.tanggal_masuk ? new Date(asset.tanggal_masuk).toISOString().slice(0,10) : '' %>" class="mt-1 block w-full pr-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+      </div>
+
+      <!-- Tombol Aksi -->
+      <div class="flex justify-end mt-8 pt-4 border-t border-gray-200">
+        <button type="reset" class="px-6 py-2 border border-red-500 rounded-md text-red-500 font-medium hover:bg-red-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mr-3">Reset</button>
+        <button type="submit" class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Simpan</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <%- include('./partials/closeAside.ejs') %>
@@ -101,12 +108,28 @@
 
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         preview.src = e.target.result;
         preview.classList.remove('hidden');
-        if (label) label.style.display = 'none';
+        if (label) label.classList.add('hidden');
+      };
+      reader.onerror = function() {
+        console.error('Error reading file');
+        if (label) label.classList.remove('hidden');
       };
       reader.readAsDataURL(input.files[0]);
+    } else {
+      // Jika tidak ada file yang dipilih, kembalikan ke gambar yang sudah ada
+      const originalSrc = '<%= asset.gambar_barang ? asset.gambar_barang : "" %>';
+      if (originalSrc) {
+        preview.src = originalSrc;
+        preview.classList.remove('hidden');
+        if (label) label.classList.add('hidden');
+      } else {
+        preview.src = '';
+        preview.classList.add('hidden');
+        if (label) label.classList.remove('hidden');
+      }
     }
   }
 </script>
