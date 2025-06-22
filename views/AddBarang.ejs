@@ -1,5 +1,5 @@
-<%- include('./partials/layoutStart.ejs') %>
-<%- include('./partials/aside.ejs') %>
+<%- include('./partials/layoutStart.ejs') %> <%- include('./partials/aside.ejs')
+%>
 
 <div class="flex-1 bg-gray-100 p-6">
   <div class="mb-6 bg-white rounded-md shadow-md p-6">
@@ -10,34 +10,69 @@
       </a>
     </div>
 
-    <!-- Form Utama -->
     <form action="/aset/tambah" method="POST" enctype="multipart/form-data">
-      <!-- Upload Gambar -->
       <div class="flex justify-center mb-8">
-        <label for="gambar" class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded w-40 h-40 text-gray-400 hover:border-blue-400 transition relative">
+        <label
+          for="gambar"
+          class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded w-40 h-40 text-gray-400 hover:border-blue-400 transition relative"
+        >
           <div class="text-center" id="upload-label">
             <p class="text-sm">Tarik gambar ke sini</p>
             <p class="text-sm">atau</p>
             <p class="text-blue-600 text-sm hover:underline">Upload gambar</p>
           </div>
-          <img id="preview-gambar" class="absolute inset-0 w-full h-full object-cover rounded hidden" />
-          <input id="gambar" name="gambar_barang" type="file" accept="image/*" class="hidden" />
+          <img
+            id="preview-gambar"
+            class="absolute inset-0 w-full h-full object-cover rounded hidden"
+          />
+          <input
+            id="gambar"
+            name="gambar_barang"
+            type="file"
+            accept="image/*"
+            class="hidden"
+          />
         </label>
       </div>
 
-      <!-- Input Form -->
       <div class="space-y-4">
         <div>
-          <label for="namaBarang" class="block text-sm font-medium text-gray-700 mb-1">Nama Barang</label>
-          <input type="text" id="namaBarang" name="nama_barang" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm" />
+          <label
+            for="namaBarang"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Nama Barang</label
+          >
+          <input
+            type="text"
+            id="namaBarang"
+            name="nama_barang"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm"
+          />
         </div>
         <div>
-          <label for="kodeBarang" class="block text-sm font-medium text-gray-700 mb-1">Kode Barang</label>
-          <input type="text" id="kodeBarang" name="kode_barang" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm" />
+          <label
+            for="kodeBarang"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Kode Barang</label
+          >
+          <input
+            type="text"
+            id="kodeBarang"
+            name="kode_barang"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm"
+          />
         </div>
         <div>
-          <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-          <select id="kategori" name="kategori_barang" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm">
+          <label
+            for="kategori"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Kategori</label
+          >
+          <select
+            id="kategori"
+            name="kategori_barang"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm"
+          >
             <option value="">Pilih kategori barang</option>
             <option value="Barang elektronik">Barang elektronik</option>
             <option value="Perabotan">Perabotan</option>
@@ -48,56 +83,109 @@
           </select>
         </div>
         <div>
-          <label for="lokasi" class="block text-sm font-medium text-gray-700 mb-1">Lokasi</label>
-          <input type="text" id="lokasi" name="lokasi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm" />
+          <label
+            for="ruangan"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Lokasi Ruangan</label
+          >
+          <select
+            id="ruangan"
+            name="kode_ruangan"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm"
+          >
+            <option selected disabled value="">Pilih lokasi ruangan</option>
+            <% if (ruangan && ruangan.length > 0) { %> <% ruangan.forEach(r => {
+            %>
+            <option value="<%= r.nama_ruangan %>"><%= r.nama_ruangan %></option>
+            <% }) %> <% } else { %>
+            <option disabled>Tidak ada ruangan tersedia</option>
+            <% } %>
+          </select>
         </div>
         <div>
-          <label for="kondisi" class="block text-sm font-medium text-gray-700 mb-1">Kondisi</label>
-          <select id="kondisi" name="kondisi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm">
+          <label
+            for="kondisi"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Kondisi</label
+          >
+          <select
+            id="kondisi"
+            name="kondisi"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm"
+          >
             <option value="">Pilih kondisi barang</option>
             <option value="Baik">Baik</option>
             <option value="Rusak">Rusak</option>
           </select>
         </div>
         <div>
-          <label for="jumlah" class="block text-sm font-medium text-gray-700 mb-1">Jumlah</label>
-          <input type="number" id="jumlah" name="kuantitas" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm" />
+          <label
+            for="jumlah"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Jumlah</label
+          >
+          <input
+            type="number"
+            id="jumlah"
+            name="kuantitas"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm"
+          />
         </div>
         <div>
-          <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-          <input type="date" id="tanggal" name="tanggal_masuk" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm" />
+          <label
+            for="tanggal"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Tanggal</label
+          >
+          <input
+            type="date"
+            id="tanggal"
+            name="tanggal_masuk"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md sm:text-sm"
+          />
         </div>
       </div>
 
       <div class="flex justify-end mt-8 pt-4 border-t border-gray-200">
-        <button type="reset" class="px-6 py-2 border border-red-500 rounded-md text-red-500 font-medium hover:bg-red-500 hover:text-white mr-3">Reset</button>
-        <button type="submit" class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700">Simpan</button>
+        <button
+          type="reset"
+          class="px-6 py-2 border border-red-500 rounded-md text-red-500 font-medium hover:bg-red-500 hover:text-white mr-3"
+        >
+          Reset
+        </button>
+        <button
+          type="submit"
+          class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700"
+        >
+          Simpan
+        </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Script Preview Gambar -->
 <script>
-  document.getElementById('gambar').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    const preview = document.getElementById('preview-gambar');
-    const label = document.getElementById('upload-label');
+  document
+    .getElementById("gambar")
+    .addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      const preview = document.getElementById("preview-gambar");
+      const label = document.getElementById("upload-label");
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        preview.src = e.target.result;
-        preview.classList.remove('hidden');
-        label.classList.add('hidden');
-      };
-      reader.readAsDataURL(file);
-    } else {
-      preview.src = '';
-      preview.classList.add('hidden');
-      label.classList.remove('hidden');
-    }
-  });
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.classList.remove("hidden");
+          label.classList.add("hidden");
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = "";
+        preview.classList.add("hidden");
+        label.classList.remove("hidden");
+      }
+    });
 </script>
 
 <%- include('./partials/closeAside.ejs') %>

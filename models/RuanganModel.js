@@ -9,6 +9,7 @@ const Ruangan = sequelize.define('Ruangan', {
     },
     kode_ruangan: {
         type: DataTypes.STRING(20),
+        primaryKey: true,
         allowNull: false,
         unique: true
     },

@@ -1,117 +1,93 @@
 // Import necessary modules and dependencies
-const session = require('express-session');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const session = require('express-session'); // <-- PENTING: Untuk session
+const flash = require('connect-flash');     // <-- PENTING: Untuk req.flash()
+
 const port = 3000;
 
-var app = express();
-
-// Database and Models
+// Database and Models (Pastikan ini di-require agar model dan relasi terdefinisi)
 const sequelize = require('./config/db');
-const { Aset } = require('./models/AsetModel');
+require('./models/Relation'); // <-- Memuat semua definisi relasi
+const { Aset } = require('./models/AsetModel'); // Diimpor untuk memastikan model dikenal oleh Sequelize
 const { PengembalianBarang } = require('./models/PengembalianBarangModel');
-const { PeminjamanBarang } = require('./models/PeminjamanBarangModel'); 
+const { PeminjamanBarang } = require('./models/PeminjamanBarangModel');
 const { Asisten } = require('./models/Asistenmodel');
 const { Ruangan } = require('./models/RuanganModel');
 
 
-// Import Router
+var app = express(); // Inisialisasi aplikasi Express
+
+// VIEW ENGINE SETUP
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+// GLOBAL MIDDLEWARE
+app.use(logger('dev'));
+app.use(express.json()); // Untuk parsing application/json
+app.use(express.urlencoded({ extended: true })); // Untuk parsing application/x-www-form-urlencoded
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
+
+// KONFIGURASI EXPRESS-SESSION (HARUS SEBELUM connect-flash)
+app.use(session({
+    secret: 'iniadalahkuncirahasiayangkuatsekaliuntuksessiapplikasikamu', // GANTI DENGAN STRING YANG LEBIH KOMPLEKS DAN SULIT DITEBAK!
+    resave: false, // Jangan menyimpan sesi jika tidak ada perubahan
+    saveUninitialized: false, // Jangan membuat sesi baru untuk permintaan yang tidak diinisialisasi
+    cookie: { maxAge: 24 * 60 * 60 * 1000 } // Contoh: sesi berlaku 24 jam
+}));
+
+// KONFIGURASI CONNECT-FLASH (HARUS SETELAH express-session)
+app.use(flash());
+
+// MIDDLEWARE UNTUK MEMBUAT PESAN FLASH TERSEDIA DI SEMUA TEMPLATE EJS
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success');
+    res.locals.error_msg = req.flash('error');
+    res.locals.info_msg = req.flash('info'); // Jika Anda punya pesan info
+    next();
+});
+
+// IMPORT DAN GUNAKAN ROUTER
 const asetRouter = require("./routes/Aset");
 const peminjamanBarangRouter = require("./routes/PeminjamanBarang");
-const pengembalianBarangRouter = require("./routes/PengembalianBarang");
+const pengembalianBarangRouter = require("./routes/PengembalianBarang"); // ini juga notifikasi router?
 const laporanRouter = require("./routes/Laporan");
 const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
-const addBarangRouter = require('./routes/Aset');
-const tambahBarangRouter = require('./routes/Aset')
 const ruanganRouter = require('./routes/Ruangan');
-const tambahRuangan = require('./routes/Ruangan');
-const updateRuangan = require('./routes/Ruangan');
-const detailRuangan = require('./routes/Ruangan');
-
-// ✅ Import router files for the views
-// Import router files
 const addAslabRoutes = require('./routes/AddAslab');
-const dataAsistenRoute = require('./routes/dataasisten');  // Import router untuk data asisten
+const dataAsistenRoute = require('./routes/dataasisten');
 
 
-// Menambahkan rute untuk '/aslab/tambah' dan '/aslab/data'
-app.use('/aslab', addAslabRoutes);  // Menangani '/aslab/tambah'
-app.use('/aslab', dataAsistenRoute);  // Menangani '/aslab/data' dan '/aslab/update/:id'
-
-
-// **Import notifikasiRouter**
-const notifikasiRouter = require("./routes/PengembalianBarang");  // Mengimpor notifikasiRouter
-
-// Gunakan router untuk pengembalian barang / notifikasi
-app.use("/notifikasi", notifikasiRouter);  // Menambahkan rute '/notifikasi' untuk pengembalian barang
-
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
-        
-// Router lainnya
-app.use("/", asetRouter);
+app.use("/", asetRouter); // Menangani semua rute yang dimulai dengan / dari Aset.js
 app.use('/', peminjamanBarangRouter);
 app.use("/", pengembalianBarangRouter);
 app.use("/", laporanRouter);
 app.use("/", loginRouter);
 app.use("/", logoutRouter);
-app.use("/", addBarangRouter);
-app.use("/", ruanganRouter);
-app.use("/", tambahRuangan);
-app.use("/", updateRuangan);
-app.use("/", detailRuangan);
-app.use("/", tambahBarangRouter)
+app.use("/", ruanganRouter); // Menangani semua rute ruangan
 
-// Rute lainnya
+app.use('/aslab', addAslabRoutes);    // Menangani '/aslab/tambah'
+app.use('/aslab', dataAsistenRoute);  // Menangani '/aslab/data' dan '/aslab/update/:id' (prefix /aslab)
+
+
+// Rute-rute default dari Express generator (jika masih digunakan)
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
-// Defining a route for the home page
-app.get("/", (req, res) => {
-    res.send("Halo! Ini server pertama saya dengan Express.js");
-});
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// Route for the 'index' page
+
 app.get("/index", (req, res) => {
     res.render("index", { title: "Halaman Utama" });
 });
 
-// Nodemailer for sending email (customize with environment variables for production)
-const nodemailer = require("nodemailer");
 
-async function kirimEMail() {
-  try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "lailaqdr04@gmail.com",
-        pass: "wqxmyrtqdfswqibd", // IMPORTANT: Don't store password directly in code for production!
-      },
-    });
-
-    const info = await transporter.sendMail({
-      from: "noreply", // Replace with a valid sender email
-      to: "lailaqdr10@gmail.com",
-      subject: "Mengirim EMail",
-      text: "mengirim email itu mudah",
-    });
-
-    console.log("Email berhasil dikirim: %s", info.messageId);
-    return true; // Success
-  } catch (error) {
-    console.error("Gagal mengirim email:", error);
-    return false; // Failure
-  }
-}
-
-// Function to start the server after DB connection is successful
+// FUNGSI UNTUK MEMULAI SERVER SETELAH KONEKSI DB BERHASIL
 async function startServer() {
     try {
         // Connect to DB
@@ -119,52 +95,8 @@ async function startServer() {
         console.log('Koneksi database berhasil.');
 
         // Sync models with DB (use { alter: true } for production cautiously)
-        await sequelize.sync({ alter: true });
+        await sequelize.sync({ alter: true }); // <-- Hati-hati dengan {alter: true} di produksi!
         console.log('Semua tabel model berhasil disinkronkan ke database!');
-
-        // Set view engine
-        app.set('views', path.join(__dirname, 'views'));
-        app.set('view engine', 'ejs');
-
-        app.use(logger('dev'));
-        
-        app.use(cookieParser());
-        app.use(express.static(path.join(__dirname, 'public')));
-
-        // Add function to send email to req (accessible in route handlers)
-        app.use((req, res, next) => {
-          req.kirimEMail = kirimEMail;
-          next();
-        });
-        
-      
-        // Use all routers
-        app.use("/", asetRouter);
-        app.use('/', peminjamanBarangRouter);
-        app.use("/", pengembalianBarangRouter);
-        app.use("/", laporanRouter);
-        app.use("/", loginRouter);
-        app.use("/", logoutRouter);
-        app.use("/", addBarangRouter);
-        app.use("/", ruanganRouter);
-        app.use("/", tambahRuangan);
-        app.use("/", updateRuangan);
-        app.use("/", detailRuangan);
-        app.use("/", tambahBarangRouter)
-        // Route for Add Aslab and Data Asisten
-        app.use('/aslab', addAslabRoutes);
-        app.use('/', dataAsistenRoute);
-
-        // Other routes
-        var indexRouter = require('./routes/index');
-        var usersRouter = require('./routes/users');
-
-        app.use('/', indexRouter);
-        app.use('/users', usersRouter);
-
-        app.get("/index", (req, res) => {
-            res.render("index", { title: "Halaman Utama" });
-        });
 
         // Start the server
         app.listen(port, () => {
@@ -173,11 +105,11 @@ async function startServer() {
 
     } catch (error) {
         console.error('Gagal memulai server atau sinkronisasi database:', error);
-        process.exit(1);
+        process.exit(1); // Keluar dari proses jika ada error fatal
     }
 }
 
-// Start the server
+// Panggil fungsi untuk memulai server
 startServer();
 
 module.exports = app;

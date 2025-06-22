@@ -43,7 +43,11 @@ const Aset = sequelize.define(
     gambar_barang: {
         type: DataTypes.STRING, // hanya menyimpan nama file, bukan isi file
         allowNull: true,
-    }    
+    },
+     kode_ruangan: { // <-- Nama kolom foreign key di tabel Aset
+        type: DataTypes.STRING(20), // Tipe data harus sama dengan kode_ruangan di RuanganModel
+        allowNull: true,
+     }   
 
   },
   {

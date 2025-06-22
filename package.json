@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.8",
+    "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
     "csv-stringify": "^6.5.2",
     "debug": "~2.6.9",
