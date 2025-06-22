@@ -130,27 +130,30 @@ const updateAset = async (req, res) => {
 // ==============================================================================
 // CONTROLLER: deleteAset
 // ==============================================================================
+// controllers/AsetController.js
+
 const deleteAset = async (req, res) => {
     try {
-        const asetId = req.params.kode_barang;
+        const kodeBarang = req.params.kode_barang; // ambil dari route param
 
-        const deletedRows = await Aset.destroy({
-            where: { id: asetId }
+        const deleted = await Aset.destroy({
+            where: { kode_barang: kodeBarang }
         });
 
-        if (deletedRows > 0) {
-            res.status(200).json({ message: 'Aset berhasil dihapus.' });
+        if (deleted) {
+            return res.status(200).json({ message: 'Aset berhasil dihapus.' });
         } else {
-            res.status(404).json({ error: 'Aset tidak ditemukan.' });
+            return res.status(404).json({ error: 'Aset tidak ditemukan.' });
         }
     } catch (error) {
-        console.error('Error menghapus aset:', error);
-        res.status(500).json({
-            error: 'Gagal menghapus aset.',
-            details: error.message
+        console.error('Error saat menghapus aset:', error);
+        return res.status(500).json({
+            error: 'Terjadi kesalahan saat menghapus aset.',
+            detail: error.message
         });
     }
 };
+
 
 // ==============================================================================
 // FUNGSI BARU: getAssetDetail - Menggunakan Sequelize
