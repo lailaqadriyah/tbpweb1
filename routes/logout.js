@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
       if (err) {
         console.log('Error saat logout:', err);
       }
-      res.redirect('/login'); // pastikan route /login juga ada
+      res.redirect('/login'); 
     });
   } else {
     res.redirect('/login');
