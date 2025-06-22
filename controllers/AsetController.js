@@ -90,7 +90,6 @@ const updateAset = async (req, res) => {
         const {
             kode_barang,
             nama_barang,
-            kuantitas,
             tanggal_masuk,
             kondisi,
             ruangan_kode, 
@@ -111,7 +110,6 @@ const updateAset = async (req, res) => {
         await asetToUpdate.update({
             kode_barang,
             nama_barang,
-            kuantitas,
             tanggal_masuk,
             kondisi,
             ruangan_kode, 
