@@ -123,10 +123,9 @@ const ruangan = await Ruangan.findOne({ where: { kode_ruangan: ruanganId } });
 // ==============================================================================
 const updateRuangan = async (req, res) => {
   try {
-    const kodeLama = req.params.kode_ruangan; // ini kode lama dari URL
+    const kodeLama = req.params.kode_ruangan;
     const { nama_ruangan, kode_ruangan, deskripsi } = req.body;
 
-    // Cari ruangan berdasarkan kode lama
     const ruangan = await Ruangan.findOne({ where: { kode_ruangan: kodeLama } });
     if (!ruangan) {
       return res.status(404).render("UpdateRuangan", {
@@ -136,26 +135,24 @@ const updateRuangan = async (req, res) => {
       });
     }
 
-    // Cek apakah kode baru bentrok dengan ruangan lain
-    const existing = await Ruangan.findOne({
-      where: {
-        kode_ruangan,
-        kode_ruangan: { [Op.ne]: kodeLama }
-      }
-    });
-
-    if (existing) {
-      return res.render("UpdateRuangan", {
-        title: "Edit Ruangan",
-        ruangan,
-        error: "Kode ruangan sudah digunakan ruangan lain!"
+    if (kode_ruangan !== kodeLama) {
+      const existing = await Ruangan.findOne({
+        where: {
+          kode_ruangan
+        }
       });
+
+      if (existing) {
+        return res.render("UpdateRuangan", {
+          title: "Edit Ruangan",
+          ruangan,
+          error: "Kode ruangan sudah digunakan ruangan lain!"
+        });
+      }
     }
 
-    // Jika ada file baru, pakai yang baru
     const foto = req.file ? `/uploads/ruangan/${req.file.filename}` : ruangan.foto;
 
-    // Update data
     await ruangan.update({
       nama_ruangan,
       kode_ruangan,
@@ -163,7 +160,6 @@ const updateRuangan = async (req, res) => {
       foto
     });
 
-    // Redirect ke halaman edit dengan kode baru
     res.redirect(`/ruangan/edit/${kode_ruangan}?status=success`);
   } catch (error) {
     console.error("Error update ruangan:", error);
