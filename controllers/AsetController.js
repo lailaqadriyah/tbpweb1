@@ -242,38 +242,44 @@ const addAset = async (req, res) => {
         const {
             kode_barang,
             nama_barang,
-            kuantitas,
             tanggal_masuk,
             kondisi,
-            ruangan_kode, // <-- Ganti ruangan_id menjadi ruangan_kode
+            kode_ruangan, // This is the room NAME from the form
             kategori_barang
         } = req.body;
 
-        const foto_barang = req.file ? `/uploads/aset/${req.file.filename}` : null;
-
-        if (!kode_barang || !nama_barang || !kuantitas || !tanggal_masuk || !kondisi || !ruangan_kode || !kategori_barang) {
-            req.flash('error', 'Semua field harus diisi.');
-            return res.status(400).redirect('/addaset');
+        // Validasi dasar
+        if (!kode_barang || !nama_barang || !tanggal_masuk || !kondisi || !kategori_barang || !kode_ruangan) {
+            return res.status(400).send('Data tidak lengkap. Semua field harus diisi.');
         }
 
-        await Aset.create({
+        // Cek apakah ada file yang di-upload
+        if (!req.file) {
+            return res.status(400).send('Gambar barang harus di-upload.');
+        }
+        const gambar_barang = `/uploads/aset/${req.file.filename}`;
+        
+        const ruangan = await Ruangan.findOne({ where: { nama_ruangan: kode_ruangan } });
+
+        // Buat aset baru di database
+        const newAset = await Aset.create({
             kode_barang,
             nama_barang,
-            kuantitas,
+            kuantitas: 1, // Kuantitas di-hardcode menjadi 1
             tanggal_masuk,
             kondisi,
-            ruangan_kode, // <-- Simpan ruangan_kode
+            lokasi: kode_ruangan, // Use the room name for 'lokasi'
+            kode_ruangan: ruangan ? ruangan.kode_ruangan : null, // Save the code if found
             kategori_barang,
-            gambar_barang: foto_barang,
+            gambar_barang
         });
 
-        req.flash('success', 'Aset berhasil ditambahkan!');
+        // Redirect ke halaman daftar aset setelah berhasil
         res.redirect('/aset');
 
     } catch (error) {
         console.error('Error saat menambahkan aset baru:', error);
-        req.flash('error', 'Gagal menambahkan aset: ' + error.message);
-        res.status(500).redirect('/addaset');
+        res.status(500).send('Terjadi kesalahan saat menyimpan aset baru.');
     }
 };
 
