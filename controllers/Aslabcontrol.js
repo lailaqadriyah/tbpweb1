@@ -1,29 +1,92 @@
 // controllers/Aslabcontrol.js
 
-const { Asisten } = require('../models/Asistenmodel');
+const { Asisten, Ruangan } = require('../models/Relation');
 const { Op } = require("sequelize"); // Import operator Sequelize
+const path = require('path');
+const fs = require('fs');
 
 // Fungsi untuk menampilkan form tambah asisten
-exports.formTambahAslab = (req, res) => {
-  res.render('aslab/tambah');  // Pastikan ada file 'tambah.ejs' di views/aslab/
+exports.formTambahAslab = async (req, res) => {
+  try {
+    // Ambil data ruangan untuk dropdown
+    const ruanganList = await Ruangan.findAll({
+      attributes: ['id', 'kode_ruangan', 'nama_ruangan'],
+      order: [['nama_ruangan', 'ASC']]
+    });
+
+    res.render('aslab/tambah', { 
+      ruanganList: ruanganList || []
+    });
+  } catch (err) {
+    console.error('Error fetching ruangan data:', err);
+    res.render('aslab/tambah', { 
+      ruanganList: []
+    });
+  }
 };
 
 // Fungsi untuk menyimpan data asisten
 exports.simpanAslab = async (req, res) => {
   try {
-    const { nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili } = req.body;
+    const { nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, ruangan_id } = req.body;
     const foto = req.file ? req.file.path : null;
 
+    // Validasi: Cek apakah nomor_asisten sudah ada
+    const existingAsisten = await Asisten.findOne({
+      where: { nomor_asisten: nomor_asisten }
+    });
+
+    if (existingAsisten) {
+      return res.status(400).json({
+        success: false,
+        message: `Nomor asisten "${nomor_asisten}" sudah terdaftar. Silakan gunakan nomor yang berbeda.`
+      });
+    }
+
+    // Validasi: Cek apakah NIM sudah ada
+    const existingNIM = await Asisten.findOne({
+      where: { nim: nim }
+    });
+
+    if (existingNIM) {
+      return res.status(400).json({
+        success: false,
+        message: `NIM "${nim}" sudah terdaftar. Silakan gunakan NIM yang berbeda.`
+      });
+    }
+
     // Simpan data asisten ke database
-    await Asisten.create({
-      nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, foto
+    const newAsisten = await Asisten.create({
+      nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, ruangan_id, foto
     });
 
     // Setelah berhasil, redirect ke halaman daftar asisten
     res.redirect('/aslab/data');
   } catch (err) {
-    console.error(err);
-    res.send('Gagal menyimpan data');
+    console.error('Error saat menyimpan asisten:', err);
+    
+    // Handle Sequelize unique constraint error
+    if (err.name === 'SequelizeUniqueConstraintError') {
+      const field = err.errors[0].path;
+      const value = err.errors[0].value;
+      
+      if (field === 'nomor_asisten') {
+        return res.status(400).json({
+          success: false,
+          message: `Nomor asisten "${value}" sudah terdaftar. Silakan gunakan nomor yang berbeda.`
+        });
+      } else if (field === 'nim') {
+        return res.status(400).json({
+          success: false,
+          message: `NIM "${value}" sudah terdaftar. Silakan gunakan NIM yang berbeda.`
+        });
+      }
+    }
+    
+    res.status(500).json({
+      success: false,
+      message: 'Gagal menyimpan data asisten. Silakan coba lagi.'
+    });
   }
 };
 
@@ -46,8 +109,16 @@ exports.viewAsisten = async (req, res) => {
     // DEBUG: Tampilkan klausa where yang digunakan
     console.log('Klausa Pencarian yang Digunakan:', JSON.stringify(whereClause, null, 2));
 
-    // Ambil data asisten dari database dengan filter pencarian
-    const asistenList = await Asisten.findAll({ where: whereClause });
+    // Ambil data asisten dari database dengan filter pencarian dan include ruangan
+    const asistenList = await Asisten.findAll({ 
+      where: whereClause,
+      include: [{
+        model: Ruangan,
+        as: 'ruangan',
+        attributes: ['nama_ruangan', 'kode_ruangan'],
+        required: false // LEFT JOIN
+      }]
+    });
 
     // DEBUG: Tampilkan data yang didapat dari database ke konsol
     console.log('Data Asisten yang Ditemukan:', JSON.stringify(asistenList, null, 2));
@@ -72,42 +143,186 @@ exports.updateForm = async (req, res) => {
       return res.send('Asisten tidak ditemukan');
     }
 
+    // Ambil data ruangan untuk dropdown
+    const ruanganList = await Ruangan.findAll({
+      attributes: ['id', 'kode_ruangan', 'nama_ruangan'],
+      order: [['nama_ruangan', 'ASC']]
+    });
+
     // Kirim data asisten ke form update
-    res.render('aslab/updateasisten', { asisten });
+    res.render('aslab/updateasisten', { 
+      asisten,
+      ruanganList: ruanganList || []
+    });
   } catch (err) {
     console.error(err);
     res.send('Gagal mengambil data asisten');
   }
 };
 
-// Fungsi untuk memproses pembaruan data asisten
-exports.updateAsisten = async (req, res) => {
+// Fungsi untuk update data asisten
+exports.updateAslab = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili } = req.body;
-    const foto = req.file ? req.file.path : null; // Jika ada foto baru, simpan path-nya
+    const { nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, ruangan_id } = req.body;
+    const foto = req.file ? req.file.path : null;
 
+    // Cari asisten yang akan diupdate
+    const asisten = await Asisten.findByPk(id);
+    if (!asisten) {
+      return res.status(404).json({
+        success: false,
+        message: 'Asisten tidak ditemukan'
+      });
+    }
+
+    // Validasi: Cek apakah nomor_asisten sudah ada (kecuali untuk asisten yang sedang diupdate)
+    if (nomor_asisten !== asisten.nomor_asisten) {
+      const existingAsisten = await Asisten.findOne({
+        where: { 
+          nomor_asisten: nomor_asisten,
+          id: { [Op.ne]: id } // Exclude current asisten
+        }
+      });
+
+      if (existingAsisten) {
+        return res.status(400).json({
+          success: false,
+          message: `Nomor asisten "${nomor_asisten}" sudah terdaftar. Silakan gunakan nomor yang berbeda.`
+        });
+      }
+    }
+
+    // Validasi: Cek apakah NIM sudah ada (kecuali untuk asisten yang sedang diupdate)
+    if (nim !== asisten.nim) {
+      const existingNIM = await Asisten.findOne({
+        where: { 
+          nim: nim,
+          id: { [Op.ne]: id } // Exclude current asisten
+        }
+      });
+
+      if (existingNIM) {
+        return res.status(400).json({
+          success: false,
+          message: `NIM "${nim}" sudah terdaftar. Silakan gunakan NIM yang berbeda.`
+        });
+      }
+    }
+
+    // Update data asisten
+    const updateData = {
+      nama, nomor_asisten, nim, telepon, jabatan, jenis_kelamin, domisili, ruangan_id
+    };
+
+    // Hanya update foto jika ada file baru
+    if (foto) {
+      updateData.foto = foto;
+    }
+
+    await asisten.update(updateData);
+
+    // Redirect ke halaman daftar asisten
+    res.redirect('/aslab/data');
+  } catch (err) {
+    console.error('Error saat update asisten:', err);
+    
+    // Handle Sequelize unique constraint error
+    if (err.name === 'SequelizeUniqueConstraintError') {
+      const field = err.errors[0].path;
+      const value = err.errors[0].value;
+      
+      if (field === 'nomor_asisten') {
+        return res.status(400).json({
+          success: false,
+          message: `Nomor asisten "${value}" sudah terdaftar. Silakan gunakan nomor yang berbeda.`
+        });
+      } else if (field === 'nim') {
+        return res.status(400).json({
+          success: false,
+          message: `NIM "${value}" sudah terdaftar. Silakan gunakan NIM yang berbeda.`
+        });
+      }
+    }
+    
+    res.status(500).json({
+      success: false,
+      message: 'Gagal update data asisten. Silakan coba lagi.'
+    });
+  }
+};
+
+// Fungsi untuk menghapus data asisten
+exports.deleteAsisten = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
     const asisten = await Asisten.findByPk(id);
     if (!asisten) {
       return res.send('Asisten tidak ditemukan');
     }
 
-    // Update data asisten
-    await asisten.update({
-      nama,
-      nomor_asisten,
-      nim,
-      telepon,
-      jabatan,
-      jenis_kelamin,
-      domisili,
-      foto: foto || asisten.foto, // Gunakan foto yang ada jika tidak ada foto baru
-    });
+    // Hapus data asisten dari database
+    await asisten.destroy();
 
     // Redirect ke halaman data asisten setelah berhasil
     res.redirect('/aslab/data');
   } catch (err) {
     console.error(err);
-    res.send('Gagal mengupdate data asisten');
+    res.send('Gagal menghapus data asisten');
+  }
+};
+
+// Fungsi untuk validasi nomor asisten (real-time)
+exports.checkNomorAsisten = async (req, res) => {
+  try {
+    const { nomor_asisten, exclude_id } = req.query;
+    
+    if (!nomor_asisten) {
+      return res.json({ exists: false });
+    }
+
+    const whereClause = { nomor_asisten: nomor_asisten };
+    
+    // Jika ada exclude_id, tambahkan kondisi untuk mengecualikan record tersebut
+    if (exclude_id) {
+      whereClause.id = { [require('sequelize').Op.ne]: exclude_id };
+    }
+
+    const existingAsisten = await Asisten.findOne({
+      where: whereClause
+    });
+
+    res.json({ exists: !!existingAsisten });
+  } catch (err) {
+    console.error('Error checking nomor asisten:', err);
+    res.status(500).json({ error: 'Terjadi kesalahan saat validasi' });
+  }
+};
+
+// Fungsi untuk validasi NIM (real-time)
+exports.checkNIM = async (req, res) => {
+  try {
+    const { nim, exclude_id } = req.query;
+    
+    if (!nim) {
+      return res.json({ exists: false });
+    }
+
+    const whereClause = { nim: nim };
+    
+    // Jika ada exclude_id, tambahkan kondisi untuk mengecualikan record tersebut
+    if (exclude_id) {
+      whereClause.id = { [require('sequelize').Op.ne]: exclude_id };
+    }
+
+    const existingAsisten = await Asisten.findOne({
+      where: whereClause
+    });
+
+    res.json({ exists: !!existingAsisten });
+  } catch (err) {
+    console.error('Error checking NIM:', err);
+    res.status(500).json({ error: 'Terjadi kesalahan saat validasi' });
   }
 };

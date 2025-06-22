@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const path = require('path'); // Jangan lupa untuk mengimpor modul 'path' untuk jalur file
+const path = require('path');
 const multer = require('multer');
-const fs = require('fs'); // Tambahkan ini untuk mengakses file system
+const fs = require('fs');
 const aslabController = require('../controllers/Aslabcontrol');
 
-// Konfigurasi multer untuk meng-handle upload foto
+// Konfigurasi multer untuk menangani upload foto
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = 'public/uploads/asisten';
@@ -20,13 +20,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// **Perbaikan**: Menghapus duplikasi route
-// Route untuk menampilkan form tambah asisten
+// Rute dari AddAslab.js
 router.get('/tambah', aslabController.formTambahAslab);
+router.post('/tambah', upload.single('foto'), aslabController.simpanAslab);
 
-// Route untuk menyimpan data asisten
-router.post('/tambah', upload.single('foto'), aslabController.simpanAslab);  // 'foto' adalah nama field di form
+// Rute dari dataasisten.js
+router.get('/data', aslabController.viewAsisten);
+router.get('/update/:id', aslabController.updateForm);
+router.post('/update/:id', upload.single('foto'), aslabController.updateAslab);
+router.post('/delete/:id', aslabController.deleteAsisten);
 
-// Export upload untuk digunakan di file lain
-module.exports.upload = upload;
-module.exports = router;
+// Rute untuk validasi real-time
+router.get('/check-nomor-asisten', aslabController.checkNomorAsisten);
+router.get('/check-nim', aslabController.checkNIM);
+
+module.exports = router; 

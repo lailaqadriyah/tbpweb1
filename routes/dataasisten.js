@@ -2,30 +2,21 @@
 
 const express = require('express');
 const router = express.Router();
-const path = require('path');
-const multer = require('multer');
+// Impor 'upload' yang sudah benar dari AddAslab.js
+const AddAslab = require('./AddAslab'); 
 const aslabController = require('../controllers/Aslabcontrol');
-
-// Konfigurasi multer untuk meng-handle upload foto
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Tentukan folder penyimpanan gambar
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Nama file yang unik dengan timestamp
-  }
-});
-
-const upload = multer({ storage: storage });
 
 
 // Rute untuk menampilkan halaman data asisten
 router.get('/data', aslabController.viewAsisten);
 
 // Rute untuk menampilkan halaman update asisten
-router.get('/update/:id', aslabController.updateForm);  // Menggunakan :id sebagai parameter URL
+router.get('/update/:id', aslabController.updateForm);
 
-// Rute untuk mengupdate data asisten (POST)
-router.post('/update/:id', upload.single('foto'), aslabController.updateAsisten);  // Menangani permintaan POST
+// Rute untuk mengupdate data asisten (POST) - SEKARANG MENGGUNAKAN UPLOAD YANG BENAR
+router.post('/update/:id', AddAslab.upload.single('foto'), aslabController.updateAsisten);
+
+// Rute BARU untuk menghapus data asisten
+router.post('/delete/:id', aslabController.deleteAsisten);
 
 module.exports = router;

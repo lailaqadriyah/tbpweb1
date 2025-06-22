@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalender Aktivitas</title>
+</head>
+<body>
+    <%- include('partials/layoutStart.ejs') %>
+    <%- include('partials/aside.ejs') %>
+
+    <!-- Main Content -->
+    <div class="flex-1 bg-gray-100 p-6">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h1 class="text-xl font-semibold text-gray-800 mb-4">Kalender Aktivitas</h1>
+            <div id="calendar" class="h-[80vh] border border-gray-200 rounded-lg"></div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Tambah/Edit Event -->
+    <div id="event-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="modal-title" class="text-lg font-semibold">Tambah Kegiatan Baru</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <form id="event-form">
+                <input type="hidden" id="event-id">
+                <input type="hidden" id="event-start-date">
+
+                <div class="mb-4">
+                    <label for="event-title" class="block text-sm font-medium text-gray-700">Nama Kegiatan</label>
+                    <input type="text" id="event-title" name="title" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="event-description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                    <textarea id="event-description" name="description" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300">Batal</button>
+                    <button type="submit" id="save-button" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Simpan</button>
+                    <button type="button" id="delete-button" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 hidden">Hapus</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('partials/closeAside.ejs') %>
+
+    <!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            const modal = document.getElementById('event-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const eventForm = document.getElementById('event-form');
+            const deleteButton = document.getElementById('delete-button');
+
+            function openModal(date) {
+                eventForm.reset();
+                document.getElementById('event-id').value = '';
+                document.getElementById('event-start-date').value = date;
+                modalTitle.textContent = 'Tambah Kegiatan Baru';
+                deleteButton.classList.add('hidden');
+                modal.classList.remove('hidden');
+            }
+
+            function closeModal() {
+                modal.classList.add('hidden');
+            }
+
+            window.closeModal = closeModal;
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                locale: 'id',
+                events: function(info, successCallback, failureCallback) {
+                    console.log('=== DEBUG: Calendar requesting events ===');
+                    fetch('/kalender-aktivitas/api/events')
+                        .then(response => {
+                            console.log('API Response status:', response.status);
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('API Response data:', data);
+                            successCallback(data);
+                        })
+                        .catch(error => {
+                            console.error('API Error:', error);
+                            failureCallback(error);
+                        });
+                },
+                selectable: true,
+                select: function(info) {
+                    openModal(info.startStr);
+                },
+                eventClick: function(info) {
+                    if (info.event.extendedProps.editable) {
+                        document.getElementById('event-id').value = info.event.id;
+                        document.getElementById('event-start-date').value = info.event.startStr.substring(0, 10);
+                        document.getElementById('event-title').value = info.event.title;
+                        document.getElementById('event-description').value = info.event.extendedProps.description || '';
+                        
+                        modalTitle.textContent = 'Edit Kegiatan';
+                        deleteButton.classList.remove('hidden');
+                        modal.classList.remove('hidden');
+                    }
+                },
+                displayEventTime: false
+            });
+
+            calendar.render();
+
+            eventForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const title = document.getElementById('event-title').value;
+                const description = document.getElementById('event-description').value;
+                const start = document.getElementById('event-start-date').value;
+                const eventId = document.getElementById('event-id').value;
+                
+                const submitButton = document.getElementById('save-button');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Menyimpan...';
+
+                const isUpdate = !!eventId;
+                const baseUrl = '/kalender-aktivitas';
+                const url = isUpdate ? `${baseUrl}/${eventId}` : baseUrl;
+                const method = isUpdate ? 'PUT' : 'POST';
+
+                fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title, description, start }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw new Error(err.message || 'Server error') });
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    if (isUpdate) {
+                        const existingEvent = calendar.getEventById(result.event.id);
+                        if (existingEvent) {
+                            existingEvent.setProp('title', result.event.title);
+                            existingEvent.setExtendedProp('description', result.event.description);
+                        }
+                    } else {
+                        calendar.addEvent({
+                            id: result.newEvent.id,
+                            title: result.newEvent.title,
+                            start: result.newEvent.start,
+                            backgroundColor: '#F59E0B',
+                            borderColor: '#F59E0B',
+                            extendedProps: {
+                                description: result.newEvent.description,
+                                editable: true
+                            }
+                        });
+                    }
+                    closeModal();
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert(`Gagal: ${err.message}`);
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Simpan';
+                });
+            });
+
+            deleteButton.addEventListener('click', function() {
+                const eventId = document.getElementById('event-id').value;
+                if (!eventId || !confirm('Apakah Anda yakin ingin menghapus event ini?')) {
+                    return;
+                }
+
+                deleteButton.disabled = true;
+                deleteButton.textContent = 'Menghapus...';
+
+                fetch(`/kalender-aktivitas/${eventId}`, { method: 'DELETE' })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw new Error(err.message || 'Gagal menghapus') });
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    const eventToRemove = calendar.getEventById(eventId);
+                    if (eventToRemove) {
+                        eventToRemove.remove();
+                    }
+                    closeModal();
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert(`Gagal: ${err.message}`);
+                })
+                .finally(() => {
+                    deleteButton.disabled = false;
+                    deleteButton.textContent = 'Hapus';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

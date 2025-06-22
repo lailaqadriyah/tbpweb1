@@ -1,86 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('../partials/layoutStart.ejs') %>
+<%- include('../partials/aside.ejs') %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Asisten</title>
-</head>
-
-<body>
-    <%- include('../partials/layoutStart.ejs') %>
-
-    <!-- Memanggil Sidebar -->
-    <%- include('../partials/aside.ejs') %>
-
-    <!-- Konten Utama -->
-    <div class="flex-1 bg-gray-100 p-6">
-        <div class="p-1 mb-4 flex justify-between items-center">
+<!-- Konten Utama -->
+<div class="flex-1 bg-gray-100 p-6">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <div class="mb-4 flex justify-between items-center">
             <h1 class="text-xl font-semibold text-gray-800">Data Asisten</h1>
-
-            <!-- Search Form -->
-            <form action="/aslab/data" method="GET" class="flex items-center space-x-2">
-                <input type="text" name="search" placeholder="Cari Nama, NIM, No. Asisten" class="p-2 border rounded-md" value="<%= search %>" />
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                    Cari
-                </button>
-            </form>
         </div>
 
+        <!-- Search Form -->
+        <form action="/aslab/data" method="GET" class="mb-4 flex items-center space-x-2">
+            <input  type="text" name="search" placeholder="Cari Nama, NIM, atau Nomor Asisten"
+                class="flex-grow p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                value="<%= locals.search || '' %>" />
+            <button type="submit" class="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
+                Cari
+            </button>
+        </form>
+
         <% if (asistenList.length === 0) { %>
-            <div class="text-center text-gray-600">
-                <p>Tidak ada data asisten</p>
-            </div>
+        <div class="text-center py-10 text-gray-500">
+            <p>Data asisten tidak ditemukan.</p>
+        </div>
         <% } else { %>
-            <div class="overflow-x-auto rounded-lg border border-gray-200">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
-                                Nama
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
-                                Nomor Asisten
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
-                                NIM
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
-                                Telepon
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
-                                Jabatan
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
-                                Aksi
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <% asistenList.forEach(asisten => { %>
-                            <tr>
-                                <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.nama %></td>
-                                <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.nomor_asisten %></td>
-                                <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.nim %></td>
-                                <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.telepon %></td>
-                                <td class="px-6 py-4 text-sm text-gray-800"><%= asisten.jabatan %></td>
-                                <td class="px-6 py-4 text-sm text-gray-800">
-                                    <a href="/aslab/update/<%= asisten.id %>" class="bg-black text-white px-4 py-2 rounded">Update</a>
-                                    <!-- Tombol Hapus -->
-                                    <form action="/aslab/delete/<%= asisten.id %>" method="POST" style="display: inline-block;">
-                                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Foto
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Nama
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Nomor Asisten
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            NIM
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Telepon
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Jabatan
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Ruangan
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Aksi
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <% asistenList.forEach(asisten => { %>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex-shrink-0 h-10 w-10">
+                                <% if (asisten.foto) { %>
+                                    <%
+                                        // Logika cerdas untuk menangani format path lama dan baru
+                                        const normalizedPath = asisten.foto.replace(/\\/g, '/');
+                                        const filename = normalizedPath.substring(normalizedPath.lastIndexOf('/') + 1);
+                                    %>
+                                    <img class="h-10 w-10 rounded-full object-cover" src="/uploads/asisten/<%= filename %>" alt="Foto Asisten">
+                                <% } else { %>
+                                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                        <img class="h-6 w-6" src="/icons/detail.png" alt="Placeholder">
+                                    </div>
+                                <% } %>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= asisten.nama %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= asisten.nomor_asisten %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= asisten.nim %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= asisten.telepon %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= asisten.jabatan %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            <% if (asisten.ruangan) { %>
+                                <%= asisten.ruangan.kode_ruangan %> - <%= asisten.ruangan.nama_ruangan %>
+                            <% } else { %>
+                                <span class="text-gray-400">-</span>
+                            <% } %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex items-center space-x-2">
+                                <form style="display: inline-block;">
+                                    <button type="button" onclick="window.location.href='/aslab/update/<%= asisten.id %>'"
+                                        class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition-colors">Update</button>
+                                </form>
+                                <form action="/aslab/delete/<%= asisten.id %>" method="POST"
+                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus asisten ini?');"
+                                    style="display: inline-block;">
+                                    <button type="submit"
+                                        class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors">Hapus</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
         <% } %>
     </div>
+</div>
 
-    <%- include('../partials/closeAside.ejs') %>
-
-</body>
-
-</html>
+<%- include('../partials/closeAside.ejs') %> 

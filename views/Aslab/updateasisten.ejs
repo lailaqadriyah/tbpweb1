@@ -5,50 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Data Asisten</title>
-    <style>
-        .form-container {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            max-width: 600px;
-            margin: 20px auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .btn-submit {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .btn-submit:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-delete {
-            background-color: #f44336;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-
-        .btn-delete:hover {
-            background-color: #d32f2f;
-        }
-    </style>
 </head>
 
 <body>
@@ -58,82 +14,249 @@
     <%- include('../partials/aside.ejs') %>
 
     <div class="flex-1 bg-gray-100 p-6">
-        <h1 class="text-xl font-semibold text-gray-800">Update Data Asisten</h1>
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">Update Data Asisten</h1>
+                <p class="text-gray-500">Ubah detail di bawah ini untuk memperbarui data asisten.</p>
+            </div>
 
-        <% if (!asisten) { %>
-            <p class="text-red-500">Tidak ada data asisten yang ditemukan untuk diubah.</p>
-        <% } else { %>
-            <!-- Form untuk update asisten dalam kotak -->
-            <div class="form-container">
+            <% if (!asisten) { %>
+                <p class="text-red-500 text-center">Data asisten tidak ditemukan.</p>
+            <% } else { %>
                 <form action="/aslab/update/<%= asisten.id %>" method="POST" enctype="multipart/form-data">
-                    <!-- Nama -->
-                    <div>
-                        <label for="nama" class="block">Nama:</label>
-                        <input type="text" id="nama" name="nama" value="<%= asisten.nama %>" required class="input-field">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Kolom Upload Foto -->
+                        <div class="md:col-span-1 flex flex-col items-center text-center">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Foto Profil</label>
+                            <div id="image-preview" class="w-40 h-40 rounded-full bg-gray-200 mb-4 flex items-center justify-center overflow-hidden">
+                                <% if (asisten.foto) { %>
+                                    <img id="preview-img" src="/uploads/asisten/<%= asisten.foto %>" alt="Preview" class="w-full h-full object-cover" />
+                                    <svg id="placeholder-svg" class="w-16 h-16 text-gray-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                <% } else { %>
+                                    <img id="preview-img" src="" alt="Preview" class="w-full h-full object-cover" style="display: none;" />
+                                    <svg id="placeholder-svg" class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                <% } %>
+                            </div>
+                            <input type="file" name="foto" id="foto" class="hidden" accept="image/*" />
+                            <label for="foto" class="cursor-pointer bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm">
+                                Ganti Gambar
+                            </label>
+                            <p class="text-xs text-gray-500 mt-2">Biarkan kosong jika tidak ingin diubah.</p>
+                        </div>
+
+                        <!-- Kolom Input Data -->
+                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="nama" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                                <input type="text" name="nama" id="nama" value="<%= asisten.nama %>" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required />
+                            </div>
+                            <div>
+                                <label for="nomor_asisten" class="block text-sm font-medium text-gray-700">Nomor Asisten</label>
+                                <input type="text" name="nomor_asisten" id="nomor_asisten" value="<%= asisten.nomor_asisten %>" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required />
+                            </div>
+                            <div>
+                                <label for="nim" class="block text-sm font-medium text-gray-700">NIM</label>
+                                <input type="text" name="nim" id="nim" value="<%= asisten.nim %>" placeholder="Contoh: 2311523034" maxlength="10" pattern="[0-9]{10}" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                                <div id="nim-error" class="hidden text-red-600 text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="telepon" class="block text-sm font-medium text-gray-700">Telepon</label>
+                                <input type="text" name="telepon" id="telepon" value="<%= asisten.telepon %>" placeholder="Contoh: 081234567890" maxlength="13" pattern="[0-9]{10,13}" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                                <div id="telepon-error" class="hidden text-red-600 text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="jabatan" class="block text-sm font-medium text-gray-700">Jabatan</label>
+                                <input type="text" name="jabatan" value="<%= asisten.jabatan %>" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+                            </div>
+                            <div>
+                                <label for="jenis_kelamin" class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                                <select name="jenis_kelamin" id="jenis_kelamin" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <option value="Perempuan" <%= asisten.jenis_kelamin === 'Perempuan' ? 'selected' : '' %>>Perempuan</option>
+                                    <option value="Laki-laki" <%= asisten.jenis_kelamin === 'Laki-laki' ? 'selected' : '' %>>Laki-laki</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="domisili" class="block text-sm font-medium text-gray-700">Domisili</label>
+                                <input type="text" name="domisili" id="domisili" value="<%= asisten.domisili %>" placeholder="Contoh: Yogyakarta" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="ruangan_id" class="block text-sm font-medium text-gray-700">Ruangan</label>
+                                <select name="ruangan_id" id="ruangan_id" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <option value="">Pilih Ruangan</option>
+                                    <% if (ruanganList && ruanganList.length > 0) { %>
+                                        <% ruanganList.forEach(ruangan => { %>
+                                            <option value="<%= ruangan.id %>" <%= asisten.ruangan_id == ruangan.id ? 'selected' : '' %>><%= ruangan.kode_ruangan %> - <%= ruangan.nama_ruangan %></option>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <option value="" disabled>Tidak ada data ruangan</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Nomor Asisten -->
-                    <div>
-                        <label for="nomor_asisten" class="block">Nomor Asisten:</label>
-                        <input type="text" id="nomor_asisten" name="nomor_asisten" value="<%= asisten.nomor_asisten %>" required class="input-field">
-                    </div>
-
-                    <!-- NIM -->
-                    <div>
-                        <label for="nim" class="block">NIM:</label>
-                        <input type="text" id="nim" name="nim" value="<%= asisten.nim %>" required class="input-field">
-                    </div>
-
-                    <!-- Telepon -->
-                    <div>
-                        <label for="telepon" class="block">Telepon:</label>
-                        <input type="text" id="telepon" name="telepon" value="<%= asisten.telepon %>" required class="input-field">
-                    </div>
-
-                    <!-- Jabatan -->
-                    <div>
-                        <label for="jabatan" class="block">Jabatan:</label>
-                        <input type="text" id="jabatan" name="jabatan" value="<%= asisten.jabatan %>" required class="input-field">
-                    </div>
-
-                    <!-- Jenis Kelamin -->
-                    <div>
-                        <label for="jenis_kelamin" class="block">Jenis Kelamin:</label>
-                        <select id="jenis_kelamin" name="jenis_kelamin" required class="input-field">
-                            <option value="Laki-laki" <%= asisten.jenis_kelamin === 'Laki-laki' ? 'selected' : '' %>>Laki-laki</option>
-                            <option value="Perempuan" <%= asisten.jenis_kelamin === 'Perempuan' ? 'selected' : '' %>>Perempuan</option>
-                        </select>
-                    </div>
-
-                    <!-- Domisili -->
-                    <div>
-                        <label for="domisili" class="block">Domisili:</label>
-                        <input type="text" id="domisili" name="domisili" value="<%= asisten.domisili %>" required class="input-field">
-                    </div>
-
-                    <!-- Foto -->
-                    <div>
-                        <label for="foto" class="block">Foto:</label>
-                        <input type="file" id="foto" name="foto" class="input-field">
-                        <% if (asisten.foto) { %>
-                            <p>Foto yang sudah ada:</p>
-                            <img src="<%= asisten.foto %>" alt="Foto Asisten" width="100">
-                        <% } %>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <button type="submit" class="btn-submit">Update</button>
-                        <!-- Tombol Hapus -->
-                        <form action="/aslab/delete/<%= asisten.id %>" method="POST" style="display: inline-block;">
-                            <button type="submit" class="btn-delete">Hapus</button>
-                        </form>
+                    <!-- Tombol Aksi -->
+                    <div class="flex justify-end space-x-4 mt-8">
+                        <a href="/aslab/data" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">Batal</a>
+                        <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">Update Data</button>
                     </div>
                 </form>
-            </div>
-        <% } %>
+            <% } %>
+        </div>
     </div>
 
     <%- include('../partials/closeAside.ejs') %>
+
+    <script>
+        document.getElementById('foto').addEventListener('change', function(event) {
+            const [file] = event.target.files;
+            if (file) {
+                const previewImg = document.getElementById('preview-img');
+                const placeholderSvg = document.getElementById('placeholder-svg');
+                previewImg.src = URL.createObjectURL(file);
+                previewImg.style.display = 'block';
+                if (placeholderSvg) {
+                    placeholderSvg.style.display = 'none';
+                }
+            }
+        });
+
+        // Tambahkan validasi form untuk update
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitButton = document.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            
+            // Disable button dan ubah text
+            submitButton.disabled = true;
+            submitButton.textContent = 'Mengupdate...';
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.redirected) {
+                    // Jika berhasil, redirect ke halaman data
+                    window.location.href = response.url;
+                } else {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                if (data && !data.success) {
+                    // Tampilkan error message
+                    alert(data.message || 'Terjadi kesalahan saat mengupdate data');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengupdate data');
+            })
+            .finally(() => {
+                // Enable button kembali
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+            });
+        });
+
+        // Validasi real-time untuk nomor asisten (update)
+        const currentId = '<%= asisten ? asisten.id : "" %>';
+        document.getElementById('nomor_asisten').addEventListener('blur', function() {
+            const nomorAsisten = this.value.trim();
+            if (nomorAsisten) {
+                fetch(`/aslab/check-nomor-asisten?nomor_asisten=${encodeURIComponent(nomorAsisten)}&exclude_id=${currentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.exists) {
+                            this.setCustomValidity('Nomor asisten ini sudah terdaftar');
+                            this.classList.add('border-red-500');
+                        } else {
+                            this.setCustomValidity('');
+                            this.classList.remove('border-red-500');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking nomor asisten:', error);
+                    });
+            }
+        });
+
+        // Validasi NIM
+        function validateNIM(nim) {
+            const nimRegex = /^[0-9]{10}$/;
+            if (!nimRegex.test(nim)) {
+                showError('nim-error', 'NIM harus berupa 10 digit angka');
+                return false;
+            }
+            hideError('nim-error');
+            return true;
+        }
+
+        // Validasi nomor telepon
+        function validateTelepon(telepon) {
+            if (telepon && telepon.length > 0) {
+                const teleponRegex = /^[0-9]{10,13}$/;
+                if (!teleponRegex.test(telepon)) {
+                    showError('telepon-error', 'Nomor telepon harus 10-13 digit angka');
+                    return false;
+                }
+            }
+            hideError('telepon-error');
+            return true;
+        }
+
+        // Event listeners untuk validasi real-time
+        document.getElementById('nim').addEventListener('blur', function() {
+            const nim = this.value.trim();
+            const currentNIM = '<%= asisten.nim %>';
+            
+            if (nim) {
+                validateNIM(nim);
+                
+                // Cek duplikasi NIM hanya jika berbeda dengan NIM saat ini
+                if (nim !== currentNIM) {
+                    fetch(`/aslab/check-nim?nim=${encodeURIComponent(nim)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.exists) {
+                                showError('nim-error', 'NIM ini sudah terdaftar');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error checking NIM:', error);
+                        });
+                }
+            }
+        });
+
+        document.getElementById('telepon').addEventListener('blur', function() {
+            const telepon = this.value.trim();
+            validateTelepon(telepon);
+        });
+
+        // Validasi form sebelum submit
+        document.getElementById('updateAsistenForm').addEventListener('submit', function(e) {
+            const nim = document.getElementById('nim').value.trim();
+            const telepon = document.getElementById('telepon').value.trim();
+            
+            let isValid = true;
+            
+            if (!validateNIM(nim)) {
+                isValid = false;
+            }
+            
+            if (!validateTelepon(telepon)) {
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
+    </script>
 
 </body>
 
