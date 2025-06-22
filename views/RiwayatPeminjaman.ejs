@@ -1,66 +1,78 @@
-  <%- include('./partials/layoutStart') %>
-  <%- include('./partials/aside') %>
+<%- include('./partials/layoutStart') %>
+<%- include('./partials/aside') %>
 
-  <div class="p-6 w-full">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-2xl font-semibold text-gray-800">Riwayat Peminjaman</h2>
-      <div class="space-x-2">
-        <a href="/peminjaman" class="bg-[#0D1F4B] text-white px-6 py-2 rounded-lg hover:bg-blue-900 transition duration-300 ease-in-out">Beranda Peminjaman</a>
-        <button class="bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 focus:outline-none transition duration-300">Select</button>
-        <button class="bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 focus:outline-none transition duration-300">Filters</button>
-        <button class="bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 focus:outline-none transition duration-300">Download all</button>
-      </div>
-    </div>
+<div class="p-6 w-full">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-semibold text-gray-800">Riwayat Peminjaman</h2>
 
-    <!-- Search Form -->
+    <!-- FORM DOWNLOAD -->
+    <form action="/laporan/riwayat-peminjaman/export" method="POST" class="flex items-center space-x-2">
+      <a href="/peminjaman" class="bg-[#0D1F4B] text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition">
+        Beranda Peminjaman
+      </a>
+
+      <select name="format" required class="border px-3 py-2 rounded-lg text-sm text-gray-700">
+        <option value="excel">Excel</option>
+        <option value="csv">CSV</option>
+      </select>
+
+     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+    Download All
+  </button>
+    </form>
+  </div>
+
+  <!-- Search Form -->
   <div class="mb-4">
     <form action="/riwayat" method="GET" class="flex items-center space-x-2">
-      <input type="text" name="search" placeholder="Search by Name, Barang, or Status" class="border px-4 py-2 rounded-lg w-full max-w-md" />
+      <input type="text" name="search" placeholder="Search by Name, Barang, or Status"
+        class="border px-4 py-2 rounded-lg w-full max-w-md" />
       <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg">Search</button>
     </form>
   </div>
 
-    <div class="overflow-x-auto rounded-lg shadow-lg bg-white w-full">
-      <table class="min-w-full bg-white text-sm text-gray-700 shadow-md rounded-lg overflow-hidden w-full">
-        <thead class="bg-[#0D1F4B] text-white uppercase text-xs">
-          <tr>
-            <th class="py-3 px-4 text-left">Nama Peminjam</th>
-            <th class="py-3 px-4 text-left">Barang</th>
-            <th class="py-3 px-4 text-left">Tanggal Pinjam</th>
-            <th class="py-3 px-4 text-left">Contact Number</th>
-            <th class="py-3 px-4 text-left">Email</th>
-            <th class="py-3 px-4 text-left">Status</th>
-            <th class="py-3 px-4 text-left">Jumlah Barang Dipinjam</th>
+  <!-- Table -->
+  <div class="overflow-x-auto rounded-lg shadow-lg bg-white w-full">
+    <table class="min-w-full bg-white text-sm text-gray-700 shadow-md rounded-lg overflow-hidden">
+      <thead class="bg-[#0D1F4B] text-white uppercase text-xs">
+        <tr>
+          <th class="py-3 px-4 text-left">Nama Peminjam</th>
+          <th class="py-3 px-4 text-left">Barang</th>
+          <th class="py-3 px-4 text-left">Tanggal Pinjam</th>
+          <th class="py-3 px-4 text-left">Contact Number</th>
+          <th class="py-3 px-4 text-left">Email</th>
+          <th class="py-3 px-4 text-left">Status</th>
+          <th class="py-3 px-4 text-left">Jumlah Barang Dipinjam</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <% peminjaman.forEach(item => { %>
+          <tr class="border-b hover:bg-gray-50">
+            <td class="py-3 px-4"><%= item.nama_peminjam %></td>
+            <td class="py-3 px-4"><%= item.nama_barang %></td>
+            <td class="py-3 px-4"><%= new Date(item.tanggal_pinjam).toLocaleDateString("id-ID") %></td>
+            <td class="py-3 px-4"><%= item.no_hp %></td>
+            <td class="py-3 px-4"><%= item.email || '-' %></td>
+            <td class="py-3 px-4 font-semibold">
+              <% if (item.status === 'Sudah Dikembalikan') { %>
+                <span class="text-green-600">Sudah Dikembalikan</span>
+              <% } else { %>
+                <span class="text-red-600">Belum Dikembalikan</span>
+              <% } %>
+            </td>
+            <td class="py-3 px-4 text-center"><%= item.jumlah_barang || '-' %></td>
           </tr>
-        </thead>
-        <tbody class="text-gray-700">
-          <% peminjaman.forEach(item => { %>
-            <tr class="border-b hover:bg-gray-50">
-              <td class="py-3 px-4"><%= item.nama_peminjam %></td>
-              <td class="py-3 px-4"><%= item.nama_barang %></td>
-              <td class="py-3 px-4"><%= new Date(item.tanggal_pinjam).toLocaleDateString() %></td>
-              <td class="py-3 px-4"><%= item.no_hp %></td>
-              <td class="py-3 px-4"><%= item.email || '-' %></td>
-              <td class="py-3 px-4 font-semibold">
-                <% if (item.status === 'Sudah Dikembalikan') { %>
-                  <span class="text-green-600">Sudah Dikembalikan</span>
-                <% } else { %>
-                  <span class="text-red-600">Belum Dikembalikan</span>
-                <% } %>
-              </td>
-              <td class="py-3 px-4 text-center"><%= item.jumlah_barang || '-' %></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Pagination -->
-    <div class="flex justify-between items-center mt-6 text-sm text-gray-600">
-      <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none transition duration-300">Sebelumnya</button>
-      <span class="text-gray-600">Page 1 of 10</span>
-      <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none transition duration-300">Berikutnya</button>
-    </div>
+        <% }) %>
+      </tbody>
+    </table>
   </div>
 
-  <%- include('./partials/closeAside') %>
+  <!-- Pagination (optional) -->
+  <div class="flex justify-between items-center mt-6 text-sm text-gray-600">
+    <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Sebelumnya</button>
+    <span class="text-gray-600">Page 1 of 10</span>
+    <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Berikutnya</button>
+  </div>
+</div>
+
+<%- include('./partials/closeAside') %>

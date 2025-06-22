@@ -165,20 +165,7 @@ const exportRiwayatPeminjaman = async (req, res) => {
       res.setHeader("Content-Disposition", `attachment; filename=${filename}.xlsx`);
       await workbook.xlsx.write(res);
       res.end();
-    } else if (format === 'pdf') {
-      const doc = new PDFDocument({ margin: 40, size: "A4" });
-      res.setHeader("Content-Disposition", `attachment; filename=${filename}.pdf`);
-      res.setHeader("Content-Type", "application/pdf");
-      doc.pipe(res);
-      doc.fontSize(16).text("Laporan Riwayat Peminjaman", { align: "center" }).moveDown();
-      formatted.forEach(item => {
-        Object.entries(item).forEach(([key, val]) => {
-          doc.text(`${key}: ${val}`);
-        });
-        doc.moveDown();
-      });
-      doc.end();
-    }
+    } 
   } catch (error) {
     console.error("Gagal ekspor riwayat peminjaman:", error);
     res.status(500).send("Gagal ekspor riwayat peminjaman.");
