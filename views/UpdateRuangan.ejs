@@ -6,7 +6,7 @@
     <!-- Header -->
     <div class="flex justify-between items-start mb-6">
       <h2 class="text-xl font-semibold text-gray-800">Edit Ruangan</h2>
-      <a href="/ruangan" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">
+      <a href="/ruangan" id="closeButton" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">
         &times;
       </a>
     </div>
@@ -64,7 +64,9 @@
       <div class="flex justify-end mt-8 space-x-4">
         <button
           type="submit"
-          class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          id="saveButton"
+          class="px-6 py-2 bg-[#0D1F4B] text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
+          disabled
         >Simpan</button>
       </div>
     </form>
@@ -117,7 +119,7 @@
     }
   });
 
-  // Jika URL mengandung status success, tampilkan notifikasi
+  // Notifikasi sukses setelah update
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('status') === 'success') {
     Swal.fire({
@@ -129,7 +131,6 @@
       window.location.href = '/ruangan';
     });
   }
-
 
   // Preview gambar baru
   const inputFile = document.getElementById('gambar');
@@ -150,6 +151,73 @@
       previewImage.src = '';
       previewImage.classList.add('hidden');
       labelText.classList.remove('hidden');
+    }
+  });
+
+  // Tombol Simpan
+  const saveButton = document.getElementById('saveButton');
+  const formInputs = document.querySelectorAll('input[name="nama_ruangan"], input[name="kode_ruangan"], textarea[name="deskripsi"], input[name="gambar"]');
+  
+  // Menampilkan nilai awal form
+  const originalValues = {
+    nama_ruangan: document.querySelector('input[name="nama_ruangan"]').value,
+    kode_ruangan: document.querySelector('input[name="kode_ruangan"]').value,
+    deskripsi: document.querySelector('textarea[name="deskripsi"]').value,
+    gambar: null // Will be set to true if a file is selected
+  };
+
+  // Konfirmasi 'X'
+  const closeButton = document.getElementById('closeButton');
+  let hasUnsavedChanges = false;
+
+  // Cek perubahan nilai form
+  function checkFormChanges() {
+    const currentValues = {
+      nama_ruangan: document.querySelector('input[name="nama_ruangan"]').value,
+      kode_ruangan: document.querySelector('input[name="kode_ruangan"]').value,
+      deskripsi: document.querySelector('textarea[name="deskripsi"]').value,
+      gambar: inputFile.files.length > 0
+    };
+
+    const hasChanges = 
+      currentValues.nama_ruangan !== originalValues.nama_ruangan ||
+      currentValues.kode_ruangan !== originalValues.kode_ruangan ||
+      currentValues.deskripsi !== originalValues.deskripsi ||
+      currentValues.gambar;
+
+    saveButton.disabled = !hasChanges;
+    hasUnsavedChanges = hasChanges;
+  }
+
+  // Cek perubahan pada input
+  formInputs.forEach(input => {
+    input.addEventListener('input', checkFormChanges);
+    input.addEventListener('change', checkFormChanges);
+  });
+
+  // Cek perubahan
+  checkFormChanges();
+
+  // Tombol 'X' click
+  closeButton.addEventListener('click', function(e) {
+    if (hasUnsavedChanges) {
+      e.preventDefault();
+      
+      Swal.fire({
+        title: 'Batalkan mengedit data ruangan?',
+        text: 'Perubahan yang belum disimpan akan hilang',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Lanjutkan',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#0D1F4B',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.replace('/ruangan');
+        }
+      });
     }
   });
 </script>
