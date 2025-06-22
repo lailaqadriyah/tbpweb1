@@ -1,5 +1,6 @@
 const { Ruangan } = require('../models/RuanganModel');
 const { Aset } = require('../models/AsetModel');
+const { Asisten } = require('../models/Asistenmodel');
 const { Op } = require('sequelize');
 
 // ==============================================================================
@@ -206,10 +207,19 @@ const getRuanganDetail = async (req, res) => {
                 order: [['nama_barang', 'ASC']]
             });
 
+            // Fetch assistants responsible for this room
+            const penanggungJawabRuangan = await Asisten.findAll({
+                where: {
+                    ruangan_id: ruanganId
+                },
+                order: [['nama', 'ASC']]
+            });
+
             res.render("DetailRuangan", {
                 title: "Detail Ruangan",
                 ruangan,
-                asetDiRuangan
+                asetDiRuangan,
+                penanggungJawabRuangan
             });
         } else {
             res.status(404).render("404", { title: "Tidak Ditemukan", message: "Ruangan tidak ditemukan." });
