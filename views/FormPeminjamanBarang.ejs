@@ -20,13 +20,47 @@
                     <p class="text-gray-500 mb-1">Tarik gambar ke sini</p>
                     <p class="text-gray-500 mb-2">atau</p>
                     <label for="imageUpload" class="cursor-pointer text-blue-600 hover:underline">Upload gambar</label>
-                    <input type="file" id="imageUpload" name="gambarBarang" class="hidden" accept="image/*">
+                    <input type="file" id="imageUpload" name="gambar" class="hidden" accept="image/*">
                 </div>
 
                 <!-- Preview Gambar -->
                 <div id="imagePreview" class="w-32 h-32 bg-gray-200 rounded-full overflow-hidden mx-auto">
                     <img id="preview" src="#" alt="Preview Gambar" class="w-full h-full object-cover hidden">
                 </div>
+
+                <% if (selectedAset && selectedAset.length > 0) { %>
+                    <div class="mt-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Barang yang akan Dipinjam:</h3>
+                        <div class="overflow-x-auto rounded-lg border border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                                            Kode Barang
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                                            Nama Barang
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <% selectedAset.forEach(item => { %>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                                                <%= item.kode_barang %>
+                                                <input type="hidden" name="kode_barang" value="<%= item.kode_barang %>">
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                                                <%= item.nama_barang %>
+                                                <input type="hidden" name="nama_barang" value="<%= item.nama_barang %>">
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <% } %>
 
                 <!-- Form Fields -->
                 <div class="space-y-4 mt-4">
@@ -59,23 +93,8 @@
                         <input type="text" id="noHp" name="no_hp" placeholder="Masukkan nomor HP" value=""
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
-
-                    <div>
-                        <label for="barang" class="block text-sm font-medium text-gray-700 mb-1">Barang</label>
-                        <input type="text" id="barang" name="barang" placeholder="Masukkan kode barang" value=""
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                    </div>
                 </div>
             </div>
-
-            <!-- Tombol Detail Peminjaman -->
-            <div class="flex justify-end mt-4">
-                <a href="/detailpeminjaman" 
-                    class="px-6 py-2 border border-gray-500 rounded-md text-gray-500 font-medium hover:bg-gray-300 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                    Detail Peminjaman
-                </a>
-            </div>
-
 
             <!-- Action Buttons -->
             <div class="flex justify-end mt-8 pt-4 border-t border-gray-200">

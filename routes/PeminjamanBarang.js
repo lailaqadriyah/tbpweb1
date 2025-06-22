@@ -3,12 +3,10 @@ const router = express.Router();
 
 // Import controller Peminjaman
 const peminjamanController = require('../controllers/PeminjamanBarangController'); // Pastikan path ini sesuai!
-const { riwayatPeminjaman } = require('../controllers/PeminjamanBarangController');
+const { riwayatPeminjaman, upload } = require('../controllers/PeminjamanBarangController');
 
 // Tampilkan form tambah peminjaman
-router.get('/peminjaman/tambah', (req, res) => {
-    res.render('FormPeminjamanBarang', { title: 'Tambah Peminjaman' });
-});
+router.get('/peminjaman/tambah', peminjamanController.showTambahPeminjamanForm);
 
 // Tampilkan daftar semua peminjaman barang
 router.get('/peminjaman', peminjamanController.getAllPeminjaman);
@@ -20,7 +18,7 @@ router.get('/peminjaman/edit/:id', peminjamanController.getDetailPeminjamanById)
 router.post('/peminjaman/update/:id', peminjamanController.updatePeminjamanById);
 
 // Tambah data peminjaman barang (POST)
-router.post('/peminjaman/tambah', peminjamanController.tambahPeminjaman);
+router.post('/peminjaman/tambah', upload.single('gambar'), peminjamanController.tambahPeminjaman);
 
 // Rute baru untuk menghapus beberapa peminjaman
 router.post('/peminjaman/delete', peminjamanController.deletePeminjaman);

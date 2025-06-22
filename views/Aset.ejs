@@ -49,7 +49,8 @@
               d="M12 4.5v15m7.5-7.5h-15"
             />
           </svg>
-          Ajukan Barang 
+          Ajukan Barang
+        </a>
         <a href="/addaset"
           class="flex items-center bg-[#0D1F4B] text-white font-medium py-2 px-4 rounded-lg shadow-sm"
         >
@@ -69,17 +70,15 @@
           </svg>
           Tambah Barang 
         </a>
-        <a href="/peminjaman/tambah" class="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm">
-    <img src="icons/pinjam.png" alt="Pinjam Barang" class="mr-2 w-5 h-5" />
-    Pinjam Barang
-        </a>
-        <!-- New Export File Button -->
-   <a href="/aset/export-pdf" class="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm">
-    <img src="icons/file.png" alt="Export Icon" class="w-5 h-5 mr-2">
-    Export File 
-</a>
-
+        <button id="pinjamBarangBtn" class="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm">
+            <img src="/icons/pinjam.png" alt="Pinjam Barang" class="mr-2 w-5 h-5" />
+            Pinjam Barang
         </button>
+        <!-- New Export File Button -->
+        <a href="/aset/export-pdf" class="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm">
+            <img src="/icons/file.png" alt="Export Icon" class="w-5 h-5 mr-2">
+            Export File 
+        </a>
       </div>
     </div>
 
@@ -139,7 +138,7 @@
               <tr class="hover:bg-gray-50">
                 <!-- Checkbox untuk setiap item -->
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  <input type="checkbox" class="asset-checkbox" data-id="<%= item.id %>" />
+                  <input type="checkbox" class="asset-checkbox" data-kode-barang="<%= item.kode_barang %>" />
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.kode_barang %></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= item.nama_barang %></td>
@@ -209,6 +208,31 @@
                 checkbox.checked = isChecked;
             });
         });
+        
+        const pinjamBarangBtn = document.getElementById('pinjamBarangBtn');
+        if (pinjamBarangBtn) {
+            pinjamBarangBtn.addEventListener('click', function() {
+                const selectedItems = [];
+                assetCheckboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        selectedItems.push(checkbox.dataset.kodeBarang);
+                    }
+                });
+
+                if (selectedItems.length > 0) {
+                    const queryString = selectedItems.join(',');
+                    window.location.href = `/peminjaman/tambah?items=${queryString}`;
+                } else {
+                    Swal.fire({
+                        title: "Tidak ada barang dipilih",
+                        text: "Silakan pilih setidaknya satu barang untuk dipinjam.",
+                        icon: "warning",
+                        confirmButtonColor: "#3085d6",
+                        confirmButtonText: "OK"
+                    });
+                }
+            });
+        }
 
         // Logic for deleting assets
         if (assetsTable) {

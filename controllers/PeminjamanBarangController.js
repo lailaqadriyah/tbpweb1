@@ -1,9 +1,55 @@
-// controllers/PeminjamanController.js
+// controllers/PeminjamanBarangController.js
 
 const { PeminjamanBarang } = require('../models/PeminjamanBarangModel'); // Model Sequelize
 const { PengembalianBarang } = require('../models/PengembalianBarangModel');
+const { Aset } = require('../models/AsetModel');
 const sequelize = require('../config/db'); // Impor instance Sequelize
 const { Op } = require('sequelize'); // Diperlukan untuk operasi 'in' atau pencarian nanti
+const multer = require('multer');
+const path = require('path');
+
+// Konfigurasi Multer untuk upload gambar
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads/peminjaman/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// ==============================================================================
+// CONTROLLER: showTambahPeminjamanForm
+// Menampilkan form tambah peminjaman, dengan data aset jika ada
+// ==============================================================================
+const showTambahPeminjamanForm = async (req, res) => {
+    try {
+        const { items } = req.query;
+        let selectedAset = [];
+
+        if (items) {
+            const kodeBarangList = items.split(',');
+            selectedAset = await Aset.findAll({
+                where: {
+                    kode_barang: {
+                        [Op.in]: kodeBarangList
+                    }
+                }
+            });
+        }
+
+        res.render('FormPeminjamanBarang', {
+            title: 'Tambah Peminjaman',
+            selectedAset: selectedAset
+        });
+
+    } catch (error) {
+        console.error('Gagal menampilkan form tambah peminjaman:', error);
+        res.status(500).send('Terjadi kesalahan saat memuat form.');
+    }
+};
 
 // ==============================================================================
 // CONTROLLER: getAllPeminjaman
@@ -34,28 +80,58 @@ const tambahPeminjaman = async (req, res) => {
     try {
         const {
             nama_peminjam,
-            nama_barang,
-            no_hp,
             tanggal_pinjam,
             tanggal_kembali,
-            status_peminjaman
+            no_hp,
+            email
         } = req.body;
+        
+        const kode_barang_list = req.body.kode_barang;
+        const nama_barang_list = req.body.nama_barang;
 
-        // Validasi sederhana (opsional bisa ditambahkan validasi lebih detail)
-        if (!nama_peminjam || !nama_barang || !tanggal_pinjam || !tanggal_kembali) {
-            return res.status(400).send('Data peminjaman tidak lengkap.');
+        // Validasi dasar
+        if (!nama_peminjam || !tanggal_pinjam || !tanggal_kembali) {
+            return res.status(400).send('Data peminjam tidak lengkap.');
         }
 
-        await PeminjamanBarang.create({
+        let gambar = null;
+        if (req.file) {
+            gambar = req.file.filename;
+        }
+
+        const recordsToCreate = [];
+        const commonData = {
             nama_peminjam,
-            nama_barang,
             no_hp,
+            email,
             tanggal_pinjam,
             tanggal_kembali,
-            status_peminjaman: status_peminjaman || 'Dipinjam' // Default status
-        });
+            gambar,
+            jumlah_barang: 1,
+            status_pengembalian: 'Belum Dikembalikan'
+        };
 
-        res.redirect('/peminjaman'); // Arahkan kembali ke halaman daftar peminjaman
+        // Handle items selected from the list
+        if (kode_barang_list) {
+            const kodes = Array.isArray(kode_barang_list) ? kode_barang_list : [kode_barang_list];
+            const names = Array.isArray(nama_barang_list) ? nama_barang_list : [nama_barang_list];
+            
+            kodes.forEach((kode, index) => {
+                recordsToCreate.push({
+                    ...commonData,
+                    nama_barang: names[index],
+                    kode_barang: kode
+                });
+            });
+        }
+
+        if (recordsToCreate.length === 0) {
+            return res.status(400).send('Tidak ada barang yang dipinjam.');
+        }
+
+        await PeminjamanBarang.bulkCreate(recordsToCreate);
+
+        res.redirect('/peminjaman');
 
     } catch (error) {
         console.error('Gagal menambahkan data peminjaman:', error);
@@ -302,6 +378,7 @@ const updatePeminjamanById = async (req, res) => {
 };
 
 module.exports = {
+    showTambahPeminjamanForm,
     getAllPeminjaman,
     tambahPeminjaman,
     hapusPeminjaman,
@@ -310,5 +387,6 @@ module.exports = {
     getDetailPeminjaman,
     deletePeminjaman,
     getDetailPeminjamanById,
-    updatePeminjamanById
+    updatePeminjamanById,
+    upload // Ekspor upload untuk digunakan di rute
 };
