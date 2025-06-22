@@ -236,52 +236,66 @@ const getDetailTotal = async (req, res) => {
 // FUNGSI BARU: addAset - Untuk menambahkan aset baru ke database
 // ==============================================================================
 const addAset = async (req, res) => {
-    console.log(req.body);
-    console.log(req.file);
-    try {
-        const {
-            kode_barang,
-            nama_barang,
-            tanggal_masuk,
-            kondisi,
-            kode_ruangan, // This is the room NAME from the form
-            kategori_barang
-        } = req.body;
+  try {
+    const {
+      kode_barang,
+      nama_barang,
+      tanggal_masuk,
+      kondisi,
+      kode_ruangan,
+      kategori_barang
+    } = req.body;
 
-        // Validasi dasar
-        if (!kode_barang || !nama_barang || !tanggal_masuk || !kondisi || !kategori_barang || !kode_ruangan) {
-            return res.status(400).send('Data tidak lengkap. Semua field harus diisi.');
-        }
-
-        // Cek apakah ada file yang di-upload
-        if (!req.file) {
-            return res.status(400).send('Gambar barang harus di-upload.');
-        }
-        const gambar_barang = `/uploads/aset/${req.file.filename}`;
-        
-        const ruangan = await Ruangan.findOne({ where: { nama_ruangan: kode_ruangan } });
-
-        // Buat aset baru di database
-        const newAset = await Aset.create({
-            kode_barang,
-            nama_barang,
-            kuantitas: 1, // Kuantitas di-hardcode menjadi 1
-            tanggal_masuk,
-            kondisi,
-            lokasi: kode_ruangan, // Use the room name for 'lokasi'
-            kode_ruangan: ruangan ? ruangan.kode_ruangan : null, // Save the code if found
-            kategori_barang,
-            gambar_barang
-        });
-
-        // Redirect ke halaman daftar aset setelah berhasil
-        res.redirect('/aset');
-
-    } catch (error) {
-        console.error('Error saat menambahkan aset baru:', error);
-        res.status(500).send('Terjadi kesalahan saat menyimpan aset baru.');
-        res.redirect('/aset');
+    if (!kode_barang || !nama_barang || !tanggal_masuk || !kondisi || !kategori_barang || !kode_ruangan) {
+      return res.render("AddBarang", {
+        title: "Tambah Barang Baru",
+        ruangan: await Ruangan.findAll(),
+        error: "Semua data wajib diisi."
+      });
     }
+
+    const existing = await Aset.findByPk(kode_barang); // cek primary key
+    if (existing) {
+      return res.render("AddBarang", {
+        title: "Tambah Barang Baru",
+        ruangan: await Ruangan.findAll(),
+        error: "Kode barang sudah digunakan!"
+      });
+    }
+
+    if (!req.file) {
+      return res.render("AddBarang", {
+        title: "Tambah Barang Baru",
+        ruangan: await Ruangan.findAll(),
+        error: "Gambar barang wajib di-upload."
+      });
+    }
+
+    const gambar_barang = `/uploads/aset/${req.file.filename}`;
+    const ruangan = await Ruangan.findOne({ where: { nama_ruangan: kode_ruangan } });
+
+    await Aset.create({
+      kode_barang,
+      nama_barang,
+      kuantitas: 1,
+      tanggal_masuk,
+      kondisi,
+      lokasi: kode_ruangan,
+      kode_ruangan: ruangan ? ruangan.kode_ruangan : null,
+      kategori_barang,
+      gambar_barang
+    });
+
+    res.redirect('/aset');
+
+  } catch (error) {
+    console.error('Error saat menambahkan aset baru:', error);
+    res.render("AddBarang", {
+      title: "Tambah Barang Baru",
+      ruangan: await Ruangan.findAll(),
+      error: "Terjadi kesalahan saat menyimpan data."
+    });
+  }
 };
 
 
