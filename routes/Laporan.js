@@ -19,7 +19,7 @@ router.get('/laporan', (req, res) => {
 
 // Laporan Barang Rusak
 router.get('/laporan/barang-rusak', tampilBarangRusak);
-router.post('/laporan/barang-rusak/export', exportBarangRusak);
+router.post('/laporan/export', exportBarangRusak);
 
 // Laporan Pengembalian
 router.get('/laporan/dikembalikan', getLaporanDikembalikan);

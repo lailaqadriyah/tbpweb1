@@ -8,59 +8,97 @@ const puppeteer = require("puppeteer");
 const path = require("path");
 const ejs = require("ejs");
 
+// ===============================
+// TAMPIL DATA BARANG RUSAK
+// ===============================
 const tampilBarangRusak = async (req, res) => {
   try {
     const asetRusak = await Aset.findAll({
       where: { kondisi: 'Rusak' },
       order: [['tanggal_masuk', 'DESC']]
     });
-    res.render('ExportBarangRusak', { title: 'Export Barang Rusak', aset: asetRusak });
+    res.render('ExportBarangRusak', {
+      title: 'Export Barang Rusak',
+      aset: asetRusak
+    });
   } catch (error) {
     console.error('Gagal mengambil data barang rusak:', error);
     res.status(500).send('Gagal memuat laporan barang rusak.');
   }
 };
 
+// ===============================
+// EXPORT BARANG RUSAK
+// ===============================
 const exportBarangRusak = async (req, res) => {
   const format = req.body.format;
+
   try {
     const rusak = await Aset.findAll({ where: { kondisi: 'Rusak' } });
-    const data = rusak.map(item => ({
-      'Kode Barang': item.kode_barang,
-      'Nama Barang': item.nama_barang,
-      'Kuantitas': item.kuantitas,
-      'Kategori': item.kategori_barang,
-      'Lokasi': item.lokasi,
-      'Tanggal Masuk': new Date(item.tanggal_masuk).toLocaleDateString('id-ID'),
-      'Kondisi': item.kondisi
-    }));
-
-    const filename = `barang_rusak_${Date.now()}`;
 
     if (format === 'csv') {
+      const data = rusak.map(item => ({
+        'Kode Barang': item.kode_barang,
+        'Nama Barang': item.nama_barang,
+        'Kuantitas': item.kuantitas,
+        'Kategori': item.kategori_barang,
+        'Lokasi': item.lokasi,
+        'Tanggal Masuk': new Date(item.tanggal_masuk).toLocaleDateString('id-ID'),
+        'Kondisi': item.kondisi
+      }));
       res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', `attachment; filename=${filename}.csv`);
+      res.setHeader('Content-Disposition', 'attachment; filename=barang_rusak.csv');
       stringify(data, { header: true }).pipe(res);
-    } else if (format === 'excel') {
+    }
+
+    else if (format === 'excel') {
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet("Barang Rusak");
-      worksheet.columns = Object.keys(data[0]).map(key => ({ header: key, key, width: 20 }));
-      data.forEach(row => worksheet.addRow(row));
+      worksheet.columns = [
+        { header: 'Kode Barang', key: 'kode_barang', width: 20 },
+        { header: 'Nama Barang', key: 'nama_barang', width: 25 },
+        { header: 'Kuantitas', key: 'kuantitas', width: 10 },
+        { header: 'Kategori', key: 'kategori_barang', width: 20 },
+        { header: 'Lokasi', key: 'lokasi', width: 20 },
+        { header: 'Tanggal Masuk', key: 'tanggal_masuk', width: 20 },
+        { header: 'Kondisi', key: 'kondisi', width: 15 }
+      ];
+      rusak.forEach(item => {
+        worksheet.addRow({
+          kode_barang: item.kode_barang,
+          nama_barang: item.nama_barang,
+          kuantitas: item.kuantitas,
+          kategori_barang: item.kategori_barang,
+          lokasi: item.lokasi,
+          tanggal_masuk: new Date(item.tanggal_masuk).toLocaleDateString('id-ID'),
+          kondisi: item.kondisi
+        });
+      });
       res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-      res.setHeader("Content-Disposition", `attachment; filename=${filename}.xlsx`);
+      res.setHeader("Content-Disposition", "attachment; filename=barang_rusak.xlsx");
       await workbook.xlsx.write(res);
       res.end();
-    } else if (format === 'pdf') {
-      const html = await ejs.renderFile(path.join(__dirname, '../views/ExportBarangRusakPDF.ejs'), { aset: rusak });
-      const browser = await puppeteer.launch();
+    }
+
+    else if (format === 'pdf') {
+      const html = await ejs.renderFile(
+        path.join(__dirname, '../views/ExportBarangRusakPDF.ejs'),
+        { aset: rusak }
+      );
+      const browser = await puppeteer.launch({ headless: true });
       const page = await browser.newPage();
       await page.setContent(html, { waitUntil: 'networkidle0' });
-      const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: { top: '20mm', bottom: '20mm' }
+      });
       await browser.close();
       res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename=${filename}.pdf`);
+      res.setHeader('Content-Disposition', 'attachment; filename=barang_rusak.pdf');
       res.end(pdfBuffer);
     }
+
   } catch (error) {
     console.error('Gagal mengekspor barang rusak:', error);
     res.status(500).send('Gagal mengekspor barang rusak.');
