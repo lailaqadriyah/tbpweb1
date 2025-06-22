@@ -1,0 +1,82 @@
+<%- include('./partials/layoutStart.ejs') %>
+<%- include('./partials/aside.ejs') %>
+
+<div class="flex-1 bg-gray-100 p-6">
+  <div class="mb-6 bg-white rounded-md shadow-md p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-semibold text-gray-800">Detail Total Per Barang</h2>
+      <a href="/aset" class="text-gray-500 hover:text-gray-700">
+        <i class="fas fa-times text-xl"></i>
+      </a>
+    </div>
+
+    <!-- Ringkasan -->
+    <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+      <div class="flex items-center">
+        <img src="icons/total.png" alt="Total Icon" class="w-6 h-6 mr-2">
+        <span class="text-blue-800 font-medium">
+          Total Jenis Barang: <%= totalData.length %>
+        </span>
+      </div>
+    </div>
+
+    <!-- Tabel Total Per Barang -->
+    <div class="overflow-x-auto rounded-lg border border-gray-200">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+              No
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+              Nama Barang
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+              Total Kuantitas
+            </th>
+
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% if (totalData.length > 0) { %>
+            <% totalData.forEach(function(item, index) { %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                  <%= index + 1 %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                  <%= item.nama_barang %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                  <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full font-semibold">
+                    <%= item.dataValues.total_kuantitas %>
+                  </span>
+        
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
+                Tidak ada data barang ditemukan.
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tombol Export -->
+    <div class="mt-6 flex justify-end">
+
+    </div>
+  </div>
+</div>
+
+<%- include('./partials/closeAside.ejs') %>
+
+<script>
+function exportToPDF() {
+    // Implementasi export PDF bisa ditambahkan di sini
+    alert('Fitur export PDF akan segera tersedia!');
+}
+</script>

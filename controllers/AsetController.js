@@ -1,4 +1,5 @@
 const { Aset } = require('../models/AsetModel');
+const sequelize = require('../config/db');
 const { Op } = require('sequelize'); // Import operator Sequelize untuk kondisi pencarian
 const pdf = require('html-pdf');
 
@@ -182,6 +183,7 @@ const getAsetDetail = async (req, res) => {
 // ==============================================================================
 // FUNGSI BARU: getAddAsetPage - Untuk menampilkan form tambah aset
 // ==============================================================================
+
 const getAddAsetPage = (req, res) => {
     try {
         res.render("AddBarang", {
@@ -192,6 +194,32 @@ const getAddAsetPage = (req, res) => {
         res.status(500).send('Gagal memuat halaman tambah aset.');
     }
 };
+
+// ==============================================================================
+// FUNGSI BARU: getDetailTotal - Menampilkan total per barang
+// ==============================================================================
+const getDetailTotal = async (req, res) => {
+    try {
+        // Menggunakan Sequelize untuk mengelompokkan berdasarkan nama_barang dan menjumlahkan kuantitas
+        const totalPerBarang = await Aset.findAll({
+            attributes: [
+                'nama_barang',
+                [sequelize.fn('SUM', sequelize.col('kuantitas')), 'total_kuantitas']
+            ],
+            group: ['nama_barang'],
+            order: [['nama_barang', 'ASC']]
+        });
+
+        res.render('DetailTotal', {
+            title: 'Detail Total Per Barang',
+            totalData: totalPerBarang
+        });
+    } catch (error) {
+        console.error('Error saat mengambil data total per barang:', error);
+        res.status(500).send('Gagal memuat data total per barang.');
+    }
+};
+
 
 // ==============================================================================
 // FUNGSI BARU: addAset - Untuk menambahkan aset baru ke database
@@ -425,4 +453,5 @@ module.exports = {
     exportPDF,       
     tampilFormPengajuan,
     prosesPengajuan,
+    getDetailTotal,
 };
