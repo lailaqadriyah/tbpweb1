@@ -1,10 +1,15 @@
+// controllers/AsetController.js
+
 const { Aset } = require('../models/AsetModel');
 const { Ruangan } = require('../models/RuanganModel');
 const sequelize = require('../config/db');
 const { Op } = require('sequelize');
 const pdf = require('html-pdf');
 
-
+// CATATAN PENTING:
+// Pastikan file 'Relation.js' Anda telah di-require/diinisialisasi di aplikasi utama Anda (misalnya app.js atau server.js)
+// agar asosiasi (relasi) antar model Aset, Ruangan, dll. sudah terbentuk sebelum controller ini dijalankan.
+// Contoh di app.js: require('./models/Relation'); // Atau sesuai path Anda
 
 // ==============================================================================
 // RUTE UTAMA UNTUK MENAMPILKAN DAFTAR ASET DENGAN DATA DARI DATABASE
@@ -18,6 +23,8 @@ const getAllAset = async (req, res) => {
             whereConditions[Op.or] = [
                 { nama_barang: { [Op.like]: `%${search}%` } },
                 { kode_barang: { [Op.like]: `%${search}%` } },
+                // Jika ingin mencari di lokasi berdasarkan nama ruangan,
+                // perlu JOIN dengan tabel Ruangan dan mencari di Ruangan.nama_ruangan
             ];
         }
 
@@ -28,6 +35,9 @@ const getAllAset = async (req, res) => {
                 model: Ruangan,
                 as: 'ruangan',
                 attributes: ['nama_ruangan'],
+                // Ini penting untuk JOIN yang benar saat primary key bukan 'id'
+                // sourceKey: 'ruangan_kode', // sourceKey adalah kolom di model Aset yang berelasi
+                // targetKey: 'kode_ruangan' // targetKey adalah kolom PK di model Ruangan yang direferensikan
             }]
         });
 
@@ -155,6 +165,8 @@ const getAsetDetail = async (req, res) => {
                 model: Ruangan,
                 as: 'ruangan',
                 attributes: ['nama_ruangan'],
+                // sourceKey: 'ruangan_kode',
+                // targetKey: 'kode_ruangan'
             }]
         });
 
@@ -302,13 +314,14 @@ const tampilFormPengajuan = async (req, res) => {
     }
 };
 
-const prosesPengajuan = async (req, res) => { 
+const prosesPengajuan = async (req, res) => { // <-- Ubah menjadi async jika Anda ingin fetch nama ruangan
     const {
         namaPengaju,
         jabatanPengaju,
         namaBarang,
         jumlahBarang,
-        ruanganTujuan, 
+        ruanganTujuan, // ini akan menjadi kode_ruangan
+        spesifikasi,
         alasan
     } = req.body;
 
@@ -354,6 +367,8 @@ const exportPDF = async (req, res) => {
                 model: Ruangan,
                 as: 'ruangan',
                 attributes: ['nama_ruangan'],
+                // sourceKey: 'ruangan_kode',
+                // targetKey: 'kode_ruangan'
             }]
         });
 
@@ -436,6 +451,7 @@ const exportPDF = async (req, res) => {
     }
 };
 
+// Ekspor semua fungsi controller
 module.exports = {
     getAllAset,
     getAsetForUpdate,

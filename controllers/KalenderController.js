@@ -40,7 +40,7 @@ exports.getEventsApi = async (req, res) => {
         allEvents.push({
           title: `Pinjam: ${item.nama_barang}`,
           start: item.tanggal_pinjam,
-          backgroundColor: '#34D399', 
+          backgroundColor: '#34D399', // Hijau
           borderColor: '#34D399'
         });
       }
@@ -49,7 +49,7 @@ exports.getEventsApi = async (req, res) => {
         allEvents.push({
           title: `Kembali: ${item.nama_barang}`,
           start: item.tanggal_kembali,
-          backgroundColor: '#60A5FA', 
+          backgroundColor: '#60A5FA', // Biru
           borderColor: '#60A5FA'
         });
       }
@@ -61,7 +61,7 @@ exports.getEventsApi = async (req, res) => {
         id: item.id,
         title: item.title,
         start: item.start,
-        backgroundColor: '#F59E0B', 
+        backgroundColor: '#F59E0B', // Oranye
         borderColor: '#F59E0B',
         extendedProps: {
           description: item.description,
