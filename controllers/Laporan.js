@@ -41,11 +41,30 @@ const exportBarangRusak = async (req, res) => {
     const rusak = await Aset.findAll({ where: { kondisi: 'Rusak' } });
 
     if (format === 'csv') {
-      const parser = new Parser();
-      const csv = parser.parse(rusak.map(r => r.toJSON()));
-      res.header('Content-Type', 'text/csv');
-      res.attachment('laporan-barang-rusak.csv');
-      return res.send(csv);
+      const headers = [
+        'Kode Barang',
+        'Nama Barang', 
+        'Kuantitas',
+        'Kategori',
+        'Lokasi',
+        'Tanggal Masuk',
+        'Kondisi'
+      ];
+
+      const formattedData = rusak.map(item => ({
+        'Kode Barang': item.kode_barang,
+        'Nama Barang': item.nama_barang,
+        'Kuantitas': item.kuantitas,
+        'Kategori': item.kategori_barang,
+        'Lokasi': item.lokasi,
+        'Tanggal Masuk': new Date(item.tanggal_masuk).toLocaleDateString('id-ID'),
+        'Kondisi': item.kondisi
+      }));
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename=laporan-barang-rusak.csv');
+      stringify(formattedData, { header: true }).pipe(res);
+      return;
     }
 
     if (format === 'excel') {

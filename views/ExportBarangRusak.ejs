@@ -6,29 +6,32 @@
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
       <h2 class="text-xl font-semibold text-gray-800 mb-6">Laporan Barang Rusak</h2>
 
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <label for="formatExport" class="block text-sm font-medium text-gray-700 mb-2">Format Export</label>
-          <form action="/laporan/export" method="POST" class="flex items-center gap-4">
-            <select id="formatExport" name="format" required
-              class="block w-32 py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-              <option value="csv">CSV</option>
-              <option value="excel">Excel</option>
-              <option value="pdf">PDF</option>
-            </select>
-            <button type="submit"
-              class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors shadow-sm flex items-center">
-              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0v-3a1 1 0 00-1-1zM9 6a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"/>
-              </svg>
-              Export
-            </button>
-          </form>
-        </div>
-        <a href="/laporan" class="bg-red-500 text-white px-5 py-2 rounded-md hover:bg-red-600 transition-colors shadow-sm">
-          Kembali
-        </a>
-      </div>
+      <div class="flex items-end gap-4 mb-4">
+  <form action="/laporan/export" method="POST" class="flex items-end gap-4">
+    <div>
+      <label for="formatExport" class="block text-sm font-medium text-gray-700 mb-2">Format Export</label>
+      <select id="formatExport" name="format" required
+        class="block w-32 py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        <option value="csv">CSV</option>
+        <option value="excel">Excel</option>
+        <option value="pdf">PDF</option>
+      </select>
+    </div>
+    <button type="submit"
+      class="h-[38px] bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors shadow-sm flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0v-3a1 1 0 00-1-1zM9 6a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"/>
+      </svg>
+      Export
+    </button>
+  </form>
+
+  <a href="/laporan"
+    class="h-[38px] bg-red-500 text-white px-5 py-2 rounded-md hover:bg-red-600 transition-colors shadow-sm flex items-center">
+    Kembali
+  </a>
+</div>
+
 
       <div class="bg-white rounded-lg shadow-md p-6">
         <div class="overflow-x-auto">

@@ -35,15 +35,14 @@
 
     <!-- Daftar Aset di Ruangan -->
     <div class="mt-6">
-      <h3 class="text-sm font-medium text-gray-600 mb-2">Aset yang ada di ruangan ini</h3>
+      <h3 class="text-base font-medium text-gray-600 mb-3">Daftar Aset di Ruangan ini:</h3>
       
       <% if (asetDiRuangan && asetDiRuangan.length > 0) { %>
-        <div class="space-y-1">
+        <div class="space-y-1 text-left">
           <% asetDiRuangan.forEach((aset, index) => { %>
             <div class="flex items-center p-2 bg-gray-50 rounded border border-gray-200">
-              <div class="flex-shrink-0 w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center mr-2">
-                <span class="text-xs font-medium text-gray-700"><%= index + 1 %></span>
-              </div>
+              <!-- Bullet Point Circle -->
+              <div class="flex-shrink-0 w-2 h-2 bg-gray-600 rounded-full mr-3"></div>
               
               <!-- Icon Aset -->
               <div class="flex-shrink-0 mr-2">
@@ -52,42 +51,22 @@
                 </svg>
               </div>
               
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between mb-1">
-                  <h4 class="font-medium text-gray-800 text-xs truncate"><%= aset.nama_barang %></h4>
-                  <span class="text-xs px-1.5 py-0.5 rounded-full ml-2 <%= aset.kondisi === 'Baik' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
-                    <%= aset.kondisi %>
-                  </span>
-                </div>
-                
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-1 text-xs text-gray-600">
-                  <span class="truncate"><strong>Kode:</strong> <%= aset.kode_barang %></span>
-                  <span><strong>Qty:</strong> <%= aset.kuantitas %></span>
-                  <span class="truncate"><strong>Kat:</strong> <%= aset.kategori_barang %></span>
-                  <span class="truncate"><strong>Tgl:</strong> <%= new Date(aset.tanggal_masuk).toLocaleDateString('id-ID') %></span>
-                </div>
+              <div class="flex-1">
+                <h4 class="font-medium text-gray-800 text-xs"><%= aset.nama_barang %> (<%= aset.kuantitas %> Unit)</h4>
               </div>
-              
-              <% if (aset.gambar_barang) { %>
-                <div class="flex-shrink-0 ml-2">
-                  <img src="<%= aset.gambar_barang %>" alt="<%= aset.nama_barang %>" class="w-8 h-8 object-cover rounded" />
-                </div>
-              <% } %>
             </div>
           <% }); %>
         </div>
-        
-        <div class="mt-2 text-xs text-gray-500">
-          Total aset: <strong><%= asetDiRuangan.length %></strong> item
-        </div>
       <% } else { %>
-        <div class="text-center py-4">
-          <div class="text-gray-300 mb-1">
-            <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-            </svg>
+        <div class="text-left py-4">
+          <div class="flex items-center">
+            <div class="text-gray-300 mr-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+              </svg>
+            </div>
+            <p class="text-xs text-gray-400">Tidak ada aset tersedia</p>
           </div>
-          <p class="text-xs text-gray-400">Belum ada aset yang berada di ruangan ini</p>
         </div>
       <% } %>
     </div>
